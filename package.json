@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Cordione/Chicken-Kitchen#readme",
   "dependencies": {
+    "csv-parse": "^5.3.4",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
