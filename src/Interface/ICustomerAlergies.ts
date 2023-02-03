@@ -1,4 +1,4 @@
-export interface IcustomerAlergies {
+export interface ICustomerAlergies {
     customerName: string;
     alergies: string[];
 }
