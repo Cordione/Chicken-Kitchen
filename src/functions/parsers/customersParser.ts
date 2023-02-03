@@ -1,18 +1,11 @@
-import * as fs from 'fs';
 import { trimMe } from '../../utils/trimMe';
 import { ICustomerAlergies } from '../../Interface/ICustomerAlergies';
-export function customerAlergies(sourceString: string) {
+import { createRawArray } from '../../utils/createRawArray';
+export function customersParser(sourceString: string) {
     //Pass recived input to fs.fileReadSync as source
     //Split recived input by new line \n\r
     //map trought it to create new lines as single arrays
-    const rawArray = fs
-        .readFileSync(sourceString, {
-            encoding: 'utf-8',
-        })
-        .split('\r\n')
-        .map((row: string): string[] => {
-            return row.split(',');
-        });
+    const rawArray = createRawArray(sourceString);
 
     //Create array containing list of customer objects
     const customerArray: ICustomerAlergies[] = [];
@@ -29,4 +22,4 @@ export function customerAlergies(sourceString: string) {
     }
     return customerArray;
 }
-console.log(customerAlergies('./src/csv_files/customer_alergies.csv'));
+console.log(customersParser('./src/csv_files/customersAlergies.csv'));
