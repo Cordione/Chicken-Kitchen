@@ -13,13 +13,14 @@ Basic algo will be:
 
 Make function taking 2 parameters, name of customer, name of food
 Create 3 arrays based on parsed files (customer/food/ingerdients).
+[{customerName: "Bernard Unfortunate", "alergies: "Potatoes"}, {customerName: Adam Smith, alergies: ""}], [{name: "Fries", ingredients: "Potatoes"}], [{name: "Potatoes"}]
 Find if customer name exist in passed array.
-If exist go to next step.
-If not exist Terminate.
+If exist go to next step. "Adam Smith", {customerName: Adam Smith, alergies: ""}] -> name matched, go next
+If not exist Terminate. "John Doe", {customerName: Adam Smith, alergies: ""}] -> not matching, terminate.
 Next create an empty array and find food in food array
-Compare ingredients of food with base ingredients 
-IF food ingerdient exist in base ingredient array push it's name to new Array
-IF not find ingerdients of this food and compare them with base ingredient <rinse and repeat if needed>
-Next 
-IF newArray(with base ingredients of food contains alergic food of customer) return Example of failure: “Elon Carousel - Fish in Water: can’t order, allergic to: Chocolate”
-IF newArray not contains alergens return Example of success: “Julie Mirage – Fish in Water: success”
+Compare ingredients of food with base ingredients
+IF food ingerdient exist in base ingredient array push it's name to new Array [{name: "Fries", ingredients: "Potatoes"}],  [{name: "Potatoes"}] -> ["Potatoes"]
+IF not find ingerdients of this food and compare them with base ingredient <rinse and repeat if needed> [{ name: 'Princess Chicken', ingerdients:['Chicken','Youth Sauce' ]}, [{name: 'Chicken'}, {name: 'Asparagus'}, {name: 'Milk'}, {name: 'Honey'},], [] -> [{ name: 'Youth Sauce', ingerdients: [ 'Asparagus', 'Milk', 'Honey'] }], ['Chicken'] -> ['Chicken','Asparagus', 'Milk', 'Honey']
+Next
+IF newArray(with base ingredients of food contains alergic food of customer): "Bernard Unfortunate, Fries"-> [{customerName: "Bernard Unfortunate", "alergies: "Potatoes"}], [{name: "Fries", ingredients: "Potatoes"}],  [{name: "Potatoes"}] -> ["Potatoes"] -> baseIngredients.includes("alergies") -> "Bernard Unfortunate, Fries: Can't order, alergic to: Potatoes"
+IF newArray not contains alergens return Example of success: "Adam Smith, Fries"-> [{customerName: "Adam Smith", "alergies: "Potatoes"}], [{name: "Fries", ingredients: "Potatoes"}],  [{name: "Potatoes"}] -> ["Potatoes"] -> baseIngredients.includes("alergies") -> "Adam Smith, Fries: success"
