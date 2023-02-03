@@ -8,6 +8,6 @@ describe('Food tests', () => {
         const result = foodParser(filePath);
         //then
         expect(result[0].name).toEqual('Emperor Chicken');
-        expect(result[0].ingerdients).toContain(['Fat Cat Chicken', 'Spicy Sauce', 'Tuna Cake']);
+        expect(result[0].ingerdients).toEqual(['Fat Cat Chicken', 'Spicy Sauce', 'Tuna Cake']);
     });
 });
