@@ -1,7 +1,7 @@
 import { trimMe } from '../../utils/trimMe';
 import { ICustomerAlergies } from '../../Interface/ICustomerAlergies';
 import { createRawArray } from '../../utils/createRawArray';
-export function customers_parser(sourceString: string) {
+export function customersParser(sourceString: string) {
     //Pass recived input to fs.fileReadSync as source
     //Split recived input by new line \n\r
     //map trought it to create new lines as single arrays
@@ -22,4 +22,4 @@ export function customers_parser(sourceString: string) {
     }
     return customerArray;
 }
-console.log(customers_parser('./src/csv_files/customer_alergies.csv'));
+console.log(customersParser('./src/csv_files/customersAlergies.csv'));
