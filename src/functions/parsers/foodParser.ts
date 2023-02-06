@@ -14,4 +14,4 @@ export function foodParser(sourceString: string) {
     return foodArray;
 }
 
-console.log(foodParser('./src/csv_files/food.csv'))
+// console.log(foodParser('./src/csv_files/food.csv'))
