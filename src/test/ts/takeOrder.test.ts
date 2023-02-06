@@ -53,6 +53,6 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(customer, order);
         //then
-        expect(result).toEqual(`Sorry we don't serve: Pretzles.`);
+        expect(result).toEqual(`Sorry we don't serve: Pretzles`);
     });
 });
