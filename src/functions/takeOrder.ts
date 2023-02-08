@@ -48,9 +48,3 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
         }
     }
 }
-
-// console.log(takeOrder('John Doe', 'Fries'));
-// console.log(takeOrder('Adam Smith', 'Fries'));
-// console.log(takeOrder('aDAM sMiTH', 'fRiES'));
-// console.log(takeOrder('Barbara Smith', 'Tuna Cake'));
-// console.log(takeOrder('Elon Carousel', 'crab'));
