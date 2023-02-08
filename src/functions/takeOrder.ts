@@ -2,7 +2,6 @@ import { IBaseIngredients } from '../Interface/IBaseIngredients';
 import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
 
-
 export function takeOrder(customerName: string, order: string, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[]) {
     // const customers = customersParser('./src/csv_files/customersAlergies.csv');
     // const food = foodParser('./src/csv_files/food.csv');
