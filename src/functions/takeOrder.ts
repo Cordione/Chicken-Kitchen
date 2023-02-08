@@ -1,11 +1,12 @@
-import { baseIngredientsParser } from './parsers/baseIngredientsParser';
-import { customersParser } from './parsers/customersParser';
-import { foodParser } from './parsers/foodParser';
+import { IBaseIngredients } from '../Interface/IBaseIngredients';
+import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
+import { IFood } from '../Interface/IFood';
 
-export function takeOrder(customerName: string, order: string) {
-    const customers = customersParser('./src/csv_files/customersAlergies.csv');
-    const food = foodParser('./src/csv_files/food.csv');
-    const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+
+export function takeOrder(customerName: string, order: string, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[]) {
+    // const customers = customersParser('./src/csv_files/customersAlergies.csv');
+    // const food = foodParser('./src/csv_files/food.csv');
+    // const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
     const specificCustomer = customers.find(customer => customer.customerName.toLowerCase() === customerName.toLowerCase());
     const alergies = specificCustomer?.alergies;
     const matching: string[] = [];
@@ -49,9 +50,7 @@ export function takeOrder(customerName: string, order: string) {
 }
 
 // console.log(takeOrder('John Doe', 'Fries'));
-// console.log(takeOrder('Adam Smith', 'Pretzels'));
 // console.log(takeOrder('Adam Smith', 'Fries'));
 // console.log(takeOrder('aDAM sMiTH', 'fRiES'));
-// console.log(takeOrder('aDAM sMiTH', 'Emperor Chicken'));
 // console.log(takeOrder('Barbara Smith', 'Tuna Cake'));
-console.log(takeOrder('Elon Carousel', 'crab'));
+// console.log(takeOrder('Elon Carousel', 'crab'));
