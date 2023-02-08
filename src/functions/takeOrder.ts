@@ -3,13 +3,11 @@ import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
 
 export function takeOrder(customerName: string, order: string, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[]) {
-    // const customers = customersParser('./src/csv_files/customersAlergies.csv');
-    // const food = foodParser('./src/csv_files/food.csv');
-    // const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
     const specificCustomer = customers.find(customer => customer.customerName.toLowerCase() === customerName.toLowerCase());
     const alergies = specificCustomer?.alergies;
     const matching: string[] = [];
-    // console.log(specificCustomer);
+    //Add variable to store information about total cost of order, set initial value to 0;
+    let orderCost: number = 0;
     if (specificCustomer == undefined) {
         return `Sorry we can't handle your request ${customerName}, we don't know about your alergies.`;
     } else {
@@ -18,10 +16,11 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
         } else {
             const orderedFood = food.find(x => x.name.toLowerCase().includes(order.toLowerCase()));
             const orderedFoodIngredients = orderedFood?.ingerdients;
-            const baseIngredient = baseIngredients.map(x => x.name);
             if (orderedFoodIngredients != undefined) {
                 while (orderedFoodIngredients.length > 0) {
-                    if (baseIngredient.includes(orderedFoodIngredients[0])) {
+                    const baseIngredient = baseIngredients.find(x => x.name === orderedFoodIngredients[0]);
+                    if (baseIngredient) {
+                        orderCost += baseIngredient.cost;
                         matching.push(orderedFoodIngredients[0]);
                     } else {
                         const subIngredient = food.find(x => x.name === orderedFoodIngredients[0]);
