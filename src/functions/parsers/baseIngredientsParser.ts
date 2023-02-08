@@ -18,4 +18,4 @@ export function baseIngredientsParser(sourceString: string) {
     }
     return baseIngredients;
 }
-console.log(baseIngredientsParser('./src/csv_files/baseIngredients.csv'));
+// console.log(baseIngredientsParser('./src/csv_files/baseIngredients.csv'));
