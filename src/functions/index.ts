@@ -3,7 +3,7 @@ import { customersParser } from './parsers/customersParser';
 import { foodParser } from './parsers/foodParser';
 import { takeOrder } from './takeOrder';
 
-function main(...args: string[]) {
+export function main(...args: string[]) {
     const customers = customersParser('./src/csv_files/customersAlergies.csv');
     const food = foodParser('./src/csv_files/food.csv');
     const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
@@ -27,4 +27,3 @@ function main(...args: string[]) {
     }
     return finalOutput
 }
-console.log(main('Adam Smith', 'Princess Chicken', 'Adam Smith', 'Princess Chicken', 'Julie Mirage', 'Emperor Chicken', 'Julie Mirage', 'Emperor Chicken'));

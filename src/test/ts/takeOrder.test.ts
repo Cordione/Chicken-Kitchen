@@ -28,7 +28,7 @@ describe('Take order tests', () => {
         //then
         expect(result).toEqual(`Elon Carousel - Fish In Water: can't order, alergic to: vinegar`);
     });
-    test('Julie Mirage should not be able to buy fish in water.', () => {
+    test('Julie Mirage should not be able to buy Emperor Chicken -> to expensive.', () => {
         //given
         const customer = 'Julie Mirage';
         const order = 'Emperor Chicken';
@@ -38,7 +38,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(customer, order, customers, food, baseIngredients);
         //then
-        expect(result).toEqual(`Julie Mirage - Emperor Chicken: success`);
+        expect(result).toEqual(`Julie Mirage – can’t order, budget 100 and Emperor Chicken costs 284`);
     });
     test('Bernard Unfortunate should not be able to buy fish in water.', () => {
         //given
