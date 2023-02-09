@@ -20,6 +20,7 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
                 while (orderedFoodIngredients.length > 0) {
                     const baseIngredient = baseIngredients.find(x => x.name === orderedFoodIngredients[0]);
                     if (baseIngredient) {
+                        //update order cost based on removed ingredient
                         orderCost += baseIngredient.cost;
                         matching.push(orderedFoodIngredients[0]);
                     } else {
