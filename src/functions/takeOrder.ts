@@ -1,6 +1,7 @@
 import { IBaseIngredients } from '../Interface/IBaseIngredients';
 import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
+import { possibleOutputs } from './possibleOutputs';
 
 export function takeOrder(customerName: string, order: string, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[]) {
     const specificCustomer = customers.find(customer => customer.customerName.toLowerCase() === customerName.toLowerCase());
@@ -14,7 +15,7 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
         if (!food.find(x => x.name.toLowerCase().includes(order.toLowerCase()))) {
             return `Sorry we don't serve: ${order}`;
         } else {
-            const orderedFood = food.find(x => x.name.toLowerCase().includes(order.toLowerCase()));
+            const orderedFood = (food.find(x => x.name.toLowerCase().includes(order.toLowerCase())) as IFood);
             const orderedFoodIngredients = orderedFood?.ingerdients.map(ingredient => ingredient);
             if (orderedFoodIngredients != undefined) {
                 while (orderedFoodIngredients.length > 0) {
@@ -36,13 +37,8 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
                 }
             }
             if (alergies != undefined) {
-                const matchingAlergies = alergies.some(x => matching.includes(x));
-                const listOfMatchingAlergies = alergies.filter(x => matching.includes(x));
-                if (matchingAlergies) {
-                    return [`${specificCustomer.customerName} - ${orderedFood?.name}: can't order, alergic to: ${listOfMatchingAlergies.join(' ').toLowerCase()}`, orderCost];
-                } else if (!matchingAlergies) {
-                    return [`${specificCustomer.customerName} - ${orderedFood?.name}: success`, orderCost];
-                }
+                const output = possibleOutputs(alergies, specificCustomer, orderedFood, orderCost, matching);
+                return output
             }
         }
     }

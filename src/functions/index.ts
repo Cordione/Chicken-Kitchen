@@ -9,7 +9,7 @@ function main(...args: string[]) {
     const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
     const customerList: string[] = [];
     const orderList: string[] = [];
-    const finalOutput: string | (string | number)[] = [];
+    const finalOutput: string[] = [];
     if (args.length % 2 != 0) {
         return 'You have to pass a proper input (CUSTOMER NAME), (FOOD ORDER)';
     } else {
@@ -22,8 +22,9 @@ function main(...args: string[]) {
         }
     }
     for (let index = 0; index < customerList.length; index++) {
-        const result = takeOrder(customerList[index], orderList[index], customers, food, baseIngredients);
-        console.log(result)
+        const result = takeOrder(customerList[index], orderList[index], customers, food, baseIngredients)
+        finalOutput.push(result as string)
     }
+    return finalOutput
 }
-console.log(main('Adam Smith', 'Princess Chicken', 'Julie Mirage', 'Emperor Chicken', 'Julie Mirage', 'Emperor Chicken'));
+console.log(main('Adam Smith', 'Princess Chicken', 'Adam Smith', 'Princess Chicken', 'Julie Mirage', 'Emperor Chicken', 'Julie Mirage', 'Emperor Chicken'));
