@@ -15,7 +15,7 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
             return `Sorry we don't serve: ${order}`;
         } else {
             const orderedFood = food.find(x => x.name.toLowerCase().includes(order.toLowerCase()));
-            const orderedFoodIngredients = orderedFood?.ingerdients;
+            const orderedFoodIngredients = orderedFood?.ingerdients.map(ingredient => ingredient);
             if (orderedFoodIngredients != undefined) {
                 while (orderedFoodIngredients.length > 0) {
                     const baseIngredient = baseIngredients.find(x => x.name === orderedFoodIngredients[0]);
@@ -33,14 +33,14 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
                     }
                     orderedFoodIngredients.splice(0, 1);
                 }
-                if (alergies != undefined) {
-                    const matchingAlergies = alergies.some(x => matching.includes(x));
-                    const listOfMatchingAlergies = alergies.filter(x => matching.includes(x));
-                    if (matchingAlergies) {
-                        return `${specificCustomer.customerName} - ${orderedFood?.name}: can't order, alergic to: ${listOfMatchingAlergies.join(' ').toLowerCase()}`;
-                    } else {
-                        return `${specificCustomer.customerName} - ${orderedFood?.name}: success`;
-                    }
+            }
+            if (alergies != undefined) {
+                const matchingAlergies = alergies.some(x => matching.includes(x));
+                const listOfMatchingAlergies = alergies.filter(x => matching.includes(x));
+                if (matchingAlergies) {
+                    return [`${specificCustomer.customerName} - ${orderedFood?.name}: can't order, alergic to: ${listOfMatchingAlergies.join(' ').toLowerCase()}`, orderCost];
+                } else if (!matchingAlergies) {
+                    return [`${specificCustomer.customerName} - ${orderedFood?.name}: success`, orderCost];
                 }
             }
         }
