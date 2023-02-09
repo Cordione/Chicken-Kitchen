@@ -23,4 +23,4 @@ export function customersParser(sourceString: string) {
     }
     return customerArray;
 }
-console.log(customersParser('./src/csv_files/customersAlergies.csv'));
+// console.log(customersParser('./src/csv_files/customersAlergies.csv'));
