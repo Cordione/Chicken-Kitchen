@@ -15,7 +15,7 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
         if (!food.find(x => x.name.toLowerCase().includes(order.toLowerCase()))) {
             return `Sorry we don't serve: ${order}`;
         } else {
-            const orderedFood = (food.find(x => x.name.toLowerCase().includes(order.toLowerCase())) as IFood);
+            const orderedFood = food.find(x => x.name.toLowerCase().includes(order.toLowerCase())) as IFood;
             const orderedFoodIngredients = orderedFood?.ingerdients.map(ingredient => ingredient);
             if (orderedFoodIngredients != undefined) {
                 while (orderedFoodIngredients.length > 0) {
@@ -38,7 +38,7 @@ export function takeOrder(customerName: string, order: string, customers: ICusto
             }
             if (alergies != undefined) {
                 const output = possibleOutputs(alergies, specificCustomer, orderedFood, orderCost, matching);
-                return output
+                return output;
             }
         }
     }
