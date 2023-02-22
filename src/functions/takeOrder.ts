@@ -1,9 +1,10 @@
 import { IBaseIngredients } from '../Interface/IBaseIngredients';
 import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
+import { IRestaurant } from '../Interface/IRestaurant';
 import { possibleOutputs } from './possibleOutputs';
 
-export function takeOrder(command: string, customerName: string, order: string, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[]) {
+export function takeOrder(command: string, customerName: string, order: string, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[], restaurant: IRestaurant) {
     const specificCustomer = customers.find(customer => customer.customerName.toLowerCase() === customerName.toLowerCase());
     const alergies = specificCustomer?.alergies;
     const matching: string[] = [];
@@ -38,7 +39,9 @@ export function takeOrder(command: string, customerName: string, order: string, 
                     }
                 }
                 if (alergies != undefined) {
-                    const output = possibleOutputs(command, alergies, specificCustomer, orderedFood, orderCost, matching);
+                    //Restaurant Markup
+                    orderCost *= 1.3;
+                    const output = possibleOutputs(command, alergies, specificCustomer, orderedFood, orderCost, matching, restaurant);
                     return output;
                 }
             }
