@@ -31,3 +31,17 @@ Make function which will be supposed to save data to file:
 -> data from possibleOutputs: i.e  `Adam Smith have budget: 100-> wants to order Fries, which cost: 3.9: success`
 -> data from possibleOutputs: i.e  `Alexandra Smith have budget: 500-> wants to order Princess Chicken, which cost: 117: success`
 -> Final restaurant budget: 620.9(500+3.9+117);
+
+6.2.3 
+Edit index.ts (main function) to accept "Order" and "Budget" as new keywords (both case insensitive)
+If command equals to "Buy" work as is right now.
+
+If command equals to "Order":
+-Ensure that second parameter case insensitive exist in base ingredients array
+-If no throw error. 
+-Third parameter must be a numeric value greater than 0
+-If is not a numeric value or lower than 0 throw error
+
+If commands equals to "Budget":
+- Second parameter must equal to one of those "=", "-", "+"
+- Third parameter must be numeric value can be positive or negative.
