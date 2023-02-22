@@ -1,3 +1,5 @@
+import { IRestaurant } from '../Interface/IRestaurant';
+import { createReport } from './createReport';
 import { baseIngredientsParser } from './parsers/baseIngredientsParser';
 import { customersParser } from './parsers/customersParser';
 import { foodParser } from './parsers/foodParser';
@@ -11,7 +13,11 @@ export function main(...args: string[]) {
     const customerList: string[] = [];
     //If we would wish to have args input
     const finalOutput: string[] = [];
-
+    const restaurant: IRestaurant = {
+        budget: 500,
+    };
+    const restaurantBudgetIterations: number[] = []
+    restaurantBudgetIterations.push(restaurant.budget)
     if (args.length > 0) {
         const orderList: string[] = [];
         const command: string[] = [];
@@ -34,17 +40,20 @@ export function main(...args: string[]) {
             }
         }
         for (let index = 0; index < customerList.length; index++) {
-            const result = takeOrder(command[index], customerList[index], orderList[index], customers, food, baseIngredients);
+            const result = takeOrder(command[index], customerList[index], orderList[index], customers, food, baseIngredients, restaurant);
+            restaurantBudgetIterations.push(restaurant.budget)
             finalOutput.push(result as string);
         }
     } else {
         const input = inputParser('./src/txt_files/input.txt');
         for (let index = 0; index < input.length; index++) {
-            const result = takeOrder(input[index][0], input[index][1], input[index][2], customers, food, baseIngredients);
+            const result = takeOrder(input[index][0], input[index][1], input[index][2], customers, food, baseIngredients, restaurant);
+            restaurantBudgetIterations.push(restaurant.budget)
             finalOutput.push(result as string);
         }
     }
+    createReport(restaurantBudgetIterations, finalOutput)
     return finalOutput;
 }
-console.log(main());
-console.log(main('dupa', 'sth'));
+// console.log(main());
+console.log(main('buy', 'Adam Smith', 'Fries', "buy", "alexandra smith", "Princess Chicken"));
