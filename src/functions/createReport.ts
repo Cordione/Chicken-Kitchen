@@ -1,4 +1,4 @@
-import { saveFile } from "./saveFile";
+import { saveFile } from './saveFile';
 
 export function createReport(restaurantBudgetIterations: number[], outputArray: string[]) {
     //Function should take array of strings as parameter
@@ -20,5 +20,8 @@ export function createReport(restaurantBudgetIterations: number[], outputArray: 
             finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
         }
     }
-    saveFile(finalArray)
+    //Save array as file
+    const saved = saveFile(finalArray);
+    console.log(saved)
+    return saved;
 }
