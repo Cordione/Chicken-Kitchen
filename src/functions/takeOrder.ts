@@ -10,7 +10,7 @@ export function takeOrder(command: string, customerName: string, order: string, 
     const matching: string[] = [];
     //Add variable to store information about total cost of order, set initial value to 0;
     let orderCost: number = 0;
-    if (restaurant.budget > 0) {
+    if (restaurant.budget >= 0) {
         if (command.toLowerCase() == 'buy'.toLowerCase()) {
             if (specificCustomer == undefined) {
                 return `Sorry we can't handle your request ${customerName}, we don't know about your alergies.`;
@@ -72,7 +72,7 @@ export function takeOrder(command: string, customerName: string, order: string, 
             }
         }
     }
-    if (restaurant.budget <= 0) {
+    if (restaurant.budget < 0) {
         //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt, no future orders are realized/reported
         return `RESTAURANT BANKRUPT`;
     }
