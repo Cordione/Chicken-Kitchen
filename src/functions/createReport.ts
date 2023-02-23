@@ -10,7 +10,6 @@ export function createReport(restaurantBudgetIterations: number[], outputArray: 
     //Array to store all outputs before writing a file.
     const finalArray: string[] = [];
     for (let index = 0; index < outputArray.length; index++) {
-        console.log(restaurantBudgetIterations[index]);
         //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt, no future orders are realized/reported
         if (restaurantBudgetIterations[index] < 0) {
             isRestaurantBankrupt = true;
