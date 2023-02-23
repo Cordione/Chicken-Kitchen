@@ -45,7 +45,7 @@ export function main(...args: string[]) {
                         // If command equals to "Order":
                         // -Ensure that second parameter case insensitive exist in base ingredients array
                         // -If no throw error.
-                        if (baseIngredients.find(ingredient => ingredient.name.toLowerCase() == args[index])) {
+                        if (baseIngredients.find(ingredient => ingredient.name.toLowerCase() == args[index].toLowerCase())) {
                             //customerList is supposed to be renamed, have no clue how to call it right now, but leaving it as check mark.
                             customerList.push(args[index]);
                         } else {
