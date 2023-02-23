@@ -24,3 +24,24 @@ IF not find ingerdients of this food and compare them with base ingredient <rins
 Next
 IF newArray(with base ingredients of food contains alergic food of customer): "Bernard Unfortunate, Fries"-> [{customerName: "Bernard Unfortunate", "alergies: "Potatoes"}], [{name: "Fries", ingredients: "Potatoes"}],  [{name: "Potatoes"}] -> ["Potatoes"] -> baseIngredients.includes("alergies") -> "Bernard Unfortunate, Fries: Can't order, alergic to: Potatoes"
 IF newArray not contains alergens return Example of success: "Adam Smith, Fries"-> [{customerName: "Adam Smith", "alergies: "Potatoes"}], [{name: "Fries", ingredients: "Potatoes"}],  [{name: "Potatoes"}] -> ["Potatoes"] -> baseIngredients.includes("alergies") -> "Adam Smith, Fries: success"
+
+6.2.2
+Make function which will be supposed to save data to file:
+- Initial restaurant budget: 500
+-> data from possibleOutputs: i.e  `Adam Smith have budget: 100-> wants to order Fries, which cost: 3.9: success`
+-> data from possibleOutputs: i.e  `Alexandra Smith have budget: 500-> wants to order Princess Chicken, which cost: 117: success`
+-> Final restaurant budget: 620.9(500+3.9+117);
+
+6.2.3 
+Edit index.ts (main function) to accept "Order" and "Budget" as new keywords (both case insensitive)
+If command equals to "Buy" work as is right now.
+
+If command equals to "Order":
+-Ensure that second parameter case insensitive exist in base ingredients array
+-If no throw error. 
+-Third parameter must be a numeric value greater than 0
+-If is not a numeric value or lower than 0 throw error
+
+If commands equals to "Budget":
+- Second parameter must equal to one of those "=", "-", "+"
+- Third parameter must be numeric value can be positive or negative.

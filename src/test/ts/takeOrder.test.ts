@@ -2,6 +2,7 @@ import { baseIngredientsParser } from '../../functions/parsers/baseIngredientsPa
 import { customersParser } from '../../functions/parsers/customersParser';
 import { foodParser } from '../../functions/parsers/foodParser';
 import { takeOrder } from '../../functions/takeOrder';
+import { IRestaurant } from '../../Interface/IRestaurant';
 
 describe('Take order tests', () => {
     test('Julie Mirage should be able to buy fish in water.', () => {
@@ -11,10 +12,14 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const command = 'buy';
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
         //when
-        const result = takeOrder(customer, order, customers, food, baseIngredients);
+        const result = takeOrder(command, customer, order, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual('Julie Mirage - Fish In Water: success');
+        expect(result).toEqual('Julie Mirage have budget: 100 -> wants to order Fish In Water, which cost: 49.40: success');
     });
     test('Elon Carousel should not be able to buy fish in water.', () => {
         //given
@@ -23,10 +28,14 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const command = 'buy';
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
         //when
-        const result = takeOrder(customer, order, customers, food, baseIngredients);
+        const result = takeOrder(command, customer, order, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual(`Elon Carousel - Fish In Water: can't order, alergic to: vinegar`);
+        expect(result).toEqual(`Elon Carousel have budget: 50 -> wants to order Fish In Water -> can't order, alergic to: vinegar`);
     });
     test('Julie Mirage should not be able to buy Emperor Chicken -> to expensive.', () => {
         //given
@@ -35,10 +44,14 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const command = 'buy';
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
         //when
-        const result = takeOrder(customer, order, customers, food, baseIngredients);
+        const result = takeOrder(command, customer, order, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual(`Julie Mirage – can’t order, budget 100 and Emperor Chicken costs 284`);
+        expect(result).toEqual(`Julie Mirage have budget: 100 -> wants to order Emperor Chicken -> can’t order, Emperor Chicken costs 369.2`);
     });
     test('Bernard Unfortunate should not be able to buy fish in water.', () => {
         //given
@@ -47,10 +60,14 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const command = 'buy';
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
         //when
-        const result = takeOrder(customer, order, customers, food, baseIngredients);
+        const result = takeOrder(command, customer, order, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual(`Bernard Unfortunate - Emperor Chicken: can't order, alergic to: potatoes`);
+        expect(result).toEqual(`Bernard Unfortunate have budget: 15 -> wants to order Emperor Chicken -> can't order, food cost 369.2, alergic to: potatoes`);
     });
     test('Unknown customer want to place an order', () => {
         //given
@@ -59,8 +76,12 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const command = 'buy';
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
         //when
-        const result = takeOrder(customer, order, customers, food, baseIngredients);
+        const result = takeOrder(command, customer, order, customers, food, baseIngredients, restaurant);
         //then
         expect(result).toEqual(`Sorry we can't handle your request Jaques Chirac, we don't know about your alergies.`);
     });
@@ -71,8 +92,12 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const command = 'buy';
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
         //when
-        const result = takeOrder(customer, order, customers, food, baseIngredients);
+        const result = takeOrder(command, customer, order, customers, food, baseIngredients, restaurant);
         //then
         expect(result).toEqual(`Sorry we don't serve: Pretzles`);
     });
