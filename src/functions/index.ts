@@ -55,6 +55,11 @@ export function main(...args: string[]) {
                         //Right now to be skipped, focusing on ORDER.
                         // If commands equals to "Budget":
                         // - Second parameter must equal to one of those "=", "-", "+"
+                        if (args[index] == '=' || args[index] == '-' || args[index] == '+') {
+                            customerList.push(args[index]);
+                        } else {
+                            throw new Error(`You passed wrong sign, acceptable signs are: - + = `);
+                        }
                     }
                 } else if (index % 3 == 2) {
                     const isProperNumber = parseInt(args[index]);
@@ -63,6 +68,7 @@ export function main(...args: string[]) {
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'Order'.toLowerCase() && !isNaN(isProperNumber) && isProperNumber > 0) {
                         orderList.push(args[index]);
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'budget'.toLowerCase()) {
+                        orderList.push(args[index]);
                     }
                 }
             }
@@ -85,4 +91,5 @@ export function main(...args: string[]) {
     return finalOutput;
 }
 // console.log(main());
-console.log(main('buy', 'Adam Smith', 'Fries', 'buy', 'alexandra smith', 'Princess Chicken', 'order', 'tuna', '5'));
+// console.log(main('buy', 'Adam Smith', 'Fries', 'buy', 'alexandra smith', 'Princess Chicken', 'order', 'tuna', '5'));
+console.log(main('budget', '=', '50', 'budget', '-', '50', 'budget', '+', '50'));

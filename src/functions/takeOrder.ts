@@ -57,13 +57,22 @@ export function takeOrder(command: string, customerName: string, order: string, 
             });
             //Reduce restaurant budget by recived order
             restaurant.budget -= singleUnit!.cost * parseFloat(order);
-            return `We ordered ${parseFloat(order)}x ${customerName} and current restaurant budget is ${restaurant.budget}`;
+            return `We ordered ${parseFloat(order)}x ${customerName} and current restaurant budget is ${restaurant.budget.toFixed(2)}`;
         }
         if (command.toLowerCase() == 'budget'.toLowerCase()) {
-            console.log('We passed budget command');
+            if (customerName == '=') {
+                restaurant.budget = parseFloat(order);
+                return `New budget of restaurant: ${restaurant.budget}`;
+            } else if (customerName == '-') {
+                restaurant.budget -= parseFloat(order);
+                return `Budget of restaurant was reduced by: ${order}, new budget is: ${restaurant.budget.toFixed(2)}`;
+            } else if (customerName == '+') {
+                restaurant.budget += parseFloat(order);
+                return `Budget of restaurant was increased by: ${order}, new budget is: ${restaurant.budget.toFixed(2)}`
+            }
         }
     }
-    if (restaurant.budget < 0) {
+    if (restaurant.budget <= 0) {
         //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt, no future orders are realized/reported
         return `RESTAURANT BANKRUPT`;
     }
