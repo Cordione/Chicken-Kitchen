@@ -10,7 +10,9 @@ export function main(...args: string[]) {
     const customers = customersParser('./src/csv_files/customersAlergies.csv');
     const food = foodParser('./src/csv_files/food.csv');
     const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
-    const customerList: string[] = [];
+    const command: string[] = [];
+    const customerIngredientSign: string[] = [];
+    const orderQuantity: string[] = [];
     //If we would wish to have args input
     const finalOutput: string[] = [];
     const restaurant: IRestaurant = {
@@ -19,14 +21,11 @@ export function main(...args: string[]) {
     const restaurantBudgetIterations: number[] = [];
     restaurantBudgetIterations.push(restaurant.budget);
     if (args.length > 0) {
-        const orderList: string[] = [];
-        const command: string[] = [];
         if (args.length % 3 != 0) {
-            return 'You have to pass a proper input (Command), (CUSTOMER NAME), (FOOD ORDER)';
+            return 'You have to pass a proper input';
         } else {
             // -Third parameter must be a numeric value greater than 0
             // -If is not a numeric value or lower than 0 throw error
-
             // - Third parameter must be numeric value can be positive or negative.
 
             for (let index = 0; index < args.length; index++) {
@@ -40,14 +39,14 @@ export function main(...args: string[]) {
 
                 if (index % 3 == 1) {
                     if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'buy'.toLowerCase()) {
-                        customerList.push(args[index]);
+                        customerIngredientSign.push(args[index]);
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'Order'.toLowerCase()) {
                         // If command equals to "Order":
                         // -Ensure that second parameter case insensitive exist in base ingredients array
                         // -If no throw error.
                         if (baseIngredients.find(ingredient => ingredient.name.toLowerCase() == args[index].toLowerCase())) {
                             //customerList is supposed to be renamed, have no clue how to call it right now, but leaving it as check mark.
-                            customerList.push(args[index]);
+                            customerIngredientSign.push(args[index]);
                         } else {
                             throw new Error('You want to order unknown ingredient');
                         }
@@ -56,7 +55,7 @@ export function main(...args: string[]) {
                         // If commands equals to "Budget":
                         // - Second parameter must equal to one of those "=", "-", "+"
                         if (args[index] == '=' || args[index] == '-' || args[index] == '+') {
-                            customerList.push(args[index]);
+                            customerIngredientSign.push(args[index]);
                         } else {
                             throw new Error(`You passed wrong sign, acceptable signs are: - + = `);
                         }
@@ -64,18 +63,18 @@ export function main(...args: string[]) {
                 } else if (index % 3 == 2) {
                     const isProperNumber = parseInt(args[index]);
                     if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'buy'.toLowerCase()) {
-                        orderList.push(args[index]);
+                        orderQuantity.push(args[index]);
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'Order'.toLowerCase() && !isNaN(isProperNumber) && isProperNumber > 0) {
-                        orderList.push(args[index]);
+                        orderQuantity.push(args[index]);
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'budget'.toLowerCase()) {
-                        orderList.push(args[index]);
+                        orderQuantity.push(args[index]);
                     }
                 }
             }
         }
 
-        for (let index = 0; index < customerList.length; index++) {
-            const result = takeOrder(command[index], customerList[index], orderList[index], customers, food, baseIngredients, restaurant);
+        for (let index = 0; index < customerIngredientSign.length; index++) {
+            const result = takeOrder(command[index], customerIngredientSign[index], orderQuantity[index], customers, food, baseIngredients, restaurant);
             restaurantBudgetIterations.push(restaurant.budget);
             finalOutput.push(result as string);
         }
