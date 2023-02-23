@@ -61,7 +61,7 @@ export function main(...args: string[]) {
                     if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'buy'.toLowerCase()) {
                         orderList.push(args[index]);
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'Order'.toLowerCase() && !isNaN(isProperNumber) && isProperNumber > 0) {
-                        orderList.push(args[index])
+                        orderList.push(args[index]);
                     } else if (command[Math.ceil(index / 3) - 1].toLowerCase() == 'budget'.toLowerCase()) {
                     }
                 }
