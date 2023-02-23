@@ -68,7 +68,7 @@ export function takeOrder(command: string, customerName: string, order: string, 
                 return `Budget of restaurant was reduced by: ${order}, new budget is: ${restaurant.budget.toFixed(2)}`;
             } else if (customerName == '+') {
                 restaurant.budget += parseFloat(order);
-                return `Budget of restaurant was increased by: ${order}, new budget is: ${restaurant.budget.toFixed(2)}`
+                return `Budget of restaurant was increased by: ${order}, new budget is: ${restaurant.budget.toFixed(2)}`;
             }
         }
     }
