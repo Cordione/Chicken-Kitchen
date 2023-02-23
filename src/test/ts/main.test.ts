@@ -13,4 +13,11 @@ describe('Take order tests', () => {
             'Alexandra Smith have budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
         ]);
     });
+    test('Restaurant should NOT accept new orders after reporting bankrupcy, insteed should write "RESTAURANT BANKRUPT".', () => {
+        //given
+        //when
+        const result = main('order', 'tuna', '25', 'Buy', 'Julie Mirage', 'Emperor Chicken', 'Buy', 'Alexandra Smith', 'Emperor Chicken');
+        //then
+        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -125', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT']);
+    });
 });
