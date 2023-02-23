@@ -62,7 +62,9 @@ export function takeOrder(command: string, customerName: string, order: string, 
         if (command.toLowerCase() == 'budget'.toLowerCase()) {
             console.log('We passed budget command');
         }
-    } else {
-        return `Restaurant Bankrupt`
+    }
+    if (restaurant.budget < 0) {
+        //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt, no future orders are realized/reported
+        return `RESTAURANT BANKRUPT`;
     }
 }
