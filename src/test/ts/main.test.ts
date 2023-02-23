@@ -23,6 +23,9 @@ describe('Take order tests', () => {
             'Buy',
             'Alexandra Smith',
             'Emperor Chicken',
+            'budget',
+            '+',
+            '1200',
             'Order',
             'Tuna',
             '100',
@@ -37,7 +40,8 @@ describe('Take order tests', () => {
         expect(result).toEqual([
             'Adam Smith have budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
             'Alexandra Smith have budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
-            'We ordered 100x Tuna and current restaurant budget is -1630.8',
+            'Budget of restaurant was increased by: 1200, new budget is: 2069.20',
+            'We ordered 100x Tuna and current restaurant budget is -430.80',
             'RESTAURANT BANKRUPT',
             'RESTAURANT BANKRUPT',
         ]);
@@ -47,6 +51,6 @@ describe('Take order tests', () => {
         //when
         const result = main('order', 'tuna', '25', 'Buy', 'Julie Mirage', 'Emperor Chicken', 'Buy', 'Alexandra Smith', 'Emperor Chicken');
         //then
-        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -125', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT']);
+        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -125.00', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT']);
     });
 });
