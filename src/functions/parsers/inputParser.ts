@@ -5,7 +5,7 @@ export function inputParser(sourceString: string) {
     const formatedArray: string[][] = [];
     for (let index = 0; index < rawArray.length; index++) {
         const singleLine = rawArray[index].filter(x => x != '' && x != ' ');
-        if ((singleLine.length > 2 && singleLine[0] == 'Buy') || (singleLine.length > 2 && singleLine[0] == 'Order') || (singleLine.length > 2 && singleLine[0] == 'Budget')) {
+        if ((singleLine.length > 2 && singleLine[0].toLowerCase() == 'Buy'.toLowerCase()) || (singleLine.length > 2 && singleLine[0].toLowerCase() == 'Order'.toLowerCase()) || (singleLine.length > 2 && singleLine[0].toLowerCase() == 'Budget'.toLowerCase())) {
             const formatedLine = singleLine.map(word => word.trim());
             formatedArray.push(formatedLine);
         }
