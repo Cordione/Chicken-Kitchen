@@ -5,7 +5,7 @@ import { baseIngredientsParser } from './parsers/baseIngredientsParser';
 import { customersParser } from './parsers/customersParser';
 import { foodParser } from './parsers/foodParser';
 import { inputParser } from './parsers/inputParser';
-import { inputParserWithoutFile } from './parsers/inputParserWithoutFile';
+import { commandTokenizer } from './parsers/commandTokenizer';
 import { takeOrder } from './takeOrder';
 
 export function main(initialString?: string) {
@@ -18,7 +18,7 @@ export function main(initialString?: string) {
     };
     const restaurantBudgetIterations: number[] = [];
     if (initialString != undefined) {
-        const commandAndParameters: ICommandAndParameters[] = inputParserWithoutFile(initialString, baseIngredients);
+        const commandAndParameters: ICommandAndParameters[] = commandTokenizer(initialString, baseIngredients);
         restaurantBudgetIterations.push(restaurant.budget);
         for (let index = 0; index < commandAndParameters.length; index++) {
             const result = takeOrder(commandAndParameters[index], customers, food, baseIngredients, restaurant);

@@ -2,7 +2,7 @@ import { IBaseIngredients } from '../../Interface/IBaseIngredients';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
 import { baseIngredientsParser } from './baseIngredientsParser';
 
-export function inputParserWithoutFile(oneLongString: string, baseIngredients: IBaseIngredients[]) {
+export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIngredients[]) {
     //split recived input by line, remove empty inputs
     const initialInputArray: string[] = oneLongString.split('\n').filter(x => x != '');
     const arrayOfMatchingInterfaces: ICommandAndParameters[] = [];

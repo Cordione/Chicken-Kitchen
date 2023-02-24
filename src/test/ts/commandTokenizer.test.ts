@@ -1,12 +1,12 @@
 import { baseIngredientsParser } from '../../functions/parsers/baseIngredientsParser';
-import { inputParserWithoutFile } from '../../functions/parsers/inputParserWithoutFile';
+import { commandTokenizer } from '../../functions/parsers/commandTokenizer';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
 
-describe('Input parser without file tests', () => {
+describe('Command Tokenizer tests', () => {
     test('Should properly display records', () => {
         //given
         const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
-        const commandAndParameters: ICommandAndParameters[] = inputParserWithoutFile(
+        const commandAndParameters: ICommandAndParameters[] = commandTokenizer(
             `Buy, Julie Mirage, Princess Chicken \n\r Buy, Elon Carousel, Tuna Cake \n\r Sadkl,jaslkdjasldkjaskldjsa\n\r buy, Julie Mirage,\n\r order, tuna, 5\n\r budget, +, 10`,
             baseIngredients
         );
