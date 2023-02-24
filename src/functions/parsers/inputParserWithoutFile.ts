@@ -4,10 +4,9 @@ import { baseIngredientsParser } from './baseIngredientsParser';
 
 export function inputParserWithoutFile(oneLongString: string, baseIngredients: IBaseIngredients[]) {
     //split recived input by line, remove empty inputs
-    const initialInputArray: string[] = oneLongString.split('\n\r').filter(x => x != '');
+    const initialInputArray: string[] = oneLongString.split('\n').filter(x => x != '');
     const arrayOfMatchingInterfaces: ICommandAndParameters[] = [];
     for (const singleLine of initialInputArray) {
-        // console.log(singleLine)
         let element: ICommandAndParameters = { command: '', parameters: [] };
         const singleLineSplittedByComma = singleLine.split(', ').filter(x => x != '');
         if (singleLineSplittedByComma.length >= 3) {
@@ -50,7 +49,6 @@ export function inputParserWithoutFile(oneLongString: string, baseIngredients: I
             arrayOfMatchingInterfaces.push(element);
         }
     }
-    // console.log(arrayOfMatchingInterfaces);
     return arrayOfMatchingInterfaces;
 }
 
