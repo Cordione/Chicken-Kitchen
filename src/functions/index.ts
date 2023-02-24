@@ -26,7 +26,7 @@ export function main(initialString?: string) {
             finalOutput.push(result as string);
         }
     } else {
-        const input: ICommandAndParameters[] = inputParser('./src/txt_files/input.txt');
+        const input: ICommandAndParameters[] = inputParser('./src/txt_files/input.txt', baseIngredients);
         for (let index = 0; index < input.length; index++) {
             const result = takeOrder(input[index], customers, food, baseIngredients, restaurant);
             restaurantBudgetIterations.push(restaurant.budget);

@@ -60,7 +60,6 @@ export function takeOrder(commandAndParameters: ICommandAndParameters, customers
                     return ingredient;
                 }
             });
-            console.log(specificIngredient);
             //Reduce restaurant budget by recived order
             restaurant.budget -= singleUnit!.cost * parseFloat(amount);
             return `We ordered ${parseFloat(amount)}x ${specificIngredient} and current restaurant budget is ${restaurant.budget.toFixed(2)}`;
