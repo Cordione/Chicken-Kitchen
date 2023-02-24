@@ -8,7 +8,7 @@ describe('Input parser without file tests', () => {
         const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
         const commandAndParameters: ICommandAndParameters[] = inputParserWithoutFile(
             `Buy, Julie Mirage, Princess Chicken \n\r Buy, Elon Carousel, Tuna Cake \n\r Sadkl,jaslkdjasldkjaskldjsa\n\r buy, Julie Mirage,\n\r order, tuna, 5\n\r budget, +, 10`,
-            baseIngredientsParser('./src/csv_files/baseIngredients.csv')
+            baseIngredients
         );
         //when
         //then

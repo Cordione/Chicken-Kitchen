@@ -8,9 +8,9 @@ describe('Input tests', () => {
         const result = inputParser(filePath);
         //then
         expect(result).toEqual([
-            ['Buy', 'Julie Mirage', 'Princess Chicken'],
-            ['Buy', 'Elon Carousel', 'Tuna Cake'],
-            ['Buy', 'Adam Smith', 'Fries'],
+            { command: 'Buy', parameters: ['Julie Mirage', 'Princess Chicken'] },
+            { command: 'Buy', parameters: ['Elon Carousel', 'Tuna Cake'] },
+            { command: 'Buy', parameters: ['Adam Smith', 'Fries'] },
         ]);
     });
 });
