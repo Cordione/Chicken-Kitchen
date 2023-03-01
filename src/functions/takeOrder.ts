@@ -3,7 +3,9 @@ import { ICommandAndParameters } from '../Interface/ICommandAndParameters';
 import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
 import { IRestaurant } from '../Interface/IRestaurant';
+import { budgetOutput } from './outputs/bugetOutput';
 import { buyOutput } from './outputs/buyOutput';
+import { orderOutput } from './outputs/orderOutput';
 import { tableOutput } from './outputs/tableOutput';
 
 export function takeOrder(commandAndParameters: ICommandAndParameters, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[], restaurant: IRestaurant) {
@@ -55,30 +57,12 @@ export function takeOrder(commandAndParameters: ICommandAndParameters, customers
         }
         if (commandAndParameters.command.toLowerCase() == 'order'.toLowerCase() && commandAndParameters.parameters != undefined) {
             //Find matching element price, store it, multiply it by amount of orders
-            const specificIngredient = commandAndParameters.parameters[0];
-            const amount = commandAndParameters.parameters[1];
-            const singleUnit = baseIngredients.find(ingredient => {
-                if (ingredient.name.trim().toLowerCase() == specificIngredient.trim().toLowerCase()) {
-                    return ingredient;
-                }
-            });
-            //Reduce restaurant budget by recived order
-            restaurant.budget -= singleUnit!.cost * parseFloat(amount);
-            return `We ordered ${parseFloat(amount)}x ${specificIngredient} and current restaurant budget is ${restaurant.budget.toFixed(2)}`;
+            const output = orderOutput(commandAndParameters, baseIngredients, restaurant);
+            return output;
         }
         if (commandAndParameters.command.toLowerCase() == 'budget'.toLowerCase() && commandAndParameters.parameters != undefined) {
-            const sign = commandAndParameters.parameters[0];
-            const amount = commandAndParameters.parameters[1];
-            if (sign == '=') {
-                restaurant.budget = parseFloat(amount);
-                return `New budget of restaurant: ${restaurant.budget}`;
-            } else if (sign == '-') {
-                restaurant.budget -= parseFloat(amount);
-                return `Budget of restaurant was reduced by: ${amount}, new budget is: ${restaurant.budget.toFixed(2)}`;
-            } else if (sign == '+') {
-                restaurant.budget += parseFloat(amount);
-                return `Budget of restaurant was increased by: ${amount}, new budget is: ${restaurant.budget.toFixed(2)}`;
-            }
+            const output = budgetOutput(commandAndParameters, restaurant);
+            return output;
         }
         if (commandAndParameters.command.toLowerCase() == 'table'.toLowerCase()) {
             const output = tableOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant);

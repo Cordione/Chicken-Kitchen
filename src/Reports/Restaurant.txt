@@ -1,0 +1,4 @@
+Restaurant budget: 500.00
+We ordered 25x tuna and current restaurant budget is -125.00
+RESTAURANT BANKRUPT
+RESTAURANT BANKRUPT
