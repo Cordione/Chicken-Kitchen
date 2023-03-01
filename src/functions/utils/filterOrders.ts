@@ -1,12 +1,16 @@
-import { ICommandAndParameters } from "../../Interface/ICommandAndParameters";
+import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
+import { IFood } from '../../Interface/IFood';
 
-export function filterOrders(commandAndParameters: ICommandAndParameters){
-    const foodList: string[] =[]
+export function filterOrders(commandAndParameters: ICommandAndParameters, food: IFood[]) {
+    const foodList: string[] = [];
     if (commandAndParameters.parameters != undefined) {
-        const halfOfTheArray: number = Math.floor(commandAndParameters.parameters?.length / 2);
-        for (let index = halfOfTheArray; index < commandAndParameters.parameters.length; index++) {
-            foodList.push(commandAndParameters.parameters[index]);
+        for (let index = 0; index < commandAndParameters.parameters.length; index++) {
+            const specific = commandAndParameters.parameters[index];
+            const specificOrder = food.find(dish => dish.name.toLowerCase() === specific.toLowerCase());
+            if (specificOrder != undefined) {
+                foodList.push(specificOrder.name);
+            }
         }
     }
-    return foodList
+    return foodList;
 }
