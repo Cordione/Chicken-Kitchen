@@ -23,13 +23,15 @@ export function tableOutput(
     //which guests want to take table:
     const customers: ICustomerAlergies[] = listOfCustomers(commandAndParameters, customerList);
     const unqiueCustomers = [...new Set(customers)];
-    const foodList: string[] = filterOrders(commandAndParameters);
+    const foodList: string[] = filterOrders(commandAndParameters, food);
+    const foodListToLowerCase = foodList.map(x => x.toLowerCase());
     const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients);
     const informationAboutOrdersAndItsPrice: ISpecificOrder[] = informations[0] as ISpecificOrder[];
     const informationAboutAlergies: string[][] = informations[1] as string[][];
     const informationAboutUnavailableFood: string[] = informations[2] as string[];
+    const customerNames = customers.map(x => x.customerName.toLowerCase());
+    const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()) && !foodListToLowerCase.includes(x.toLowerCase()));
 
-    // console.log(informationAboutAlergies)
     let anyoneIsAlergic: boolean = false;
     informationAboutAlergies.map(el => {
         if (el.length > 0) {
@@ -43,11 +45,13 @@ export function tableOutput(
         }
     });
 
-    // one of customers is allergic to ordered food
     const outputList: string[] = [];
-    // console.log(informationAboutAlergies.length)
-    if (customers.length == unqiueCustomers.length && customers.length == foodList.length) {
+    if (unknownParameters != undefined && unknownParameters?.length > 0) {
+        //We recived unkown parameter!
+        return `Error no idea what is ${unknownParameters.join(', ')}`;
+    } else if (customers.length == unqiueCustomers.length && customers.length == foodList.length) {
         if (anyoneIsAlergic) {
+            // one of customers is allergic to ordered food
             const customersNames = customers.map(x => x.customerName);
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
             for (let index = 0; index < customers.length; index++) {
@@ -72,7 +76,6 @@ export function tableOutput(
             const whoCouldntPay: ICustomerAlergies[] = [];
             let everyoneCanPayForTheirOrder: boolean = true;
             for (let index = 0; index < customers.length; index++) {
-                // console.log(informationAboutOrdersAndItsPrice[index]);
                 if (customers[index].budget < informationAboutOrdersAndItsPrice[index].price * restaurantMarkup) {
                     everyoneCanPayForTheirOrder = false;
                     whoCouldntPay.push(customers[index]);
@@ -82,7 +85,6 @@ export function tableOutput(
             if (!everyoneCanPayForTheirOrder) {
                 const customersNames = customers.map(x => x.customerName);
                 const whoCouldntPayNames = whoCouldntPay.map(x => x.customerName);
-                console.log(whoCouldntPayNames);
                 outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
                 for (let index = 0; index < customers.length; index++) {
                     const orderPrice = informationAboutOrdersAndItsPrice[index].price * restaurantMarkup;
@@ -142,51 +144,3 @@ export function tableOutput(
         }
     }
 }
-
-// console.log(
-//     tableOutput(
-//         { command: 'table', parameters: ['Bernard Unfortunate', 'Julie Mirage', 'Fries', 'Princess Chicken'] },
-//         customersParser('./src/csv_files/customersAlergies.csv'),
-//         foodParser('./src/csv_files/food.csv'),
-//         baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
-//         1.3
-//     )
-// );
-// console.log(
-//     tableOutput(
-//         { command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Fries', 'Princess Chicken'] },
-//         customersParser('./src/csv_files/customersAlergies.csv'),
-//         foodParser('./src/csv_files/food.csv'),
-//         baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
-//         1.3
-//     )
-// );
-// console.log(
-//     tableOutput(
-//         { command: 'table', parameters: ['Adam Smith', 'Alexandra Smith', 'Fries', 'Princess Chicken'] },
-//         customersParser('./src/csv_files/customersAlergies.csv'),
-//         foodParser('./src/csv_files/food.csv'),
-//         baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
-//         1.3,
-//         { budget: 500 }
-//     )
-// );
-console.log(
-    tableOutput(
-        { command: 'table', parameters: ['Adam Smith', 'Fries'] },
-        customersParser('./src/csv_files/customersAlergies.csv'),
-        foodParser('./src/csv_files/food.csv'),
-        baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
-        1.3,
-        { budget: 500 }
-    )
-);
-// console.log(
-//     tableOutput(
-//         { command: 'table', parameters: ['Adam Smith', 'Alexandra Smith', 'Fires', 'Princess Chicken'] },
-//         customersParser('./src/csv_files/customersAlergies.csv'),
-//         foodParser('./src/csv_files/food.csv'),
-//         baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
-//         1.3
-//     )
-// );
