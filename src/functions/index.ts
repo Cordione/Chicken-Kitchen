@@ -36,6 +36,3 @@ export function main(initialString?: string) {
     createReport(restaurantBudgetIterations, finalOutput);
     return finalOutput;
 }
-console.log(main());
-// console.log(main(`buy, Adam Smith, Fries\nbuy, alexandra smith, Princess Chicken\norder, tuna, 5\nbudget, +, 15`));
-// console.log(main('budget', '=', '50', 'budget', '-', '50', 'budget', '+', '50'));
