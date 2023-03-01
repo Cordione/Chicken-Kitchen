@@ -13,7 +13,8 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
             if (
                 singleLineSplittedByComma[0].trim().toLowerCase() == 'Buy'.trim().toLowerCase() ||
                 singleLineSplittedByComma[0].trim().toLowerCase() == 'Order'.trim().toLowerCase() ||
-                singleLineSplittedByComma[0].trim().toLowerCase() == 'budget'.trim().toLowerCase()
+                singleLineSplittedByComma[0].trim().toLowerCase() == 'budget'.trim().toLowerCase() ||
+                singleLineSplittedByComma[0].trim().toLowerCase() == 'Table'.trim().toLowerCase()
             ) {
                 element.command += singleLineSplittedByComma[0].trim();
             }
@@ -46,6 +47,12 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
                     throw new Error(`You passed wrong sign, acceptable signs are: - + = `);
                 }
             }
+            if (singleLineSplittedByComma[0].trim().toLowerCase() == 'Table'.toLowerCase()) {
+                for (let index = 1; index < singleLineSplittedByComma.length; index++) {
+                    element.parameters?.push(singleLineSplittedByComma[index]);
+                }
+            }
+
             arrayOfMatchingInterfaces.push(element);
         }
     }
@@ -53,8 +60,9 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
 }
 
 // console.log(
-//     inputParserWithoutFile(
-//         `Buy, Julie Mirage, Princess Chicken \n\r Buy, Elon Carousel, Tuna Cake \n\r Sadkl,jaslkdjasldkjaskldjsa\n\r buy, Julie Mirage,\n\r order, tuna, 5\n\r budget, +, 10`,
+//     commandTokenizer(
+//         `Buy, Julie Mirage, Princess Chicken \n\r Buy, Elon Carousel, Tuna Cake \n\r Sadkl,jaslkdjasldkjaskldjsa\n\r buy, Julie Mirage,\n\r order, tuna, 5\n\r budget, +, 10\ntable, Julie Mirage, Princess Chicken`,
 //         baseIngredientsParser('./src/csv_files/baseIngredients.csv')
 //     )
 // );
+console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));

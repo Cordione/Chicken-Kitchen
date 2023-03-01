@@ -15,13 +15,13 @@ export function createReport(restaurantBudgetIterations: number[], outputArray: 
             isRestaurantBankrupt = true;
         }
         if (index == 0 && !isRestaurantBankrupt) {
-            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[0]}`);
+            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[0].toFixed(2)}`);
         }
         if (!isRestaurantBankrupt) {
             finalArray.push(outputArray[index]);
         }
         if (index == outputArray.length - 1 && !isRestaurantBankrupt) {
-            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
+            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1].toFixed(2)}`);
         }
         if (isRestaurantBankrupt) {
             finalArray.push(`RESTAURANT BANKRUPT`);

@@ -3,3 +3,13 @@ Buy, Elon Carousel, Tuna Cake
 Sadkl,jaslkdjasldkjaskldjsa 
 Buy, Julie Mirage, 
 Buy, Adam Smith, Fries
+budget, +, 125
+Order, Tuna, 5
+Table, Adam Smith, Fries 
+Table, John Doe, Fries
+table, Julie Mirage, Princess Chicken 
+Table, Alexandra Smith, Adam Smith, Irish Fish, Fries
+Table, Alexandra Smith, Bernard Unfortunate, Irish Fish, Fries
+Table, Alexandra Smith, Adam Smith, Fries
+Table, Alexandra Smith, Fries, Irish Fish
+Table, Adam Smith, Adam Smith, Fries, Fries

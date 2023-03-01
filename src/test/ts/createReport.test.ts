@@ -10,8 +10,8 @@ describe('Create report tests', () => {
         //when
         const report = createReport(restaurantBudgetIterations, orders);
         //then
-        expect(report[0]).toEqual("Restaurant budget: 500");
+        expect(report[0]).toEqual("Restaurant budget: 500.00");
         expect(report[1]).toEqual("Alexandra Smith have budget: 500 -> wants to order Princess Chicken, which cost: 117.00: success");
-        expect(report[2]).toEqual("Restaurant budget: 617");
+        expect(report[2]).toEqual("Restaurant budget: 617.00");
     });
 });
