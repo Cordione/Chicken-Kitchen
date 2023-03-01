@@ -28,8 +28,14 @@ export function inputParser(sourceString: string, baseIngredients: IBaseIngredie
                 // -If no throw error.
                 throw new Error(`You passed wrong sign, acceptable signs are: - + = `);
             }
+        } else if (singleLine[0].toLowerCase() == 'table'.toLowerCase()) {
+            const formatedLineWithoutFirstWord: string[] = [];
+            for (let i = 1; i < formatedLine.length; i++) {
+                formatedLineWithoutFirstWord.push(formatedLine[i]);
+            }
+            formatedArray.push({ command: formatedLine[0], parameters: formatedLineWithoutFirstWord });
         }
     }
     return formatedArray;
 }
-console.log(inputParser('./src/txt_files/input.txt', baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
+// console.log(inputParser('./src/txt_files/input.txt', baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
