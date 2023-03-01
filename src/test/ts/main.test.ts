@@ -8,10 +8,10 @@ describe('Take order tests', () => {
         const result = main(inputString);
         //then
         expect(result).toEqual([
-            'Adam Smith have budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
-            'Adam Smith have budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
-            'Julie Mirage have budget: 100 -> wants to order Emperor Chicken -> can’t order, Emperor Chicken costs 369.2',
-            'Alexandra Smith have budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
+            'Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
+            'Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
+            'Julie Mirage has budget: 100 -> wants to order Emperor Chicken -> can’t order, Emperor Chicken costs 369.2',
+            'Alexandra Smith has budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
         ]);
     });
     test('Should work properly with multi operations.', () => {
@@ -22,8 +22,8 @@ describe('Take order tests', () => {
         const result = main(inputString);
         //then
         expect(result).toEqual([
-            'Adam Smith have budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
-            'Alexandra Smith have budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
+            'Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
+            'Alexandra Smith has budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
             'Budget of restaurant was increased by: 1200, new budget is: 2069.20',
             'We ordered 100x tuna and current restaurant budget is -430.80',
             'RESTAURANT BANKRUPT',

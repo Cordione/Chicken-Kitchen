@@ -22,7 +22,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual('Julie Mirage have budget: 100 -> wants to order Fish In Water, which cost: 49.40: success');
+        expect(result).toEqual('Julie Mirage has budget: 100 -> wants to order Fish In Water, which cost: 49.40: success');
     });
     test('Elon Carousel should not be able to buy fish in water.', () => {
         //given
@@ -40,7 +40,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual(`Elon Carousel have budget: 50 -> wants to order Fish In Water -> can't order, alergic to: vinegar`);
+        expect(result).toEqual(`Elon Carousel has budget: 50 -> wants to order Fish In Water -> can't order, alergic to: vinegar`);
     });
     test('Julie Mirage should not be able to buy Emperor Chicken -> to expensive.', () => {
         //given
@@ -58,7 +58,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual(`Julie Mirage have budget: 100 -> wants to order Emperor Chicken -> can’t order, Emperor Chicken costs 369.2`);
+        expect(result).toEqual(`Julie Mirage has budget: 100 -> wants to order Emperor Chicken -> can’t order, Emperor Chicken costs 369.2`);
     });
     test('Bernard Unfortunate should not be able to buy emperor chicken.', () => {
         //given
@@ -76,7 +76,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant);
         //then
-        expect(result).toEqual(`Bernard Unfortunate have budget: 15 -> wants to order Emperor Chicken -> can't order, food cost 369.2, alergic to: potatoes`);
+        expect(result).toEqual(`Bernard Unfortunate has budget: 15 -> wants to order Emperor Chicken -> can't order, food cost 369.2, alergic to: potatoes`);
     });
     test('Unknown customer want to place an order', () => {
         //given
