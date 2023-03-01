@@ -3,13 +3,13 @@ import { ICommandAndParameters } from '../Interface/ICommandAndParameters';
 import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
 import { IRestaurant } from '../Interface/IRestaurant';
-import { possibleOutputs } from './possibleOutputs';
+import { buyOutput } from './outputs/buyOutput';
+import { tableOutput } from './outputs/tableOutput';
 
 export function takeOrder(commandAndParameters: ICommandAndParameters, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[], restaurant: IRestaurant) {
-    const matching: string[] = [];
     //Add variable to store information about total cost of order, set initial value to 0;
-    let orderCost: number = 0;
     if (restaurant.budget >= 0) {
+        const restaurantMarkup: number = 1.3;
         if (commandAndParameters.command.toLowerCase() == 'buy'.toLowerCase() && commandAndParameters.parameters != undefined) {
             const specific = commandAndParameters.parameters[0];
             const specificCustomer = customers.find(customer => customer.customerName.toLowerCase() === specific.toLowerCase());
@@ -21,8 +21,10 @@ export function takeOrder(commandAndParameters: ICommandAndParameters, customers
                 if (!food.find(x => x.name.toLowerCase().includes(specificOrder.toLowerCase()))) {
                     return `Sorry we don't serve: ${specificOrder}`;
                 } else {
+                    let orderCost: number = 0;
                     const orderedFood = food.find(x => x.name.toLowerCase().includes(specificOrder.toLowerCase())) as IFood;
                     const orderedFoodIngredients = orderedFood?.ingerdients.map(ingredient => ingredient);
+                    const matching: string[] = [];
                     if (orderedFoodIngredients != undefined) {
                         while (orderedFoodIngredients.length > 0) {
                             const baseIngredient = baseIngredients.find(x => x.name === orderedFoodIngredients[0]);
@@ -44,8 +46,8 @@ export function takeOrder(commandAndParameters: ICommandAndParameters, customers
                     }
                     if (alergies != undefined) {
                         //Restaurant Markup
-                        orderCost *= 1.3;
-                        const output = possibleOutputs(commandAndParameters.command, alergies, specificCustomer, orderedFood, orderCost, matching, restaurant);
+                        orderCost *= restaurantMarkup;
+                        const output = buyOutput(alergies, specificCustomer, orderedFood, orderCost, matching, restaurant);
                         return output;
                     }
                 }
@@ -77,6 +79,10 @@ export function takeOrder(commandAndParameters: ICommandAndParameters, customers
                 restaurant.budget += parseFloat(amount);
                 return `Budget of restaurant was increased by: ${amount}, new budget is: ${restaurant.budget.toFixed(2)}`;
             }
+        }
+        if (commandAndParameters.command.toLowerCase() == 'table'.toLowerCase()) {
+            const output = tableOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant);
+            return output;
         }
     }
     if (restaurant.budget < 0) {
