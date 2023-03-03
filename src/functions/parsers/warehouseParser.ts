@@ -8,9 +8,9 @@ import { trimMe } from './utils/trimMe';
 export function warehouseParser(sourceString: string, baseIngredients: IBaseIngredients[]): IObjectInWarehouse[] {
     //Warehouse parser should have sourceString with input.
     //As we gonna have in either cases [{param1, param2} ...], we create interface for it, then we import it IObjectInWarehouse
-    const warehouseStockpile: IObjectInWarehouse[] = [];
     //We also need array to store this n interfaces (content will be EACH of baseIngredients and food orders)
-    //We have to verify if this source string is proper
+    const warehouseStockpile: IObjectInWarehouse[] = [];
+    //We have to verify if this source string leads us to file
     const doesFileExist = doesFileExists(sourceString);
     //If yes -> take data and parse it
     if (doesFileExist) {
@@ -25,7 +25,6 @@ export function warehouseParser(sourceString: string, baseIngredients: IBaseIngr
     }
     //If no -> take default data
     else {
-        console.log(baseIngredients);
         baseIngredients.forEach(ingredient => {
             warehouseStockpile.push({ name: ingredient.name, quantity: 5 });
         });
