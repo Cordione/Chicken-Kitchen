@@ -79,7 +79,8 @@ export function tableOutput(
                 }
             }
         } else if (informationAboutMissingMaterials.length > 0) {
-            return `We have not enough materials in warehouse, we miss: ${informationAboutMissingMaterials.join(', ')}`;
+            const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
+            return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
         } else if (!anyoneIsAlergic && anyoneOrderedUnavailableFood) {
             return informationAboutUnavailableFood.find(x => x.length > 0);
         } else if (!anyoneIsAlergic && !anyoneOrderedUnavailableFood) {
