@@ -1,7 +1,5 @@
 import { orderOutput } from '../../functions/outputs/orderOutput';
 import { baseIngredientsParser } from '../../functions/parsers/baseIngredientsParser';
-import { customersParser } from '../../functions/parsers/customersParser';
-import { foodParser } from '../../functions/parsers/foodParser';
 import { warehouseParser } from '../../functions/parsers/warehouseParser';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
 import { IRestaurant } from '../../Interface/IRestaurant';
