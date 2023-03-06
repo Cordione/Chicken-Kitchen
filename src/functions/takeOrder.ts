@@ -2,13 +2,21 @@ import { IBaseIngredients } from '../Interface/IBaseIngredients';
 import { ICommandAndParameters } from '../Interface/ICommandAndParameters';
 import { ICustomerAlergies } from '../Interface/ICustomerAlergies';
 import { IFood } from '../Interface/IFood';
+import { IObjectInWarehouse } from '../Interface/IObjectInWarehouse';
 import { IRestaurant } from '../Interface/IRestaurant';
 import { budgetOutput } from './outputs/bugetOutput';
 import { buyOutput } from './outputs/buyOutput';
 import { orderOutput } from './outputs/orderOutput';
 import { tableOutput } from './outputs/tableOutput';
 
-export function takeOrder(commandAndParameters: ICommandAndParameters, customers: ICustomerAlergies[], food: IFood[], baseIngredients: IBaseIngredients[], restaurant: IRestaurant) {
+export function takeOrder(
+    commandAndParameters: ICommandAndParameters,
+    customers: ICustomerAlergies[],
+    food: IFood[],
+    baseIngredients: IBaseIngredients[],
+    restaurant: IRestaurant,
+    warehouse: IObjectInWarehouse[]
+) {
     //Add variable to store information about total cost of order, set initial value to 0;
     if (restaurant.budget >= 0) {
         const restaurantMarkup: number = 1.3;
@@ -65,7 +73,7 @@ export function takeOrder(commandAndParameters: ICommandAndParameters, customers
             return output;
         }
         if (commandAndParameters.command.toLowerCase() == 'table'.toLowerCase()) {
-            const output = tableOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant);
+            const output = tableOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse);
             return output;
         }
     }
