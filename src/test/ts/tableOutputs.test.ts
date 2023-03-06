@@ -76,7 +76,7 @@ describe('Command Tokenizer tests', () => {
             restaurant,
             warehouse
         );
-        console.log(warehouse)
+        console.log(warehouse);
 
         //then
         expect(result).toContain(`Alexandra Smith, Adam Smith, ordered Irish Fish, Fries -> success, total cost: 44.20`);
@@ -156,5 +156,46 @@ describe('Command Tokenizer tests', () => {
 
         //then
         expect(result).toContain(`ERROR. One person can appear only once at the table.`);
+    });
+    test(`Table, Alexandra Smith, Princess Chicken -> invalid, no alergies, can afford it, missing ingredients`, () => {
+        //given
+        const allCustomers = customersParser('./src/csv_files/customersAlergies.csv');
+        const allFood = foodParser('./src/csv_files/food.csv');
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
+        const restaurantMarkup = 1.3;
+
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
+        //when
+        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+        //then
+        expect(result).toContain(`Sorry we're out of supplies. Missing: Chicken, Honey`);
+    });
+    test(`Table, Alexandra Smith, Adam Smith, Princess Chicken, Fries -> invalid, no alergies, can afford it, missing ingredients`, () => {
+        //given
+        const allCustomers = customersParser('./src/csv_files/customersAlergies.csv');
+        const allFood = foodParser('./src/csv_files/food.csv');
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
+        const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
+        //when
+        console.log(warehouse);
+
+        const result = tableOutput(
+            { command: 'table', parameters: ['Alexandra Smith', 'Adam SMith', 'Princess Chicken', 'fries'] },
+            allCustomers,
+            allFood,
+            allIngredients,
+            restaurantMarkup,
+            restaurant,
+            warehouse
+        );
+        //then
+        expect(result).toContain(`Sorry we're out of supplies. Missing: Chicken, Honey, Potatoes`);
     });
 });
