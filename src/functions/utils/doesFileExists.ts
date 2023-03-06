@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 export function doesFileExists(path: string): boolean {
     let output: boolean = true;
