@@ -2,6 +2,7 @@ import { tableOutput } from '../../functions/outputs/tableOutput';
 import { baseIngredientsParser } from '../../functions/parsers/baseIngredientsParser';
 import { customersParser } from '../../functions/parsers/customersParser';
 import { foodParser } from '../../functions/parsers/foodParser';
+import { warehouseParser } from '../../functions/parsers/warehouseParser';
 import { IRestaurant } from '../../Interface/IRestaurant';
 
 describe('Command Tokenizer tests', () => {
@@ -14,8 +15,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
         //then
         expect(result).toContain(`Error no idea what is John Doe`);
     });
@@ -28,8 +30,10 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+
+        const warehouse = warehouseParser('', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
         //then
         expect(result).toContain(`Adam Smith, ordered Fries -> success, total cost: 3.90`);
         expect(result).toContain(`Adam Smith, ordered Fries, -> success: 3.90`);
@@ -43,8 +47,11 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+
+        const warehouse = warehouseParser('', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Julie Mirage', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput({ command: 'table', parameters: ['Julie Mirage', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+
         //then
         expect(result).toContain(`Julie Mirage, ordered Princess Chicken -> FAILURE`);
         expect(result).toContain(`We're sorry: Julie Mirage, we cannot provide you with table, becouse you cannot afford your order, yours budget: 100, order cost: 117.00`);
@@ -58,8 +65,19 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Irish Fish', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput(
+            { command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Irish Fish', 'Fries'] },
+            allCustomers,
+            allFood,
+            allIngredients,
+            restaurantMarkup,
+            restaurant,
+            warehouse
+        );
+        console.log(warehouse)
+
         //then
         expect(result).toContain(`Alexandra Smith, Adam Smith, ordered Irish Fish, Fries -> success, total cost: 44.20`);
         expect(result).toContain(`Alexandra Smith, ordered Irish Fish, -> success: 40.30`);
@@ -74,6 +92,7 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('', allIngredients);
         //when
         const result = tableOutput(
             { command: 'table', parameters: ['Alexandra Smith', 'Bernard Unfortunate', 'Irish Fish', 'Fries'] },
@@ -81,8 +100,10 @@ describe('Command Tokenizer tests', () => {
             allFood,
             allIngredients,
             restaurantMarkup,
-            restaurant
+            restaurant,
+            warehouse
         );
+
         //then
         expect(result).toContain(`Alexandra Smith, Bernard Unfortunate, ordered Irish Fish, Fries -> FAILURE`);
         expect(result).toContain(`We're sorry Alexandra Smith, we cannot provide you with table, becouse other guest is alergic to his order`);
@@ -97,8 +118,10 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+
         //then
         expect(result).toContain(`ERROR. Every person needs something to eat.`);
     });
@@ -111,8 +134,10 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Fries', 'Irish Fish'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Fries', 'Irish Fish'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+
         //then
         expect(result).toContain(`ERROR. One person can have one type of food only.`);
     });
@@ -125,8 +150,10 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
+        const warehouse = warehouseParser('', allIngredients);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Adam SMith', 'Adam SMith', 'Fries', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant);
+        const result = tableOutput({ command: 'table', parameters: ['Adam SMith', 'Adam SMith', 'Fries', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+
         //then
         expect(result).toContain(`ERROR. One person can appear only once at the table.`);
     });
