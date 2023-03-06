@@ -26,43 +26,54 @@ export function buyOutput(
 ) {
     const customers: ICustomerAlergies[] = listOfCustomers(commandAndParameters, customerList);
     const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse);
+    const foodList: string[] = filterOrders(commandAndParameters, food);
+    const foodListToLowerCase = foodList.map(x => x.toLowerCase());
     const informationAboutAlergies: string[][] = informations[1] as string[][];
-    const isAlergic = informationAboutAlergies[0].length > 0;
     const informationAboutMissingMaterials: IMaterials[] = informations[3] as IMaterials[];
     const informationAboutUsedMaterials: IMaterials[] = informations[4] as IMaterials[];
     const specificCustomer = customers[0];
     const customerNames = customers.map(x => x.customerName.toLowerCase());
-    const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()));
-    if (specificCustomer == undefined && unknownParameters != undefined) {
-        return `Sorry we don't have information about your alergies ${unknownParameters[0]},so we cannot fulfil your order`;
-    } else if (commandAndParameters.parameters != undefined) {
-        const dish = commandAndParameters.parameters[1];
-        const specificDish = food.find(x => x.name.toLowerCase() === dish.toLowerCase());
-        if (specificDish != undefined) {
-            const orderCost = specificDish.price * restaurantMarkup;
-            if (isAlergic) {
-                removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
-                return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
-                    specificDish?.name
-                } -> can't order, food cost ${orderCost}, alergic to: ${informationAboutAlergies[0].join(' ').toLowerCase()}`;
-            } else if (specificCustomer.budget < specificDish?.price * restaurantMarkup) {
-                return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
-            } else if (!isAlergic && specificCustomer.budget >= specificDish?.price * restaurantMarkup && informationAboutMissingMaterials.length == 0) {
-                const output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name}, which cost: ${orderCost.toFixed(2)}: success`;
-                removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
-                specificCustomer.budget -= orderCost;
-                restaurant.budget += orderCost;
-                return output;
-            } else if (informationAboutMissingMaterials.length > 0) {
-                const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name)
-                return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
+    const unknownCustomer = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()));
+    if(commandAndParameters.parameters != undefined){
+    const unknownFood = !foodListToLowerCase.includes(commandAndParameters.parameters[1]?.toLowerCase());
+        if(unknownFood){
+            return `Sorry we don't serve: ${commandAndParameters.parameters[1]}`
+        }
+    }
+    if (informationAboutAlergies[0] != undefined) {
+        const isAlergic = informationAboutAlergies[0].length > 0;
+        if (specificCustomer == undefined && unknownCustomer != undefined) {
+            return `Sorry we don't have information about your alergies ${unknownCustomer[0]},so we cannot fulfil your order`;
+        } else if (commandAndParameters.parameters != undefined) {
+
+            const dish = commandAndParameters.parameters[1];
+            const specificDish = food.find(x => x.name.toLowerCase() === dish.toLowerCase());
+            if (specificDish != undefined) {
+                const orderCost = specificDish.price * restaurantMarkup;
+                if (isAlergic) {
+                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                    return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
+                        specificDish?.name
+                    } -> can't order, food cost ${orderCost}, alergic to: ${informationAboutAlergies[0].join(' ').toLowerCase()}`;
+                } else if (specificCustomer.budget < specificDish?.price * restaurantMarkup) {
+                    return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
+                } else if (!isAlergic && specificCustomer.budget >= specificDish?.price * restaurantMarkup && informationAboutMissingMaterials.length == 0) {
+                    const output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name}, which cost: ${orderCost.toFixed(2)}: success`;
+                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                    specificCustomer.budget -= orderCost;
+                    restaurant.budget += orderCost;
+                    return output;
+                } else if (informationAboutMissingMaterials.length > 0) {
+                    const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
+                    return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
+                }
             }
         }
     }
 }
 // console.log(
 //     buyOutput(
-//         { command: 'buy', parameters: ['Alexandra SMith', 'princess chicken'] },
+//         { command: 'buy', parameters: ['bernard unfortunate', 'pretzels'] },
 //         customersParser('./src/csv_files/customersAlergies.csv'),
 //         foodParser('./src/csv_files/food.csv'),
 //         baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
