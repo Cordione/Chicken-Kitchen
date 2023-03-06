@@ -2,6 +2,8 @@ import { IBaseIngredients } from '../../Interface/IBaseIngredients';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
 import { ICustomerAlergies } from '../../Interface/ICustomerAlergies';
 import { IFood } from '../../Interface/IFood';
+import { IMaterials } from '../../Interface/IMaterials';
+import { IObjectInWarehouse } from '../../Interface/IObjectInWarehouse';
 import { IRestaurant } from '../../Interface/IRestaurant';
 import { ISpecificOrder } from '../../Interface/ISpecificOrder';
 import { baseIngredientsParser } from '../parsers/baseIngredientsParser';
@@ -10,6 +12,7 @@ import { foodParser } from '../parsers/foodParser';
 import { filterOrders } from '../utils/filterOrders';
 import { informationsAboutOrders } from '../utils/informationsAboutOrders';
 import { listOfCustomers } from '../utils/listOfCustomers';
+import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
 
 export function tableOutput(
     commandAndParameters: ICommandAndParameters,
@@ -17,7 +20,8 @@ export function tableOutput(
     food: IFood[],
     baseIngredients: IBaseIngredients[],
     restaurantMarkup: number,
-    restaurant: IRestaurant
+    restaurant: IRestaurant,
+    warehouse: IObjectInWarehouse[]
 ) {
     //Should work properly for multiple customers
     //which guests want to take table:
@@ -25,10 +29,13 @@ export function tableOutput(
     const unqiueCustomers = [...new Set(customers)];
     const foodList: string[] = filterOrders(commandAndParameters, food);
     const foodListToLowerCase = foodList.map(x => x.toLowerCase());
-    const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients);
+    const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse);
     const informationAboutOrdersAndItsPrice: ISpecificOrder[] = informations[0] as ISpecificOrder[];
     const informationAboutAlergies: string[][] = informations[1] as string[][];
     const informationAboutUnavailableFood: string[] = informations[2] as string[];
+    const informationAboutMissingMaterials: IMaterials[] = informations[3] as IMaterials[];
+    const informationAboutUsedMaterials: IMaterials[] = informations[4] as IMaterials[];
+
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()) && !foodListToLowerCase.includes(x.toLowerCase()));
 
@@ -54,6 +61,7 @@ export function tableOutput(
             // one of customers is allergic to ordered food
             const customersNames = customers.map(x => x.customerName);
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
+            removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
             for (let index = 0; index < customers.length; index++) {
                 if (index == 0) {
                     outputList.push(`{\n`);
@@ -70,6 +78,9 @@ export function tableOutput(
                     outputList.push('}');
                 }
             }
+        } else if (informationAboutMissingMaterials.length > 0) {
+            const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
+            return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
         } else if (!anyoneIsAlergic && anyoneOrderedUnavailableFood) {
             return informationAboutUnavailableFood.find(x => x.length > 0);
         } else if (!anyoneIsAlergic && !anyoneOrderedUnavailableFood) {
@@ -109,6 +120,7 @@ export function tableOutput(
             } else if (everyoneCanPayForTheirOrder) {
                 const customersNames = customers.map(x => x.customerName);
                 const totalOrdersCost: number[] = [];
+                removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                 for (let index = 0; index < customers.length; index++) {
                     totalOrdersCost.push(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
                 }
