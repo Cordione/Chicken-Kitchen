@@ -27,7 +27,7 @@ export function takeOrder(
         }
         if (commandAndParameters.command.toLowerCase() == 'order'.toLowerCase() && commandAndParameters.parameters != undefined) {
             //Find matching element price, store it, multiply it by amount of orders
-            const output = orderOutput(commandAndParameters, baseIngredients, restaurant);
+            const output = orderOutput(commandAndParameters, baseIngredients, restaurant, warehouse);
             return output;
         }
         if (commandAndParameters.command.toLowerCase() == 'budget'.toLowerCase() && commandAndParameters.parameters != undefined) {
