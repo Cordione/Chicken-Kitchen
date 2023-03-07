@@ -9,6 +9,13 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
     for (const singleLine of initialInputArray) {
         let element: ICommandAndParameters = { command: '', parameters: [] };
         const singleLineSplittedByComma = singleLine.split(', ').filter(x => x != '');
+        if (singleLineSplittedByComma.length == 2) {
+            if (singleLineSplittedByComma[0].trim().toLowerCase() == 'Audit'.trim().toLowerCase()) {
+                element.command += singleLineSplittedByComma[0].trim();
+                element.parameters.push(singleLineSplittedByComma[1].trim());
+                arrayOfMatchingInterfaces.push(element);
+            }
+        }
         if (singleLineSplittedByComma.length >= 3) {
             if (
                 singleLineSplittedByComma[0].trim().toLowerCase() == 'Buy'.trim().toLowerCase() ||
@@ -65,4 +72,4 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
 //         baseIngredientsParser('./src/csv_files/baseIngredients.csv')
 //     )
 // );
-// console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
+console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken\n Audit, Resources`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
