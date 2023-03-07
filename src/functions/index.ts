@@ -10,6 +10,7 @@ import { takeOrder } from './takeOrder';
 import { warehouseParser } from './parsers/warehouseParser';
 import { IObjectInWarehouse } from '../Interface/IObjectInWarehouse';
 import { createAudit } from './createAudit';
+import { saveFile } from './saveFile';
 
 export function main(initialString?: string) {
     const customers = customersParser('./src/csv_files/customersAlergies.csv');
@@ -24,7 +25,7 @@ export function main(initialString?: string) {
     const budget: number[] = [];
     const restaurantBudgetIterations: number[] = [];
     const command: string[] = [];
-
+    let auditOutput: string[] = [];
     if (initialString != undefined) {
         const commandAndParameters: ICommandAndParameters[] = commandTokenizer(initialString, baseIngredients);
         restaurantBudgetIterations.push(restaurant.budget);
@@ -47,7 +48,7 @@ export function main(initialString?: string) {
                 commandAndParameters[index].parameters != undefined &&
                 commandAndParameters[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()
             ) {
-                createAudit(finalOutput, warehouseStates, budget);
+                auditOutput = createAudit(finalOutput, warehouseStates, budget);
             }
         }
     } else {
@@ -69,11 +70,12 @@ export function main(initialString?: string) {
                 finalOutput.push(result as string);
             }
             if (input[index].command.toLowerCase() == 'Audit'.toLowerCase() && input[index].parameters != undefined && input[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()) {
-                createAudit(finalOutput, warehouseStates, budget);
+                auditOutput = createAudit(finalOutput, warehouseStates, budget);
             }
         }
     }
 
+    saveFile(auditOutput, './src/reports/Audit.txt');
     createReport(restaurantBudgetIterations, finalOutput);
     return finalOutput;
 }

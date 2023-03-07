@@ -22,5 +22,5 @@ export function createAudit(auditArray: string[], warehouseStates: IObjectInWare
             output.push(`Audit End`);
         }
     }
-    saveFile(output, './src/reports/Audit.txt');
+    return output;
 }
