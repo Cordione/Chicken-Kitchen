@@ -34,6 +34,8 @@ export function inputParser(sourceString: string, baseIngredients: IBaseIngredie
                 formatedLineWithoutFirstWord.push(formatedLine[i]);
             }
             formatedArray.push({ command: formatedLine[0], parameters: formatedLineWithoutFirstWord });
+        } else if (singleLine[0].toLowerCase() == 'Audit'.toLowerCase()) {
+            formatedArray.push({ command: formatedLine[0], parameters: [formatedLine[1]] });
         }
     }
     return formatedArray;
