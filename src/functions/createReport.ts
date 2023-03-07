@@ -28,6 +28,6 @@ export function createReport(restaurantBudgetIterations: number[], outputArray: 
         }
     }
     //Save array as file
-    const saved = saveFile(finalArray);
+    const saved = saveFile(finalArray, './src/reports/Restaurant.txt');
     return saved;
 }

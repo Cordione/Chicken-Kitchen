@@ -22,19 +22,15 @@ export function takeOrder(
         const restaurantMarkup: number = 1.3;
         let output = '';
         if (commandAndParameters.command.toLowerCase() == 'buy'.toLowerCase() && commandAndParameters.parameters != undefined) {
-            output = buyOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse) as string;
-        }
-        if (commandAndParameters.command.toLowerCase() == 'order'.toLowerCase() && commandAndParameters.parameters != undefined) {
+            return (output = buyOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse) as string);
+        } else if (commandAndParameters.command.toLowerCase() == 'order'.toLowerCase() && commandAndParameters.parameters != undefined) {
             //Find matching element price, store it, multiply it by amount of orders
-            output = orderOutput(commandAndParameters, baseIngredients, restaurant, warehouse) as string;
+            return (output = orderOutput(commandAndParameters, baseIngredients, restaurant, warehouse) as string);
+        } else if (commandAndParameters.command.toLowerCase() == 'budget'.toLowerCase() && commandAndParameters.parameters != undefined) {
+            return (output = budgetOutput(commandAndParameters, restaurant));
+        } else if (commandAndParameters.command.toLowerCase() == 'table'.toLowerCase()) {
+            return (output = tableOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse) as string);
         }
-        if (commandAndParameters.command.toLowerCase() == 'budget'.toLowerCase() && commandAndParameters.parameters != undefined) {
-            output = budgetOutput(commandAndParameters, restaurant);
-        }
-        if (commandAndParameters.command.toLowerCase() == 'table'.toLowerCase()) {
-            output = tableOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse) as string;
-        }
-        return output;
     }
     if (restaurant.budget < 0) {
         //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt, no future orders are realized/reported

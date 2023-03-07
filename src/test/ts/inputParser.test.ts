@@ -13,6 +13,7 @@ describe('Input tests', () => {
             { command: 'Buy', parameters: ['Julie Mirage', 'Princess Chicken'] },
             { command: 'Buy', parameters: ['Elon Carousel', 'Tuna Cake'] },
             { command: 'Buy', parameters: ['Adam Smith', 'Fries'] },
+            { command: 'Audit', parameters: ['Resources'] },
         ]);
     });
 });

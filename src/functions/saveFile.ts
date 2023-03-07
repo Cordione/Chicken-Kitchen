@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-export function saveFile(data: string[]) {
-    fs.writeFileSync('./src/reports/Restaurant.txt', data.join('\n'));
+export function saveFile(data: string[], whereShouldISaveIt: string) {
+    fs.writeFileSync(whereShouldISaveIt, data.join('\n'));
     return data;
 }
