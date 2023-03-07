@@ -5,6 +5,7 @@ Buy, Julie Mirage,
 Buy, Adam Smith, Fries
 budget, +, 125
 Order, Tuna, 5
+Audit, Resources
 Table, Adam Smith, Fries 
 Table, John Doe, Fries
 table, Julie Mirage, Princess Chicken 
