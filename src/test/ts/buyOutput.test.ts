@@ -80,10 +80,10 @@ describe('srsly', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
         //when
         const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
         //then
-        expect(result).toContain(`Sorry we're out of supplies. Missing: Chicken, Honey`);
+        expect(result).toContain(`Sorry we're out of supplies. Missing: Asparagus, Chicken, Honey, Milk`);
     });
 });
