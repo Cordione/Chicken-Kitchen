@@ -8,6 +8,8 @@ import { inputParser } from './parsers/inputParser';
 import { commandTokenizer } from './parsers/commandTokenizer';
 import { takeOrder } from './takeOrder';
 import { warehouseParser } from './parsers/warehouseParser';
+import { IObjectInWarehouse } from '../Interface/IObjectInWarehouse';
+import { createAudit } from './createAudit';
 
 export function main(initialString?: string) {
     const customers = customersParser('./src/csv_files/customersAlergies.csv');
@@ -18,25 +20,63 @@ export function main(initialString?: string) {
     const restaurant: IRestaurant = {
         budget: 500,
     };
+    const warehouseStates: IObjectInWarehouse[][] = [];
+    const budget: number[] = [];
     const restaurantBudgetIterations: number[] = [];
+    const command: string[] = [];
+
     if (initialString != undefined) {
         const commandAndParameters: ICommandAndParameters[] = commandTokenizer(initialString, baseIngredients);
         restaurantBudgetIterations.push(restaurant.budget);
         for (let index = 0; index < commandAndParameters.length; index++) {
             const result = takeOrder(commandAndParameters[index], customers, food, baseIngredients, restaurant, warehouse);
+
+            const warehouseState: IObjectInWarehouse[] = [];
+            for (let idx = 0; idx < warehouse.length; idx++) {
+                warehouseState.push({ name: warehouse[idx].name, quantity: warehouse[idx].quantity });
+            }
+
             restaurantBudgetIterations.push(restaurant.budget);
-            finalOutput.push(result as string);
+            budget.push(restaurant.budget);
+            warehouseStates.push(warehouseState);
+            if (commandAndParameters[index].command.toLowerCase() != 'Audit'.toLowerCase()) {
+                finalOutput.push(result as string);
+            }
+            if (
+                commandAndParameters[index].command.toLowerCase() == 'Audit'.toLowerCase() &&
+                commandAndParameters[index].parameters != undefined &&
+                commandAndParameters[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()
+            ) {
+                createAudit(finalOutput, warehouseStates, budget);
+            }
         }
     } else {
         const input: ICommandAndParameters[] = inputParser('./src/txt_files/input.txt', baseIngredients);
         for (let index = 0; index < input.length; index++) {
             const result = takeOrder(input[index], customers, food, baseIngredients, restaurant, warehouse);
+            const warehouseState: IObjectInWarehouse[] = [];
+
+            for (let idx = 0; idx < warehouse.length; idx++) {
+                warehouseState.push({ name: warehouse[idx].name, quantity: warehouse[idx].quantity });
+            }
+
             restaurantBudgetIterations.push(restaurant.budget);
-            finalOutput.push(result as string);
+            budget.push(restaurant.budget);
+            command.push(`${input[index].command} ${input[index].parameters}`);
+            warehouseStates.push(warehouseState);
+
+            if (input[index].command.toLowerCase() != 'Audit'.toLowerCase()) {
+                finalOutput.push(result as string);
+            }
+            if (input[index].command.toLowerCase() == 'Audit'.toLowerCase() && input[index].parameters != undefined && input[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()) {
+                createAudit(finalOutput, warehouseStates, budget);
+            }
         }
     }
+
     createReport(restaurantBudgetIterations, finalOutput);
     return finalOutput;
 }
+// console.log(main());
 // console.log(main(`buy, julie mirage, fries`));
-// console.log(main(`Buy, Adam Smith, Princess Chicken\nBuy, Adam Smith, Princess Chicken\nBuy, Julie Mirage, Emperor Chicken\nbuy, alexandra smith, emperor chicken`));
+console.log(main(`Buy, Adam Smith, Princess Chicken\nBuy, Adam Smith, Princess Chicken\nBuy, Alexandra Smith, Emperor Chicken\n Audit, Resources`));
