@@ -65,4 +65,4 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
 //         baseIngredientsParser('./src/csv_files/baseIngredients.csv')
 //     )
 // );
-console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
+// console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));

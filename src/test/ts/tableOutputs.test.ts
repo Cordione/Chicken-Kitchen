@@ -167,11 +167,11 @@ describe('Command Tokenizer tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
         //when
         const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
         //then
-        expect(result).toContain(`Sorry we're out of supplies. Missing: Chicken, Honey`);
+        expect(result).toContain(`Sorry we're out of supplies. Missing: Asparagus, Chicken, Honey, Milk`);
     });
     test(`Table, Alexandra Smith, Adam Smith, Princess Chicken, Fries -> invalid, no alergies, can afford it, missing ingredients`, () => {
         //given
@@ -182,7 +182,7 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
         //when
         console.log(warehouse);
 
@@ -196,6 +196,6 @@ describe('Command Tokenizer tests', () => {
             warehouse
         );
         //then
-        expect(result).toContain(`Sorry we're out of supplies. Missing: Chicken, Honey, Potatoes`);
+        expect(result).toContain(`Sorry we're out of supplies. Missing: Asparagus, Chicken, Honey, Milk, Potatoes`);
     });
 });

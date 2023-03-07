@@ -32,4 +32,4 @@ export function warehouseParser(sourceString: string, baseIngredients: IBaseIngr
     return warehouseStockpile;
 }
 
-console.log(warehouseParser('./src/csv_files/warehouse.csv', baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
+// console.log(warehouseParser('./src/csv_files/warehouse.csv', baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
