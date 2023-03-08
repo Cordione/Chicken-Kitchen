@@ -3,5 +3,8 @@
     "audit": "yes",
     "table": "yes",
     "budget": "yes",
-    "order": "yes"
+    "order": "yes",
+    "profitMargin": 30,
+    "transactionTax": 10,
+    "dailyTax" : 20
 }
