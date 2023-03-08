@@ -29,7 +29,7 @@ export function countPriceOfOrder(food: IFood[], baseIngredients: IBaseIngredien
             orderedFoodIngredients.splice(0, 1);
         }
 
-        element.price = orderCost;
+        element.price = Math.ceil(orderCost);
         element.rawIngredients = requiredRawIngredientsNames
     });
 }
