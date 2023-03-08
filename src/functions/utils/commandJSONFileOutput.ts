@@ -1,4 +1,4 @@
-import { ICommands } from '../../Interface/ICommands';
+import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 export function commandJSONFileOutput(jsonSource?: string) {
     let src;
     if (jsonSource == undefined || jsonSource == '') {
@@ -6,6 +6,6 @@ export function commandJSONFileOutput(jsonSource?: string) {
     } else {
         src = require(jsonSource);
     }
-    const commandOutput: ICommands = src;
+    const commandOutput: IInformationsFromJsonFile = src;
     return commandOutput;
 }
