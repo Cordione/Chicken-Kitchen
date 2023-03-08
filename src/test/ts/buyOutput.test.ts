@@ -5,7 +5,7 @@ import { foodParser } from '../../functions/parsers/foodParser';
 import { warehouseParser } from '../../functions/parsers/warehouseParser';
 import { IRestaurant } from '../../Interface/IRestaurant';
 
-describe('srsly', () => {
+describe('Buy Output Tests', () => {
     test(`Buy, John Doe, Fries -> invalid, unknown customer`, () => {
         //given
         const allCustomers = customersParser('./src/csv_files/customersAlergies.csv');
@@ -19,7 +19,6 @@ describe('srsly', () => {
         //when
         const result = buyOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
         //then
-        console.log(result);
         expect(result).toContain(`Sorry we don't have information about your alergies John Doe,so we cannot fulfil your order`);
     });
     test(`Buy, Adam Smith, Fries -> valid, no alergies, can afford it`, () => {

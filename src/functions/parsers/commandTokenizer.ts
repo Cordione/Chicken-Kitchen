@@ -9,6 +9,17 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
     for (const singleLine of initialInputArray) {
         let element: ICommandAndParameters = { command: '', parameters: [] };
         const singleLineSplittedByComma = singleLine.split(', ').filter(x => x != '');
+        console.log(singleLineSplittedByComma);
+        if (
+            singleLineSplittedByComma[0].trim().toLowerCase() != 'Buy'.trim().toLowerCase() &&
+            singleLineSplittedByComma[0].trim().toLowerCase() != 'Order'.trim().toLowerCase() &&
+            singleLineSplittedByComma[0].trim().toLowerCase() != 'budget'.trim().toLowerCase() &&
+            singleLineSplittedByComma[0].trim().toLowerCase() != 'Table'.trim().toLowerCase() &&
+            singleLineSplittedByComma[0].trim().toLowerCase() != 'Audit'.trim().toLowerCase()
+        ) {
+            element.command = singleLineSplittedByComma[0].trim();
+        }
+
         if (singleLineSplittedByComma.length == 2) {
             if (singleLineSplittedByComma[0].trim().toLowerCase() == 'Audit'.trim().toLowerCase()) {
                 element.command += singleLineSplittedByComma[0].trim();
@@ -16,6 +27,7 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
                 arrayOfMatchingInterfaces.push(element);
             }
         }
+
         if (singleLineSplittedByComma.length >= 3) {
             if (
                 singleLineSplittedByComma[0].trim().toLowerCase() == 'Buy'.trim().toLowerCase() ||

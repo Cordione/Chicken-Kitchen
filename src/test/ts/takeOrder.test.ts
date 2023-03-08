@@ -3,6 +3,7 @@ import { customersParser } from '../../functions/parsers/customersParser';
 import { foodParser } from '../../functions/parsers/foodParser';
 import { warehouseParser } from '../../functions/parsers/warehouseParser';
 import { takeOrder } from '../../functions/takeOrder';
+import { commandJSONFileOutput } from '../../functions/utils/commandJSONFileOutput';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
 import { IRestaurant } from '../../Interface/IRestaurant';
 
@@ -20,8 +21,10 @@ describe('Take order tests', () => {
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const warehouse = warehouseParser('', baseIngredients);
+        const json = commandJSONFileOutput('../../json/allEnabled.json');
+        
         //when
-        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse);
+        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
         expect(result).toEqual('Julie Mirage has budget: 100 -> wants to order Fish In Water, which cost: 49.40: success');
     });
@@ -38,8 +41,9 @@ describe('Take order tests', () => {
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const warehouse = warehouseParser('', baseIngredients);
+        const json = commandJSONFileOutput('../../json/allEnabled.json');
         //when
-        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse);
+        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
         expect(result).toEqual(`Elon Carousel has budget: 50 -> wants to order Fish In Water -> can't order, food cost 49.4, alergic to: vinegar`);
     });
@@ -56,8 +60,9 @@ describe('Take order tests', () => {
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const warehouse = warehouseParser('', baseIngredients);
+        const json = commandJSONFileOutput('../../json/allEnabled.json');
         //when
-        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse);
+        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
         expect(result).toEqual(`Julie Mirage has budget: 100 -> wants to order Emperor Chicken -> can’t order, Emperor Chicken costs 369.2`);
     });
@@ -74,8 +79,9 @@ describe('Take order tests', () => {
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const warehouse = warehouseParser('', baseIngredients);
+        const json = commandJSONFileOutput('../../json/allEnabled.json');
         //when
-        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse);
+        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
         expect(result).toEqual(`Bernard Unfortunate has budget: 15 -> wants to order Emperor Chicken -> can't order, food cost 369.2, alergic to: potatoes`);
     });
@@ -91,10 +97,11 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-
+        const json = commandJSONFileOutput('../../json/allEnabled.json');
         const warehouse = warehouseParser('', baseIngredients);
         //when
-        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse);
+        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
+
         //then
         expect(result).toEqual(`Sorry we don't have information about your alergies Jaques Chirac,so we cannot fulfil your order`);
     });
@@ -111,8 +118,9 @@ describe('Take order tests', () => {
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const warehouse = warehouseParser('', baseIngredients);
+        const json = commandJSONFileOutput('../../json/allEnabled.json');
         //when
-        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse);
+        const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
         expect(result).toEqual(`Sorry we don't serve: Pretzels`);
     });

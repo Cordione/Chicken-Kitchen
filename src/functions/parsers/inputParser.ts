@@ -36,6 +36,13 @@ export function inputParser(sourceString: string, baseIngredients: IBaseIngredie
             formatedArray.push({ command: formatedLine[0], parameters: formatedLineWithoutFirstWord });
         } else if (singleLine[0].toLowerCase() == 'Audit'.toLowerCase()) {
             formatedArray.push({ command: formatedLine[0], parameters: [formatedLine[1]] });
+        } else if (
+            singleLine[0].toLowerCase() != 'Buy'.toLowerCase() &&
+            singleLine[0].toLowerCase() != 'Order'.toLowerCase() &&
+            singleLine[0].toLowerCase() != 'Budget'.toLowerCase() &&
+            singleLine[0].toLowerCase() != 'table'.toLowerCase()
+        ) {
+            formatedArray.push({ command: formatedLine[0], parameters: [] });
         }
     }
     return formatedArray;
