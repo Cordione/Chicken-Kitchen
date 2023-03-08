@@ -76,7 +76,6 @@ describe('Command Tokenizer tests', () => {
             restaurant,
             warehouse
         );
-        console.log(warehouse);
 
         //then
         expect(result).toContain(`Alexandra Smith, Adam Smith, ordered Irish Fish, Fries -> success, total cost: 44.20`);

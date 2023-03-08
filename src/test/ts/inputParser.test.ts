@@ -12,6 +12,7 @@ describe('Input tests', () => {
         expect(result).toEqual([
             { command: 'Buy', parameters: ['Julie Mirage', 'Princess Chicken'] },
             { command: 'Buy', parameters: ['Elon Carousel', 'Tuna Cake'] },
+            { command: 'Sadkl', parameters: [] },
             { command: 'Buy', parameters: ['Adam Smith', 'Fries'] },
             { command: 'Audit', parameters: ['Resources'] },
         ]);
