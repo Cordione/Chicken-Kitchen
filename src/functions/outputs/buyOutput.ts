@@ -37,6 +37,7 @@ export function buyOutput(
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownCustomer = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()));
     const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
+    const succesfulAppearance: string[] = [];
 
     if (commandAndParameters.parameters != undefined) {
         const unknownFood = !foodListToLowerCase.includes(commandAndParameters.parameters[1]?.toLowerCase());
@@ -52,7 +53,17 @@ export function buyOutput(
             const dish = commandAndParameters.parameters[1];
             const specificDish = food.find(x => x.name.toLowerCase() === dish.toLowerCase());
             if (specificDish != undefined) {
-                const orderCost = Math.ceil(specificDish.price * restaurantMarkup);
+                let discountToApply = 0;
+
+                if (specificCustomer.sucessfulAppearances == 2 && !isAlergic && informationAboutMissingMaterials.length == 0) {
+                    discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
+                }
+                const discountInMoney = Math.ceil(specificDish.price * restaurantMarkup * discountToApply);
+
+                const orderCost =
+                    Math.ceil(specificDish.price * restaurantMarkup - discountInMoney) <= specificCustomer.budget
+                        ? Math.ceil(specificDish.price * restaurantMarkup - discountInMoney)
+                        : Math.ceil(specificDish.price * restaurantMarkup);
                 const orderTax = Math.ceil(orderCost * transactionTax);
                 if (isAlergic) {
                     removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
@@ -62,10 +73,25 @@ export function buyOutput(
                 } else if (specificCustomer.budget < orderCost) {
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
                 } else if (!isAlergic && specificCustomer.budget >= orderCost && informationAboutMissingMaterials.length == 0) {
-                    const output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name}, which cost: ${orderCost}: success -> Restaurant gets: ${orderCost - orderTax}, transactionTax: ${orderTax}`;
-                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                    specificCustomer.sucessfulAppearances++;
+                    let output = ``;
+                    if (specificCustomer.sucessfulAppearances == 3) {
+                        output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
+                            specificDish?.name
+                        }, which cost: ${orderCost}: success -> Restaurant gets: ${
+                            orderCost - orderTax
+                        }, transactionTax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}`;
+                        specificCustomer.sucessfulAppearances = 0;
+                    } else {
+                        output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
+                            specificDish?.name
+                        }, which cost: ${orderCost}: success -> Restaurant gets: ${orderCost - orderTax}, transactionTax: ${orderTax}`;
+                    }
+
                     specificCustomer.budget -= orderCost;
                     restaurant.budget += orderCost - orderTax;
+                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+
                     return [output, orderTax];
                 } else if (informationAboutMissingMaterials.length > 0) {
                     const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
