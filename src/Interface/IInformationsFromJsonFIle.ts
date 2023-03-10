@@ -8,4 +8,7 @@ export interface IInformationsFromJsonFile {
     transactionTax: number;
     dailyTax: number;
     everyThirdDiscount: number;
+    totalMaximum: number;
+    maxIngredientType: number;
+    maxDishType: number;
 }
