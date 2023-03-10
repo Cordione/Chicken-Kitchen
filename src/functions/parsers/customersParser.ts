@@ -16,9 +16,9 @@ export function customersParser(sourceString: string) {
         const secondToNColumn = trimMe(singleLine, 1);
         const customerBudget = parseInt(singleLine[singleLine.length - 1]);
         if (singleLine.length == 2) {
-            customerArray.push({ customerName: singleLine[0], alergies: [], budget: customerBudget });
+            customerArray.push({ customerName: singleLine[0], alergies: [], budget: customerBudget, sucessfulAppearances: 0 });
         } else if (singleLine.length > 2) {
-            customerArray.push({ customerName: singleLine[0], alergies: secondToNColumn, budget: customerBudget });
+            customerArray.push({ customerName: singleLine[0], alergies: secondToNColumn, budget: customerBudget, sucessfulAppearances: 0 });
         }
     }
     return customerArray;
