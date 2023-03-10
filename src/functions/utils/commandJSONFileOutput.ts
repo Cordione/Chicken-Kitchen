@@ -6,6 +6,11 @@ export function commandJSONFileOutput(jsonSource?: string) {
     } else {
         src = require(jsonSource);
     }
+    src.profitMargin = src["profit margin"];
+    src.transactionTax = src["transaction tax"];
+    src.dailyTax = src["daily tax"];
     const commandOutput: IInformationsFromJsonFile = src;
     return commandOutput;
 }
+// console.log(commandJSONFileOutput(`../../json/tax`));
+// console.log(commandJSONFileOutput())
