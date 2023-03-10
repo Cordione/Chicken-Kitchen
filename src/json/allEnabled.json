@@ -7,5 +7,8 @@
     "profit margin": 30,
     "transaction tax": 10,
     "daily tax" : 20,
-    "every third discount": 10
+    "every third discount": 10,
+    "total maximum": 500, 
+    "max ingredient type": 10, 
+    "max dish type": 3
 }
