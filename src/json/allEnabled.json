@@ -4,7 +4,7 @@
     "table": "yes",
     "budget": "yes",
     "order": "yes",
-    "profitMargin": 30,
-    "transactionTax": 10,
-    "dailyTax" : 20
+    "profit margin": 30,
+    "transaction tax": 10,
+    "daily tax" : 20
 }
