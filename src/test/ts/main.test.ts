@@ -1,5 +1,4 @@
 import { main } from '../../functions';
-import * as com from '../../json/allEnabled.json';
 describe('Take order tests', () => {
     test('Restaurant should NOT accept new orders after reporting bankrupcy, insteed should write "RESTAURANT BANKRUPT".', () => {
         //given
@@ -7,7 +6,7 @@ describe('Take order tests', () => {
         //when
         const result = main(inputString);
         //then
-        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -125.00', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT']);
+        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -188', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT', "Daily tax to pay: 0"]);
     });
     test('Work with json source, all commands are enabled', () => {
         //given

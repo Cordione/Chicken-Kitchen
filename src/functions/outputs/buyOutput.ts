@@ -1,5 +1,6 @@
 import { IBaseIngredients } from '../../Interface/IBaseIngredients';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
+import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 import { ICustomerAlergies } from '../../Interface/ICustomerAlergies';
 import { IFood } from '../../Interface/IFood';
 import { IMaterials } from '../../Interface/IMaterials';
@@ -22,7 +23,8 @@ export function buyOutput(
     baseIngredients: IBaseIngredients[],
     restaurantMarkup: number,
     restaurant: IRestaurant,
-    warehouse: IObjectInWarehouse[]
+    warehouse: IObjectInWarehouse[],
+    informationsFromJsonFile: IInformationsFromJsonFile
 ) {
     const customers: ICustomerAlergies[] = listOfCustomers(commandAndParameters, customerList);
     const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse);
@@ -34,10 +36,12 @@ export function buyOutput(
     const specificCustomer = customers[0];
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownCustomer = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()));
-    if(commandAndParameters.parameters != undefined){
-    const unknownFood = !foodListToLowerCase.includes(commandAndParameters.parameters[1]?.toLowerCase());
-        if(unknownFood){
-            return `Sorry we don't serve: ${commandAndParameters.parameters[1]}`
+    const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
+
+    if (commandAndParameters.parameters != undefined) {
+        const unknownFood = !foodListToLowerCase.includes(commandAndParameters.parameters[1]?.toLowerCase());
+        if (unknownFood) {
+            return `Sorry we don't serve: ${commandAndParameters.parameters[1]}`;
         }
     }
     if (informationAboutAlergies[0] != undefined) {
@@ -45,24 +49,24 @@ export function buyOutput(
         if (specificCustomer == undefined && unknownCustomer != undefined) {
             return `Sorry we don't have information about your alergies ${unknownCustomer[0]},so we cannot fulfil your order`;
         } else if (commandAndParameters.parameters != undefined) {
-
             const dish = commandAndParameters.parameters[1];
             const specificDish = food.find(x => x.name.toLowerCase() === dish.toLowerCase());
             if (specificDish != undefined) {
-                const orderCost = specificDish.price * restaurantMarkup;
+                const orderCost = Math.ceil(specificDish.price * restaurantMarkup);
+                const orderTax = Math.ceil(orderCost * transactionTax);
                 if (isAlergic) {
                     removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
                         specificDish?.name
                     } -> can't order, food cost ${orderCost}, alergic to: ${informationAboutAlergies[0].join(' ').toLowerCase()}`;
-                } else if (specificCustomer.budget < specificDish?.price * restaurantMarkup) {
+                } else if (specificCustomer.budget < orderCost) {
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
-                } else if (!isAlergic && specificCustomer.budget >= specificDish?.price * restaurantMarkup && informationAboutMissingMaterials.length == 0) {
-                    const output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name}, which cost: ${orderCost.toFixed(2)}: success`;
+                } else if (!isAlergic && specificCustomer.budget >= orderCost && informationAboutMissingMaterials.length == 0) {
+                    const output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name}, which cost: ${orderCost}: success -> Restaurant gets: ${orderCost - orderTax}, transactionTax: ${orderTax}`;
                     removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                     specificCustomer.budget -= orderCost;
-                    restaurant.budget += orderCost;
-                    return output;
+                    restaurant.budget += orderCost - orderTax;
+                    return [output, orderTax];
                 } else if (informationAboutMissingMaterials.length > 0) {
                     const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
                     return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;

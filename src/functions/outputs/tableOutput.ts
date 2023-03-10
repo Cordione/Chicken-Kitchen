@@ -1,5 +1,6 @@
 import { IBaseIngredients } from '../../Interface/IBaseIngredients';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
+import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 import { ICustomerAlergies } from '../../Interface/ICustomerAlergies';
 import { IFood } from '../../Interface/IFood';
 import { IMaterials } from '../../Interface/IMaterials';
@@ -21,7 +22,8 @@ export function tableOutput(
     baseIngredients: IBaseIngredients[],
     restaurantMarkup: number,
     restaurant: IRestaurant,
-    warehouse: IObjectInWarehouse[]
+    warehouse: IObjectInWarehouse[],
+    informationsFromJsonFile: IInformationsFromJsonFile
 ) {
     //Should work properly for multiple customers
     //which guests want to take table:
@@ -38,7 +40,9 @@ export function tableOutput(
 
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()) && !foodListToLowerCase.includes(x.toLowerCase()));
+    const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
 
+    let totalTax;
     let anyoneIsAlergic: boolean = false;
     informationAboutAlergies.map(el => {
         if (el.length > 0) {
@@ -87,7 +91,8 @@ export function tableOutput(
             const whoCouldntPay: ICustomerAlergies[] = [];
             let everyoneCanPayForTheirOrder: boolean = true;
             for (let index = 0; index < customers.length; index++) {
-                if (customers[index].budget < informationAboutOrdersAndItsPrice[index].price * restaurantMarkup) {
+                const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                if (customers[index].budget < orderPrice) {
                     everyoneCanPayForTheirOrder = false;
                     whoCouldntPay.push(customers[index]);
                 }
@@ -120,28 +125,36 @@ export function tableOutput(
             } else if (everyoneCanPayForTheirOrder) {
                 const customersNames = customers.map(x => x.customerName);
                 const totalOrdersCost: number[] = [];
+                const totalTaxOnOrders: number[] = [];
                 removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                 for (let index = 0; index < customers.length; index++) {
-                    totalOrdersCost.push(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                    const orderCost = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                    const orderTax = Math.ceil(orderCost * transactionTax);
+                    totalOrdersCost.push(orderCost);
+                    totalTaxOnOrders.push(orderTax);
                 }
-                outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0).toFixed(2)}\n`);
+                totalTax = totalTaxOnOrders.reduce((a, b) => a + b, 0);
+                outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0)}, total tax: ${totalTax}\n`);
 
                 for (let index = 0; index < customers.length; index++) {
-                    const orderPrice = informationAboutOrdersAndItsPrice[index].price * restaurantMarkup;
+                    const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                    const orderTax = Math.ceil(orderPrice * transactionTax);
+                    const priceBeforeTaxes = orderPrice - orderTax;
+
                     const currentCustomer = customers[index].customerName;
                     if (index == 0) {
                         outputList.push(`{\n`);
                     }
-                    outputList.push(`${currentCustomer}, ordered ${foodList[index]}, -> success: ${orderPrice.toFixed(2)}\n`);
+                    outputList.push(`${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}\n`);
                     customers[index].budget -= orderPrice;
-                    restaurant.budget += orderPrice;
+                    restaurant.budget += orderPrice - orderTax;
                     if (index + 1 == customers.length) {
                         outputList.push('}');
                     }
                 }
             }
         }
-        return outputList.join('');
+        return [outputList.join(''), totalTax];
     } else if (unqiueCustomers.length != customers.length) {
         //each customer can appear only once @ table
         return `ERROR. One person can appear only once at the table.`;

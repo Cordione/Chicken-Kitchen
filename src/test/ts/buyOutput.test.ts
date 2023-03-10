@@ -3,6 +3,7 @@ import { baseIngredientsParser } from '../../functions/parsers/baseIngredientsPa
 import { customersParser } from '../../functions/parsers/customersParser';
 import { foodParser } from '../../functions/parsers/foodParser';
 import { warehouseParser } from '../../functions/parsers/warehouseParser';
+import { commandJSONFileOutput } from '../../functions/utils/commandJSONFileOutput';
 import { IRestaurant } from '../../Interface/IRestaurant';
 
 describe('Buy Output Tests', () => {
@@ -16,8 +17,10 @@ describe('Buy Output Tests', () => {
         };
         const restaurantMarkup = 1.3;
         const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+        const result = buyOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Sorry we don't have information about your alergies John Doe,so we cannot fulfil your order`);
     });
@@ -32,10 +35,12 @@ describe('Buy Output Tests', () => {
         const restaurantMarkup = 1.3;
 
         const warehouse = warehouseParser('', allIngredients);
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+        const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
-        expect(result).toContain(`Adam Smith has budget: 100 -> wants to order Fries, which cost: 3.90: success`);
+        expect(result).toContain("Adam Smith has budget: 100 -> wants to order Fries, which cost: 4: success -> Restaurant gets: 3, transactionTax: 1");
     });
     test(`Buy, Adam Smith, Princess Chicken -> invalid, no alergies, can't afford it`, () => {
         //given
@@ -48,8 +53,10 @@ describe('Buy Output Tests', () => {
         const restaurantMarkup = 1.3;
 
         const warehouse = warehouseParser('', allIngredients);
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+        const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117`);
     });
@@ -64,10 +71,12 @@ describe('Buy Output Tests', () => {
         const restaurantMarkup = 1.3;
 
         const warehouse = warehouseParser('', allIngredients);
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+        const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
-        expect(result).toContain(`Alexandra Smith has budget: 500 -> wants to order Princess Chicken, which cost: 117.00: success`);
+        expect(result).toContain("Alexandra Smith has budget: 500 -> wants to order Princess Chicken, which cost: 117: success -> Restaurant gets: 105, transactionTax: 12");
     });
     test(`Buy, Alexandra Smith, Princess Chicken -> invalid, no alergies, can afford it, missing ingredients`, () => {
         //given
@@ -78,10 +87,11 @@ describe('Buy Output Tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse);
+        const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Sorry we're out of supplies. Missing: Asparagus, Chicken, Honey, Milk`);
     });

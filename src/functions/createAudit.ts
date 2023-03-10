@@ -1,5 +1,4 @@
 import { IObjectInWarehouse } from '../Interface/IObjectInWarehouse';
-import { saveFile } from './saveFile';
 
 export function createAudit(auditArray: string[], warehouseStates: IObjectInWarehouse[][], restaurantBugets: number[]) {
     const output: string[] = [];
@@ -15,9 +14,12 @@ export function createAudit(auditArray: string[], warehouseStates: IObjectInWare
             output.push(`Warehouse: ${warehouseAsString}`);
             output.push(`Restaurant Budget: ${restaurantBugets[index]}`);
         }
-        output.push(`Command: ${auditArray[index]}`);
-        output.push(`Warehouse: ${warehouseAsString}`);
-        output.push(`Restaurant Budget: ${restaurantBugets[index]}`);
+        if (index != 0 && index < auditArray.length) {
+            output.push(`Command: ${auditArray[index]}`);
+            output.push(`Warehouse: ${warehouseAsString}`);
+            output.push(`Restaurant Budget: ${restaurantBugets[index]}`);
+        }
+
         if (index + 1 == auditArray.length) {
             output.push(`Audit End`);
         }
