@@ -9,6 +9,7 @@ export function commandJSONFileOutput(jsonSource?: string) {
     src.profitMargin = src["profit margin"];
     src.transactionTax = src["transaction tax"];
     src.dailyTax = src["daily tax"];
+    src.everyThirdDiscount = src["every third discount"];
     const commandOutput: IInformationsFromJsonFile = src;
     return commandOutput;
 }

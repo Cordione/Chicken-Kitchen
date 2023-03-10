@@ -7,4 +7,5 @@ export interface IInformationsFromJsonFile {
     profitMargin: number;
     transactionTax: number;
     dailyTax: number;
+    everyThirdDiscount: number;
 }

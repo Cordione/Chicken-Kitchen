@@ -90,8 +90,19 @@ export function tableOutput(
         } else if (!anyoneIsAlergic && !anyoneOrderedUnavailableFood) {
             const whoCouldntPay: ICustomerAlergies[] = [];
             let everyoneCanPayForTheirOrder: boolean = true;
+
             for (let index = 0; index < customers.length; index++) {
-                const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                let discountToApply = 0;
+
+                if (customers[index].sucessfulAppearances == 2 && informationAboutMissingMaterials.length == 0) {
+                    discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
+                }
+                const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
+                const orderPrice =
+                    Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
+                        ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
+                        : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                // const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
                 if (customers[index].budget < orderPrice) {
                     everyoneCanPayForTheirOrder = false;
                     whoCouldntPay.push(customers[index]);
@@ -124,6 +135,7 @@ export function tableOutput(
                 }
             } else if (everyoneCanPayForTheirOrder) {
                 const customersNames = customers.map(x => x.customerName);
+                customers.forEach(el => el.sucessfulAppearances++);
                 const totalOrdersCost: number[] = [];
                 const totalTaxOnOrders: number[] = [];
                 removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
@@ -137,7 +149,18 @@ export function tableOutput(
                 outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0)}, total tax: ${totalTax}\n`);
 
                 for (let index = 0; index < customers.length; index++) {
-                    const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                    let discountToApply = 0;
+
+                    if (customers[index].sucessfulAppearances == 3 && informationAboutMissingMaterials.length == 0) {
+                        discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
+                    }
+                    const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
+                    const orderPrice =
+                        Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
+                            ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
+                            : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+
+                    // const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
                     const orderTax = Math.ceil(orderPrice * transactionTax);
                     const priceBeforeTaxes = orderPrice - orderTax;
 
@@ -145,7 +168,15 @@ export function tableOutput(
                     if (index == 0) {
                         outputList.push(`{\n`);
                     }
-                    outputList.push(`${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}\n`);
+                    if (customers[index].sucessfulAppearances == 3) {
+                        outputList.push(
+                            `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}\n`
+                        );
+                        customers[index].sucessfulAppearances = 0;
+                    } else {
+                        outputList.push(`${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}\n`);
+                    }
+
                     customers[index].budget -= orderPrice;
                     restaurant.budget += orderPrice - orderTax;
                     if (index + 1 == customers.length) {
