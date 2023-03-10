@@ -80,7 +80,7 @@ export function buyOutput(
                             specificDish?.name
                         }, which cost: ${orderCost}: success -> Restaurant gets: ${
                             orderCost - orderTax
-                        }, transactionTax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}`;
+                        }, transactionTax: ${orderTax}. Because of your third appearance you recived discount worth: ${discountInMoney}`;
                         specificCustomer.sucessfulAppearances = 0;
                     } else {
                         output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${

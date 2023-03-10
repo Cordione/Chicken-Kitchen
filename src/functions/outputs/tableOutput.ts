@@ -170,7 +170,7 @@ export function tableOutput(
                     }
                     if (customers[index].sucessfulAppearances == 3) {
                         outputList.push(
-                            `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}\n`
+                            `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}. Because of your third appearance you recived discount worth: ${discountInMoney}\n`
                         );
                         customers[index].sucessfulAppearances = 0;
                     } else {
