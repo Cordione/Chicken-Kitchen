@@ -17,7 +17,6 @@ export function updateWarehouseStateAndReturnWhatWasWasted(
         const isDish = food.find(x => x.name.toLowerCase() === element.name.toLowerCase());
         const maxBaseIngredientsQuantity = informationsFromJSONFile.maxIngredientType != undefined ? informationsFromJSONFile.maxIngredientType : 10;
         const maxBaseDishQuantity = informationsFromJSONFile.maxDishType != undefined ? informationsFromJSONFile.maxDishType : 3;
-        // console.log(`${element.name}, ${isBaseIngredient?.name}, ${isDish?.name} `);
         if (isBaseIngredient && element.quantity > maxBaseIngredientsQuantity) {
             wasted.push({ name: element.name, quantity: element.quantity - maxBaseIngredientsQuantity });
             element.quantity = maxBaseIngredientsQuantity;
