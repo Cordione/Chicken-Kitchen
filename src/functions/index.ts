@@ -96,7 +96,7 @@ export function main(initialString?: string, jsonSource?: string) {
     if (informationsFromJsonFile.audit == 'yes') {
         saveFile(auditOutput, './src/reports/Audit.txt');
     }
-    createReport(budget, finalOutput);
+    createReport(budget, finalOutput, whatWasWasted);
     return finalOutput;
 }
 // console.log(main());
