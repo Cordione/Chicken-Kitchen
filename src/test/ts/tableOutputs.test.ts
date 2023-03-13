@@ -16,9 +16,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
@@ -34,13 +34,14 @@ describe('Command Tokenizer tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = tableOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         if (result != undefined) {
+            console.log(result)
             expect(result[0]).toContain(`Adam Smith, ordered Fries -> success, total cost: 4, total tax: 1`);
             expect(result[0]).toContain(`Adam Smith, ordered Fries, cost: 4 -> success: Restaurant gets: 3, tax: 1`);
         }
@@ -55,9 +56,9 @@ describe('Command Tokenizer tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = tableOutput({ command: 'table', parameters: ['Julie Mirage', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
 
@@ -76,9 +77,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = tableOutput(
             { command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Irish Fish', 'Fries'] },
@@ -107,9 +108,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput(
             { command: 'table', parameters: ['Alexandra Smith', 'Bernard Unfortunate', 'Irish Fish', 'Fries'] },
@@ -138,9 +139,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
 
@@ -156,9 +157,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Fries', 'Irish Fish'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
 
@@ -174,9 +175,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput(
             { command: 'table', parameters: ['Adam SMith', 'Adam SMith', 'Fries', 'Fries'] },
@@ -202,9 +203,9 @@ describe('Command Tokenizer tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
@@ -219,9 +220,9 @@ describe('Command Tokenizer tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         console.log(warehouse);
 

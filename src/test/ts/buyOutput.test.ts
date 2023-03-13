@@ -16,9 +16,10 @@ describe('Buy Output Tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients, json);
+
         //when
         const result = buyOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
@@ -34,9 +35,9 @@ describe('Buy Output Tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients, json);
         //when
         const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
@@ -52,9 +53,9 @@ describe('Buy Output Tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients, json);
         //when
         const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
@@ -70,9 +71,9 @@ describe('Buy Output Tests', () => {
         };
         const restaurantMarkup = 1.3;
 
-        const warehouse = warehouseParser('', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients, json);
         //when
         const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
@@ -87,9 +88,9 @@ describe('Buy Output Tests', () => {
             budget: 500,
         };
         const restaurantMarkup = 1.3;
-        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients);
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
