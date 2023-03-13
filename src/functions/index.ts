@@ -15,28 +15,31 @@ import { commandJSONFileOutput } from './utils/commandJSONFileOutput';
 import { IInformationsFromJsonFile } from '../Interface/IInformationsFromJsonFIle';
 import { countTaxableProfit } from './utils/countTaxableProfit';
 import { taxesToPay } from './utils/taxesToPay';
+import { updateWarehouseStateAndReturnWhatWasWasted } from './utils/updateWarehouseState';
 // import * as commands from '../json/commands.json';
 
 export function main(initialString?: string, jsonSource?: string) {
+    let informationsFromJsonFile: IInformationsFromJsonFile = commandJSONFileOutput(jsonSource);
+
     const customers = customersParser('./src/csv_files/customersAlergies.csv');
     const food = foodParser('./src/csv_files/food.csv');
     const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
-    const warehouse = warehouseParser('./src/csv_files/warehouse.csv', baseIngredients);
+    const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', baseIngredients,  informationsFromJsonFile);
     const finalOutput: string[] = [];
     const restaurant: IRestaurant = {
         budget: 500,
     };
     const warehouseStates: IObjectInWarehouse[][] = [];
     const budget: number[] = [];
-
+    const whatWasWasted: IObjectInWarehouse[][] = [];
     const command: string[] = [];
     const taxPaid: number[] = [];
     let auditOutput: string[] = [];
-    let informationsFromJsonFile: IInformationsFromJsonFile = commandJSONFileOutput(jsonSource);
     let input: ICommandAndParameters[] = [];
     const auditArray: string[] = [];
     auditArray.push('');
     budget.push(restaurant.budget);
+
     if (initialString != undefined) {
         input = commandTokenizer(initialString, baseIngredients);
     } else if (initialString == undefined) {
@@ -48,7 +51,24 @@ export function main(initialString?: string, jsonSource?: string) {
         for (let idx = 0; idx < warehouse.length; idx++) {
             warehouseState.push({ name: warehouse[idx].name, quantity: warehouse[idx].quantity });
         }
+        if (index == 0) {
+            const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
+            if (wastedMaterials.length > 0) {
+                whatWasWasted.push(wastedMaterials);
+            } else {
+                whatWasWasted.push([{ name: 'None', quantity: 0 }]);
+            }
+        }
         const result = takeOrder(input[index], customers, food, baseIngredients, restaurant, warehouse, informationsFromJsonFile);
+        if (index != 0) {
+            const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
+            if (wastedMaterials.length > 0) {
+                whatWasWasted.push(wastedMaterials);
+            } else {
+                whatWasWasted.push([{ name: 'None', quantity: 0 }]);
+            }
+        }
+
         budget.push(restaurant.budget);
         command.push(`${input[index].command} ${input[index].parameters}`);
         warehouseStates.push(warehouseState);
@@ -62,15 +82,17 @@ export function main(initialString?: string, jsonSource?: string) {
         }
         if (input[index].command.toLowerCase() == 'Audit'.toLowerCase() && input[index].parameters != undefined && input[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()) {
             finalOutput.map(x => auditArray.push(x as string));
-            auditOutput = createAudit(auditArray, warehouseStates, budget);
+            auditOutput = createAudit(auditArray, warehouseStates, budget, whatWasWasted);
         }
     }
+    console.log(whatWasWasted);
     const totalTaxPaid = taxPaid.reduce((a, b) => a + b, 0);
     const taxableProfit = countTaxableProfit(totalTaxPaid, budget);
     const dailyTaxAmount = taxesToPay(taxableProfit, informationsFromJsonFile);
-    restaurant.budget - dailyTaxAmount
-    budget.push(restaurant.budget - dailyTaxAmount)
-    finalOutput.push(`Daily tax to pay: ${dailyTaxAmount}`)
+
+    restaurant.budget - dailyTaxAmount;
+    budget.push(restaurant.budget - dailyTaxAmount);
+    finalOutput.push(`Daily tax to pay: ${dailyTaxAmount}`);
     if (informationsFromJsonFile.audit == 'yes') {
         saveFile(auditOutput, './src/reports/Audit.txt');
     }
@@ -79,6 +101,10 @@ export function main(initialString?: string, jsonSource?: string) {
 }
 // console.log(main());
 // console.log(main(`Buy, Adam Smith, Fries`));
+console.log(
+    main(`Buy, Alexandra Smith, Princess Chicken\n Buy, Adam Smith, Tuna Cake\n Buy, Alexandra Smith, Fries\n Table, Alexandra Smith, Julie Mirage, Fries, Fries
+\n Buy, Alexandra Smith, Tuna Cake\n order, tuna, 10 \n Audit, Resources`)
+);
 // console.log(main(`Buy, Julie Mirage, Princess Chicken\n Table, Barbara Smith, Tuna Cake\n Morningstar, Alexandra Smith, Adam Smith, Irish Fish, Fries`));
-console.log(main(`Buy, Adam Smith, Princess Chicken\nBuy, Adam Smith, Princess Chicken\n buy, Alexandra Smith, Emperor Chicken\n Audit, Resources`, '../../json/allEnabled.json'));
+// console.log(main(`Buy, Adam Smith, Princess Chicken\nBuy, Adam Smith, Princess Chicken\n buy, Alexandra Smith, Emperor Chicken\n Audit, Resources`, '../../json/allEnabled.json'));
 // console.log(main(`table, Alexandra Smith, Princess Chicken\nBuy, Adam Smith, Fries\n buy, Alexandra Smith, Emperor Chicken\n Order, Tuna, 5 \n Audit, Resources`, '../../json/allEnabled.json'));
