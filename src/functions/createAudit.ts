@@ -23,10 +23,7 @@ export function createAudit(
         for (const element of warehouseState) {
             warehouseAsString.push(element.name, element.quantity.toString());
         }
-        // for (const element of wasted) {
-        //     whatWasWastedAsString.push(element.name, element.quantity.toString());
-        // }
-        console.log(wasted);
+
         if (index == 0) {
             output.push(`Initial state:`);
             output.push(`Warehouse: ${warehouseAsString}`);
