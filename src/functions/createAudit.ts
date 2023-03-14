@@ -13,17 +13,17 @@ export function createAudit(
     food: IFood[]
 ) {
     const output: string[] = [];
+    // console.log(`at`, auditArray)
+    // console.log(`wasted`, whatWasWasted)
     for (let index = 0; index < auditArray.length; index++) {
         const warehouseState = warehouseStates[index];
         const warehouseAsString: string[] = [];
         const wasted = whatWasWasted[index];
-        const whatWasWastedAsString: string[] = [];
         const maxBaseIngredientsQuantity = informationsFromJsonFile.maxIngredientType != undefined ? informationsFromJsonFile.maxIngredientType : 10;
         const maxBaseDishQuantity = informationsFromJsonFile.maxDishType != undefined ? informationsFromJsonFile.maxDishType : 3;
         for (const element of warehouseState) {
             warehouseAsString.push(element.name, element.quantity.toString());
         }
-
         if (index == 0) {
             output.push(`Initial state:`);
             output.push(`Warehouse: ${warehouseAsString}`);
@@ -41,7 +41,7 @@ export function createAudit(
             }
             output.push(`Restaurant Budget: ${restaurantBugets[index]}`);
         }
-        if (index != 0 && index < auditArray.length) {
+        if (index > 0 && index < auditArray.length) {
             output.push(`Command: ${auditArray[index]}`);
             output.push(`Warehouse: ${warehouseAsString}`);
             if (whatWasWasted[index][0].name.toLowerCase() !== 'None'.toLowerCase()) {

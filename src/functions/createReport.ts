@@ -40,18 +40,20 @@ export function createReport(
             finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[0].toFixed(2)}`);
         }
 
+        if (!isRestaurantBankrupt && whatWasWastedAsString[0] != undefined && whatWasWastedAsString[0].toLowerCase() != 'None'.toLowerCase()) {
+            for (const element of wasted) {
+                const isBaseIngredient = baseIngredients.find(x => x.name.toLowerCase() === element.name.toLowerCase());
+                const isDish = food.find(x => x.name.toLowerCase() === element.name.toLowerCase());
+                if (isBaseIngredient) {
+                    finalArray.push(`Wasted: ${element.name}, quantity: ${element.quantity} max amount in warehouse: ${maxBaseIngredientsQuantity}`);
+                }
+                if (isDish) {
+                    finalArray.push(`Wasted: ${element.name}, quantity: ${element.quantity}, max amount in warehouse ${maxBaseDishQuantity}`);
+                }
+            }
+        }
         if (!isRestaurantBankrupt) {
             finalArray.push(outputArray[index]);
-        }
-        if (whatWasWastedAsString[0] != undefined && whatWasWastedAsString[0].toLowerCase() != 'None'.toLowerCase()) {
-            const isBaseIngredient = baseIngredients.find(x => x.name.toLowerCase() === whatWasWastedAsString[0].toLowerCase());
-            const isDish = food.find(x => x.name.toLowerCase() === whatWasWastedAsString[0].toLowerCase());
-            if (isBaseIngredient) {
-                finalArray.push(`Wasted: ${whatWasWastedAsString}, max amount in warehouse: ${maxBaseIngredientsQuantity}`);
-            }
-            if (isDish) {
-                finalArray.push(`Wasted: ${whatWasWastedAsString}, max amount in warehouse ${maxBaseDishQuantity}`);
-            }
         }
         if (index == outputArray.length - 1 && !isRestaurantBankrupt) {
             finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1].toFixed(2)}`);
