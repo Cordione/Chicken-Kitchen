@@ -8,6 +8,7 @@ import { ISpecificOrder } from '../../Interface/ISpecificOrder';
 import { baseIngredientsParser } from '../parsers/baseIngredientsParser';
 import { customersParser } from '../parsers/customersParser';
 import { foodParser } from '../parsers/foodParser';
+import { countRawMaterials } from './countExtraMaterials';
 
 export function informationsAboutOrders(
     commandAndParameters: ICommandAndParameters,
@@ -20,6 +21,7 @@ export function informationsAboutOrders(
     const isAlergicTo: string[][] = [];
     const orderedUnavailableFood: string[] = [];
     const missingIngredients: IMaterials[] = [];
+    const whatTechnicalyWasUsed: IMaterials[] = [];
 
     const neededRawMaterialsWithQuantities: IMaterials[] = [];
     const usedMaterialsWithQuantities: IMaterials[] = [];
@@ -43,6 +45,7 @@ export function informationsAboutOrders(
                     const partialOrder = warehouse.find(x => x.name.toLowerCase() === orderedFoodIngredients[0].toLowerCase());
                     const howManyOfThemAreReserved = usedMaterialsNames.filter(x => x.toLowerCase() === specificOrder.toLowerCase()).length;
                     const howManySubIngredientsAreReserved = usedMaterialsNames.filter(x => x.toLowerCase() === partialOrder?.name.toLowerCase());
+
                     if (dishInWarehouse && dishInWarehouse.quantity > howManyOfThemAreReserved) {
                         usedMaterialsNames.push(dishInWarehouse.name);
                         break;
@@ -86,25 +89,30 @@ export function informationsAboutOrders(
             }
         }
         //convert dishes to raw mats (extra materials)
+        const extraMaterialArray: IMaterials[][] = [];
         for (let index = 0; index < usedMaterialsWithQuantities.length; index++) {
-            if (usedMaterialsWithQuantities[index] != undefined) {
-                const rawIngredient = baseIngredients.find(x => x.name.toLowerCase() === usedMaterialsWithQuantities[index].name.toLowerCase());
-                if (rawIngredient == undefined) {
-                    const findFood = food.find(x => x.name.toLowerCase() == usedMaterialsWithQuantities[index].name.toLowerCase());
-                    if (findFood != undefined) {
-                        for (let i = 0; i < findFood.rawIngredients.length; i++) {
-                            const extra = extraMaterials.find(x => x.name.toLowerCase() === findFood.rawIngredients[i].toLowerCase());
-                            if (extra == undefined) {
-                                extraMaterials.push({ name: findFood.rawIngredients[i], quantity: 1 });
-                            } else {
-                                extra.quantity++;
-                            }
-                        }
-                    }
+            const findFood = food.find(x => x.name.toLowerCase() == usedMaterialsWithQuantities[index].name.toLowerCase());
+            const times = usedMaterialsWithQuantities[index].quantity;
+            if (findFood != undefined) {
+                for (let i = 0; i < times; i++) {
+                    const extraMats = countRawMaterials(findFood, food, baseIngredients);
+                    extraMaterialArray.push(extraMats);
+                }
+            }
+
+        }
+        const anotherUsefulArray: IMaterials[] = [];
+        for (let i = 0; i < extraMaterialArray.length; i++) {
+            for (let j = 0; j < extraMaterialArray[i].length; j++) {
+                const alreadyOnList = anotherUsefulArray.find(x => x.name.toLowerCase() === extraMaterialArray[i][j].name.toLowerCase());
+                if (alreadyOnList) {
+                    alreadyOnList.quantity++;
+                } else {
+                    anotherUsefulArray.push({ name: extraMaterialArray[i][j].name, quantity: 1 });
                 }
             }
         }
-        const whatTechnicalyWasUsed: IMaterials[] = [];
+
         for (const element of usedMaterialsWithQuantities) {
             const baseIng = baseIngredients.find(x => x.name.toLowerCase() === element.name.toLowerCase());
             if (baseIng) {
@@ -112,18 +120,17 @@ export function informationsAboutOrders(
             }
         }
 
-        for (let index = 0; index < extraMaterials.length; index++) {
-            const exists = whatTechnicalyWasUsed.find(x => x.name.toLowerCase() == extraMaterials[index].name.toLowerCase());
+        for (let index = 0; index < anotherUsefulArray.length; index++) {
+            const exists = whatTechnicalyWasUsed.find(x => x.name.toLowerCase() == anotherUsefulArray[index].name.toLowerCase());
             if (exists == undefined) {
-                whatTechnicalyWasUsed.push({ name: extraMaterials[index].name, quantity: 1 });
+                whatTechnicalyWasUsed.push({ name: anotherUsefulArray[index].name, quantity: anotherUsefulArray[index].quantity });
             } else {
-                exists.quantity++;
+                exists.quantity += anotherUsefulArray[index].quantity
             }
         }
-
         // Sorted Arrays
         const whatSorted = whatTechnicalyWasUsed.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-        const neededSorted = neededRawMaterialsWithQuantities.sort((a, b) => a.name.localeCompare(b.name));
+        const neededSorted = neededRawMaterialsWithQuantities.sort((a, b) => a.name.toLowerCase().localeCompare(b.name));
 
         // Find missing ingredients
 
@@ -142,7 +149,7 @@ export function informationsAboutOrders(
 }
 // console.log(
 //     informationsAboutOrders(
-//         { command: 'a', parameters: ['Julie Mirage', 'Alexandra Smith', 'emperor chicken'] },
+//         { command: 'a', parameters: ['Alexandra Smith', 'Adam Smith', 'emperor chicken', 'fries'] },
 //         customersParser('./src/csv_files/customersAlergies.csv'),
 //         foodParser('./src/csv_files/food.csv'),
 //         baseIngredientsParser('./src/csv_files/baseIngredients.csv'),
