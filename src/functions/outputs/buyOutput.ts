@@ -15,6 +15,7 @@ import { filterOrders } from '../utils/filterOrders';
 import { informationsAboutOrders } from '../utils/informationsAboutOrders';
 import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
+import { keepDishes } from '../utils/keepDishes';
 
 export function buyOutput(
     commandAndParameters: ICommandAndParameters,
@@ -66,7 +67,22 @@ export function buyOutput(
                         : Math.ceil(specificDish.price * restaurantMarkup);
                 const orderTax = Math.ceil(orderCost * transactionTax);
                 if (isAlergic) {
-                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                    const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
+                    if (whatDoWeDoWithDishesFromAlergics === 'waste') {
+                        removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                    }
+                    if (whatDoWeDoWithDishesFromAlergics === 'waste') {
+                    }
+                    if (whatDoWeDoWithDishesFromAlergics === 'keep') {
+                        keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
+                        //Prepared to expand output with details about stored dishes
+                        // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                    }
+                    if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {
+                        keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
+                        //Prepared to expand output with details about stored dishes
+                        // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                    }
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
                         specificDish?.name
                     } -> can't order, food cost ${orderCost}, alergic to: ${informationAboutAlergies[0].join(' ').toLowerCase()}`;

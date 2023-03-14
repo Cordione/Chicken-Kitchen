@@ -14,6 +14,7 @@ import { filterOrders } from '../utils/filterOrders';
 import { informationsAboutOrders } from '../utils/informationsAboutOrders';
 import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
+import { keepDishes } from '../utils/keepDishes';
 
 export function tableOutput(
     commandAndParameters: ICommandAndParameters,
@@ -62,10 +63,25 @@ export function tableOutput(
         return `Error no idea what is ${unknownParameters.join(', ')}`;
     } else if (customers.length == unqiueCustomers.length && customers.length == foodList.length) {
         if (anyoneIsAlergic) {
-            // one of customers is allergic to ordered food
+            // one or more customers is allergic to ordered food
+            const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
             const customersNames = customers.map(x => x.customerName);
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
+            //Prepared to expand output with details about stored dishes
+            // let storedDishes: string[] = [];
             removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+            if (whatDoWeDoWithDishesFromAlergics === 'waste') {
+            }
+            if (whatDoWeDoWithDishesFromAlergics === 'keep') {
+                keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                //Prepared to expand output with details about stored dishes
+                // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+            }
+            if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {
+                keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                //Prepared to expand output with details about stored dishes
+                // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+            }
             for (let index = 0; index < customers.length; index++) {
                 if (index == 0) {
                     outputList.push(`{\n`);
@@ -78,6 +94,10 @@ export function tableOutput(
                 if (informationAboutAlergies[index].length == 0) {
                     outputList.push(`We're sorry ${customers[index].customerName}, we cannot provide you with table, becouse other guest is alergic to his order\n`);
                 }
+                //Prepared to expand output with details about stored dishes
+                // if (storedDishes[index] != '') {
+                //     outputList.push(`We stored ${}\n`);
+                // }
                 if (index + 1 == customers.length) {
                     outputList.push('}');
                 }
