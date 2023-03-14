@@ -61,6 +61,27 @@ describe('Warehouse testing', () => {
         expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
         expect(fries).toEqual({ name: 'Fries', quantity: 2 });
     });
+    test('3 buy -> 3 customers -> check warehouse, json - keep', () => {
+        //given
+        const allCustomers = customersParser('./src/csv_files/customersAlergies.csv');
+        const allFood = foodParser('./src/csv_files/food.csv');
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const restaurant: IRestaurant = {
+            budget: 500,
+        };
+        const restaurantMarkup = 1.3;
+        const jsonSource = '../../json/keep.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
+        //when
+        buyOutput({ command: 'buy', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const tunacake = warehouse.find( x => x.name === "Tuna Cake")
+        const fries = warehouse.find( x => x.name === "Fries")
+        expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
+        expect(fries).toEqual(undefined);
+    });
     test('3 buy -> 3 customers -> check warehouse, json - number', () => {
         //given
         const allCustomers = customersParser('./src/csv_files/customersAlergies.csv');
