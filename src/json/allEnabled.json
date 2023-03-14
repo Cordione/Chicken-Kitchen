@@ -10,5 +10,6 @@
     "every third discount": 10,
     "total maximum": 500, 
     "max ingredient type": 10, 
-    "max dish type": 3
+    "max dish type": 3,
+    "dishes with allergies": "waste"
 }
