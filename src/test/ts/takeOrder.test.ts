@@ -20,8 +20,10 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-        const warehouse = warehouseParser('', baseIngredients);
-        const json = commandJSONFileOutput('../../json/allEnabled.json');
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
@@ -40,8 +42,10 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-        const warehouse = warehouseParser('', baseIngredients);
-        const json = commandJSONFileOutput('../../json/allEnabled.json');
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);;
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
@@ -59,8 +63,10 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-        const warehouse = warehouseParser('', baseIngredients);
-        const json = commandJSONFileOutput('../../json/allEnabled.json');
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
@@ -78,8 +84,10 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-        const warehouse = warehouseParser('', baseIngredients);
-        const json = commandJSONFileOutput('../../json/allEnabled.json');
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
@@ -97,8 +105,10 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-        const json = commandJSONFileOutput('../../json/allEnabled.json');
-        const warehouse = warehouseParser('', baseIngredients);
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
 
@@ -117,8 +127,10 @@ describe('Take order tests', () => {
         const customers = customersParser('./src/test/csv/customersAlergies.csv');
         const food = foodParser('./src/test/csv/food.csv');
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
-        const warehouse = warehouseParser('', baseIngredients);
-        const json = commandJSONFileOutput('../../json/allEnabled.json');
+        const jsonSource = '../../json/allEnabled.json';
+        const json = commandJSONFileOutput(jsonSource);
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then

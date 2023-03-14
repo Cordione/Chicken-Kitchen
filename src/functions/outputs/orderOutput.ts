@@ -28,6 +28,8 @@ export function orderOutput(
         const stockpile = warehouse.find(x => x.name.toLowerCase() === specificIngredient.toLowerCase());
         if (stockpile != undefined) {
             stockpile.quantity = stockpile.quantity + parseInt(amount);
+        } else {
+            warehouse.push({name: specificIngredient, quantity: parseInt(amount)})
         }
         const output = `We ordered ${parseFloat(amount)}x ${specificIngredient} and current restaurant budget is ${restaurant.budget}`;
         return [output, tax];

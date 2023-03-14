@@ -9,7 +9,6 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
     for (const singleLine of initialInputArray) {
         let element: ICommandAndParameters = { command: '', parameters: [] };
         const singleLineSplittedByComma = singleLine.split(', ').filter(x => x != '');
-        console.log(singleLineSplittedByComma);
         if (
             singleLineSplittedByComma[0].trim().toLowerCase() != 'Buy'.trim().toLowerCase() &&
             singleLineSplittedByComma[0].trim().toLowerCase() != 'Order'.trim().toLowerCase() &&

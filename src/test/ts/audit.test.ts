@@ -1,4 +1,7 @@
 import { createAudit } from '../../functions/createAudit';
+import { baseIngredientsParser } from '../../functions/parsers/baseIngredientsParser';
+import { foodParser } from '../../functions/parsers/foodParser';
+import { commandJSONFileOutput } from '../../functions/utils/commandJSONFileOutput';
 import { IObjectInWarehouse } from '../../Interface/IObjectInWarehouse';
 
 describe('Audit Tests', () => {
@@ -84,8 +87,13 @@ describe('Audit Tests', () => {
             ],
         ];
         const budget: number[] = [500, 500, 869.2, 869.2];
+        const jsonSource = '../../json/commands.json';
+        const allFood = foodParser('./src/csv_files/food.csv');
+        const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
+        const json = commandJSONFileOutput(jsonSource);
+        const wasted: IObjectInWarehouse[][] = [[{name: 'none', quantity: 0}], [{name: 'none', quantity: 0}], [{name: 'none', quantity: 0}]];
         //when
-        const result = createAudit(finalOutput, warehouseStates, budget);
+        const result = createAudit(finalOutput, warehouseStates, budget, wasted, json, allIngredients, allFood);
         //then
         expect(result).toEqual([
             'Initial state:',
