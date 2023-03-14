@@ -41,7 +41,7 @@ describe('Command Tokenizer tests', () => {
         const result = tableOutput({ command: 'table', parameters: ['Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         if (result != undefined) {
-            console.log(result)
+            console.log(result);
             expect(result[0]).toContain(`Adam Smith, ordered Fries -> success, total cost: 4, total tax: 1`);
             expect(result[0]).toContain(`Adam Smith, ordered Fries, cost: 4 -> success: Restaurant gets: 3, tax: 1`);
         }
@@ -110,7 +110,7 @@ describe('Command Tokenizer tests', () => {
         const restaurantMarkup = 1.3;
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
-        const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
+        const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = tableOutput(
             { command: 'table', parameters: ['Alexandra Smith', 'Bernard Unfortunate', 'Irish Fish', 'Fries'] },
