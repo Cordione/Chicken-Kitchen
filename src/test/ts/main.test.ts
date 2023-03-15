@@ -6,7 +6,7 @@ describe('Take order tests', () => {
         //when
         const result = main(inputString);
         //then
-        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -188', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT', "Daily tax to pay: 0"]);
+        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -188', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT', 'Daily tax to pay: 0']);
     });
     test('Work with json source, all commands are enabled', () => {
         //given
@@ -29,5 +29,16 @@ describe('Take order tests', () => {
         expect(result[0]).toEqual('Buy command disabled.');
         expect(result[1]).toEqual(`Table Command disabled.`);
         expect(result[2]).toEqual(`Morningstar command disabled.`);
+    });
+    test('Testing budget', () => {
+        //given
+        const inputString: string = 'budget, -, 501\n budget, +, 0\nbudget, +, 1';
+        //when
+        const jsonSource = '../../json/allEnabled.json';
+        const result = main(inputString, jsonSource);
+        //then
+        expect(result[0]).toEqual('Budget of restaurant was reduced by: 501, new budget is: -1');
+        expect(result[1]).toEqual(`RESTAURANT BANKRUPT`);
+        expect(result[2]).toEqual(`Budget of restaurant was increased by: 1, new budget is: 0`);
     });
 });
