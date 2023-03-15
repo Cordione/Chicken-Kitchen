@@ -11,10 +11,10 @@ export function budgetOutput(commandAndParameters: ICommandAndParameters, restau
             output = `New budget of restaurant: ${restaurant.budget}`;
         } else if (sign == '-') {
             restaurant.budget -= parseFloat(amount);
-            output = `Budget of restaurant was reduced by: ${amount}, new budget is: ${restaurant.budget.toFixed(2)}`;
+            output = `Budget of restaurant was reduced by: ${amount}, new budget is: ${restaurant.budget}`;
         } else if (sign == '+') {
             restaurant.budget += parseFloat(amount);
-            output = `Budget of restaurant was increased by: ${amount}, new budget is: ${restaurant.budget.toFixed(2)}`;
+            output = `Budget of restaurant was increased by: ${amount}, new budget is: ${restaurant.budget}`;
         }
     }
 
