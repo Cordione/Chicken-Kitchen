@@ -42,7 +42,7 @@ export function createAudit(
             output.push(`Restaurant Budget: ${restaurantBugets[index]}`);
         }
         if (index > 0 && index < auditArray.length) {
-            output.push(`Command: ${auditArray[index]}`);
+            output.push(`Command result: ${auditArray[index]}`);
             output.push(`Warehouse: ${warehouseAsString}`);
             if (whatWasWasted[index][0].name.toLowerCase() !== 'None'.toLowerCase()) {
                 for (const element of wasted) {
