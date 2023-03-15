@@ -60,7 +60,18 @@ export function takeOrder(
         }
     }
     if (restaurant.budget < 0) {
-        //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt, no future orders are realized/reported
-        return `RESTAURANT BANKRUPT`;
+        //If restaurant budget happends to be bellow 0 at any time, we declare it bankrupt
+        // Althou budget command can make it operating again
+        let restBudget = '';
+        if (commandAndParameters.command.toLowerCase() == 'budget'.toLowerCase()) {
+            if (informationsFromJSONFile.budget == 'yes') {
+                restBudget = budgetOutput(commandAndParameters, restaurant);
+            }
+        }
+        if (restaurant.budget >= 0) {
+            return restBudget;
+        } else {
+            return `RESTAURANT BANKRUPT`;
+        }
     }
 }
