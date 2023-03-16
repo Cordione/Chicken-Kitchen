@@ -44,7 +44,6 @@ export function createReport(
             isRestaurantBankrupt = false;
         }
 
-        finalArray.push(outputArray[index]);
 
         if (whatWasWastedAsString[0] != undefined && whatWasWastedAsString[0].toLowerCase() != 'None'.toLowerCase()) {
             for (const element of wasted) {
@@ -58,6 +57,7 @@ export function createReport(
                 }
             }
         }
+        finalArray.push(outputArray[index]);
 
         if (index == outputArray.length - 1 && !isRestaurantBankrupt) {
             finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
