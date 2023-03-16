@@ -3,7 +3,7 @@
     "audit": "yes",
     "table": "yes",
     "budget": "yes",
-    "order": "ingredients",
+    "order": "dishes",
     "profit margin": 30,
     "transaction tax": 10,
     "daily tax" : 20,

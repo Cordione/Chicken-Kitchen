@@ -21,14 +21,14 @@ describe('Warehouse testing', () => {
         };
 
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
+        const food = foodParser('./src/test/csv/baseIngredients.csv');
         const jsonSource = '../../json/allEnabled.json';
         const json = commandJSONFileOutput(jsonSource);
         const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
 
         //when
-        // expect(warehouse[1]).toEqual({ name: 'Tuna', quantity: 0 });
-        const result = orderOutput(input, baseIngredients, restaurant, warehouse, json);
+        const result = orderOutput(input, baseIngredients,food, restaurant, warehouse, json);
         //then
         expect(result).toContain('We ordered 10x tuna and current restaurant budget is 225');
         expect(warehouse[0]).toEqual({ name: 'tuna', quantity: 10 });
