@@ -1,6 +1,7 @@
 import { IBaseIngredients } from '../../Interface/IBaseIngredients';
 import { ICommandAndParameters } from '../../Interface/ICommandAndParameters';
 import { baseIngredientsParser } from './baseIngredientsParser';
+import { trimMe } from './utils/trimMe';
 
 export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIngredients[]) {
     //split recived input by line, remove empty inputs
@@ -42,14 +43,11 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
             }
             if (singleLineSplittedByComma[0].trim().toLowerCase() == 'Order'.trim().toLowerCase()) {
                 const isProperNumber = parseFloat(singleLineSplittedByComma[2]);
-                if (baseIngredients.find(ingredient => ingredient.name.toLowerCase() == singleLineSplittedByComma[1].trim().toLowerCase()) && !isNaN(isProperNumber) && isProperNumber > 0) {
-                    if (element.parameters != undefined) {
-                        element.parameters.push(singleLineSplittedByComma[1].trim().toLowerCase());
-                        element.parameters.push(singleLineSplittedByComma[2].trim());
-                    }
-                } else {
-                    // -If no throw error.
-                    throw new Error('You want to order unknown ingredient');
+                const secondToNColumn = trimMe(singleLineSplittedByComma, 0);
+                if (!isNaN(isProperNumber) && isProperNumber > 0) {
+                    secondToNColumn.forEach(el => {
+                        element.parameters.push(el);
+                    });
                 }
             }
             if (singleLineSplittedByComma[0].trim().toLowerCase() == 'budget'.trim().toLowerCase()) {
@@ -83,4 +81,4 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
 //         baseIngredientsParser('./src/csv_files/baseIngredients.csv')
 //     )
 // );
-console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken\n Audit, Resources`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
+// console.log(commandTokenizer(`table, Julie Mirage, Princess Chicken\n Audit, Resources`, baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
