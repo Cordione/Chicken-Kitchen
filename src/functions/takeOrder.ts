@@ -23,7 +23,6 @@ export function takeOrder(
     if (restaurant.budget >= 0) {
         //Add variable to store information about total cost of order, set initial value to 0;
         const restaurantMarkup: number = informationsFromJSONFile.profitMargin != undefined ? parseFloat(`1.${informationsFromJSONFile.profitMargin}`) : 1.3;
-        let output = '';
         if (commandAndParameters.command.toLowerCase() == 'buy'.toLowerCase() && commandAndParameters.parameters != undefined) {
             if (informationsFromJSONFile.buy == 'yes') {
                 return buyOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse, informationsFromJSONFile);
@@ -32,8 +31,8 @@ export function takeOrder(
             }
         } else if (commandAndParameters.command.toLowerCase() == 'order'.toLowerCase() && commandAndParameters.parameters != undefined) {
             //Find matching element price, store it, multiply it by amount of orders
-            if (informationsFromJSONFile.order == 'yes') {
-                return orderOutput(commandAndParameters, baseIngredients, restaurant, warehouse, informationsFromJSONFile);
+            if (informationsFromJSONFile.order.toLowerCase() == 'ingredients' || informationsFromJSONFile.order.toLowerCase() == 'dishes' || informationsFromJSONFile.order.toLowerCase() == 'all') {
+                return orderOutput(commandAndParameters, baseIngredients, food, restaurant, warehouse, informationsFromJSONFile);
             } else {
                 return `Order command disabled.`;
             }
