@@ -6,7 +6,7 @@ import { baseIngredientsParser } from './baseIngredientsParser';
 import { createRawArray } from './utils/createRawArray';
 import { trimMe } from './utils/trimMe';
 
-export function warehouseParser(sourceString: string, baseIngredients: IBaseIngredients[], informationsFromJsonFile:IInformationsFromJsonFile): IObjectInWarehouse[] {
+export function warehouseParser(sourceString: string, baseIngredients: IBaseIngredients[], informationsFromJsonFile: IInformationsFromJsonFile): IObjectInWarehouse[] {
     //Warehouse parser should have sourceString with input.
     //As we gonna have in either cases [{param1, param2} ...], we create interface for it, then we import it IObjectInWarehouse
     //We also need array to store this n interfaces (content will be EACH of baseIngredients and food orders)
@@ -30,7 +30,7 @@ export function warehouseParser(sourceString: string, baseIngredients: IBaseIngr
             warehouseStockpile.push({ name: ingredient.name, quantity: 5 });
         });
     }
-    return warehouseStockpile
+    return warehouseStockpile;
 }
 
 // console.log(warehouseParser('./src/csv_files/warehouse.csv', baseIngredientsParser('./src/csv_files/baseIngredients.csv')));
