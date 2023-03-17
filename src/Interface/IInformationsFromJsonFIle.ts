@@ -12,4 +12,5 @@ export interface IInformationsFromJsonFile {
     maxIngredientType: number;
     maxDishType: number;
     dishWithAllergies: string | number;
+    spoilRate: number;
 }

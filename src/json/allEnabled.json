@@ -11,5 +11,6 @@
     "total maximum": 500, 
     "max ingredient type": 10, 
     "max dish type": 3,
-    "dishes with allergies": "waste"
+    "dishes with allergies": "waste",
+    "spoil rate": 0.1
 }
