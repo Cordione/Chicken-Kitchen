@@ -41,4 +41,12 @@ describe('Take order tests', () => {
         expect(result[1]).toEqual(`RESTAURANT BANKRUPT`);
         expect(result[2]).toEqual(`Budget of restaurant was increased by: 1, new budget is: 0`);
     });
+    test('Restaurant will be poisoned.', () => {
+        const inputString: string = 'order, water, 60\nbuy, julie mirage, fries';
+        const jsonSource = '../../json/allenabled.json';
+        const result = main(inputString, jsonSource);
+        //then
+        expect(result[0]).toEqual('We ordered 60x water and current restaurant budget is 434');
+        expect(result[1]).toEqual(`Restaurant Poisoned`);
+    });
 });

@@ -16,6 +16,7 @@ import { IInformationsFromJsonFile } from '../Interface/IInformationsFromJsonFIl
 import { countTaxableProfit } from './utils/countTaxableProfit';
 import { taxesToPay } from './utils/taxesToPay';
 import { updateWarehouseStateAndReturnWhatWasWasted } from './utils/updateWarehouseState';
+import { checkRestaurantState } from './utils/checkRestaurantState';
 // import * as commands from '../json/commands.json';
 
 export function main(initialString?: string, jsonSource?: string) {
@@ -28,7 +29,10 @@ export function main(initialString?: string, jsonSource?: string) {
     const finalOutput: string[] = [];
     const restaurant: IRestaurant = {
         budget: 500,
+        isPoisoned: false,
     };
+
+    const trash: IObjectInWarehouse[][] = [];
     const warehouseStates: IObjectInWarehouse[][] = [];
     const budget: number[] = [];
     const whatWasWasted: IObjectInWarehouse[][] = [];
@@ -39,31 +43,52 @@ export function main(initialString?: string, jsonSource?: string) {
     const auditArray: string[] = [];
     auditArray.push('');
     budget.push(restaurant.budget);
+
     if (initialString != undefined) {
         input = commandTokenizer(initialString, baseIngredients);
     } else if (initialString == undefined) {
         input = inputParser('./src/txt_files/input.txt', baseIngredients);
     }
+    //initial waste
+    const warehouseState: IObjectInWarehouse[] = [];
+
+    const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
+    if (wastedMaterials.length > 0) {
+        whatWasWasted.push(wastedMaterials);
+        trash.push(wastedMaterials);
+    } else {
+        whatWasWasted.push([{ name: 'None', quantity: 0 }]);
+    }
+    for (let idx = 0; idx < warehouse.length; idx++) {
+        warehouseState.push({ name: warehouse[idx].name, quantity: warehouse[idx].quantity });
+    }
 
     for (let index = 0; index < input.length; index++) {
         const warehouseState: IObjectInWarehouse[] = [];
 
-        const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
-        if (wastedMaterials.length > 0) {
-            whatWasWasted.push(wastedMaterials);
-        } else {
-            whatWasWasted.push([{ name: 'None', quantity: 0 }]);
-        }
         for (let idx = 0; idx < warehouse.length; idx++) {
             warehouseState.push({ name: warehouse[idx].name, quantity: warehouse[idx].quantity });
         }
         const result = takeOrder(input[index], customers, food, baseIngredients, restaurant, warehouse, informationsFromJsonFile);
 
+        const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
+        if (wastedMaterials.length > 0) {
+            whatWasWasted.push(wastedMaterials);
+            trash.push(wastedMaterials);
+        } else {
+            whatWasWasted.push([{ name: 'None', quantity: 0 }]);
+        }
+        checkRestaurantState(restaurant, food, trash, informationsFromJsonFile);
+
         budget.push(restaurant.budget);
         command.push(`${input[index].command} ${input[index].parameters}`);
         warehouseStates.push(warehouseState);
         if (input[index].command.toLowerCase() != 'Audit'.toLowerCase()) {
-            if (result?.length == 2) {
+            if (result?.length == 3) {
+                finalOutput.push(result[0] as string);
+                if (!isNaN(result[1] as number)) taxPaid.push(result[1] as number);
+                trash.push(result[2] as IObjectInWarehouse[]);
+            } else if (result?.length == 2) {
                 finalOutput.push(result[0] as string);
                 if (!isNaN(result[1] as number)) taxPaid.push(result[1] as number);
             } else {
@@ -71,11 +96,14 @@ export function main(initialString?: string, jsonSource?: string) {
                 taxPaid.push(0);
             }
         }
+
         if (input[index].command.toLowerCase() == 'Audit'.toLowerCase() && input[index].parameters != undefined && input[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()) {
             finalOutput.map(x => auditArray.push(x as string));
             auditOutput = createAudit(auditArray, warehouseStates, budget, whatWasWasted, informationsFromJsonFile, baseIngredients, food);
         }
     }
+
+    //count taxes
     const totalTaxPaid = taxPaid.reduce((a, b) => a + b, 0);
     const taxableProfit = countTaxableProfit(totalTaxPaid, budget);
     const dailyTaxAmount = taxesToPay(taxableProfit, informationsFromJsonFile);
@@ -88,8 +116,12 @@ export function main(initialString?: string, jsonSource?: string) {
     createReport(budget, finalOutput, whatWasWasted, informationsFromJsonFile, baseIngredients, food);
     return finalOutput;
 }
-// console.log(main(`Order, tuna, 10\n Order, tuna, 2 \n order, tuna, 2 \n Audit, Resources`));
-// console.log(main(`Buy, Alexandra Smith, emperor chicken\n order, tuna, 12`));
+// console.log(main(`buy, bernard unfortunate, fries`));
+// console.log(main(`order, tuna, 5\norder, tuna, 5\norder, tuna, 5\norder, tuna, 5`));
+console.log(main(`order, potatoes, 30\n order, water, 5`, ));
+// console.log(main(`table, barbara smith, bernard unfortunate, adam smith, tuna cake, fries, fries\n Audit, Resources`));
+// console.log(main(`Buy, Alexandra Smith, emperor chicken\n order, tuna, 15, princess chicken, 2\n Audit, Resources`, `../../json/all.json`));
+// console.log(main(`Buy, Alexandra Smith, emperor chicken\n order, tuna, 2\n Audit, Resources`, `../../json/all.json`));
 // console.log(main(`Buy, Alexandra Smith, Emperor Chicken\n Table, Barbara Smith, Tuna Cake\n Morningstar, Alexandra Smith, Adam Smith, Irish Fish, Fries`));
-console.log(main(`Buy, Adam Smith, Irish Fish\nBuy, Adam Smith, Fries\n buy, Alexandra Smith, Emperor Chicken\nOrder, tuna, 10\n Audit, Resources`, '../../json/allEnabled.json'));
+// console.log(main(`Buy, Adam Smith, Irish Fish\nBuy, Adam Smith, Fries\n buy, Alexandra Smith, Emperor Chicken\nOrder, tuna, 10\n Audit, Resources`, '../../json/allEnabled.json'));
 // console.log(main(`table, Alexandra Smith, Princess Chicken\nBuy, Adam Smith, Fries\n buy, Alexandra Smith, Emperor Chicken\n Audit, Resources`, '../../json/allEnabled.json'));

@@ -20,7 +20,7 @@ export function takeOrder(
     warehouse: IObjectInWarehouse[],
     informationsFromJSONFile: IInformationsFromJsonFile
 ) {
-    if (restaurant.budget >= 0) {
+    if (restaurant.budget >= 0 && !restaurant.isPoisoned) {
         //Add variable to store information about total cost of order, set initial value to 0;
         const restaurantMarkup: number = informationsFromJSONFile.profitMargin != undefined ? parseFloat(`1.${informationsFromJSONFile.profitMargin}`) : 1.3;
         if (commandAndParameters.command.toLowerCase() == 'buy'.toLowerCase() && commandAndParameters.parameters != undefined) {
@@ -72,5 +72,8 @@ export function takeOrder(
         } else {
             return `RESTAURANT BANKRUPT`;
         }
+    }
+    if (restaurant.isPoisoned) {
+        return `Restaurant Poisoned`;
     }
 }
