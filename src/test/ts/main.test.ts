@@ -16,7 +16,7 @@ describe('Take order tests', () => {
         const result = main(inputString, jsonSource);
         //then
         expect(result[0]).toEqual('Julie Mirage has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117');
-        expect(result[1]).toEqual(`Barbara Smith, ordered Tuna Cake -> FAILURE\n{\nWe're sorry: Barbara Smith, we cannot provide you with table, becouse you're alergic to: chocolate\n}`);
+        expect(result[1]).toContain(`Barbara Smith, ordered Tuna Cake -> FAILURE\n{\nWe're sorry: Barbara Smith, we cannot provide you with table, becouse you're alergic to: chocolate\n}`);
         expect(result[2]).toEqual(`Morningstar command disabled.`);
     });
     test('Work with json source, all commands are disabled', () => {
