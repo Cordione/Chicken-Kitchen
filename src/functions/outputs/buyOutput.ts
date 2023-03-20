@@ -74,6 +74,7 @@ export function buyOutput(
                         updatedInformationsAboutUsedMaterials = [];
                     }
                     if (whatDoWeDoWithDishesFromAlergics === 'keep') {
+                        keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
                         updatedInformationsAboutUsedMaterials = [];
                         //Prepared to expand output with details about stored dishes
                         // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);

@@ -73,6 +73,7 @@ export function tableOutput(
                 removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
             }
             if (whatDoWeDoWithDishesFromAlergics === 'keep') {
+                keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                 updatedInformationsAboutUsedMaterials = []
                 //Prepared to expand output with details about stored dishes
                 // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
