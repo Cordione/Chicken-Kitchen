@@ -28,7 +28,7 @@ export function buyOutput(
     informationsFromJsonFile: IInformationsFromJsonFile
 ) {
     const customers: ICustomerAlergies[] = listOfCustomers(commandAndParameters, customerList);
-    const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse);
+    const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse, informationsFromJsonFile);
     const foodList: string[] = filterOrders(commandAndParameters, food);
     const foodListToLowerCase = foodList.map(x => x.toLowerCase());
     const informationAboutAlergies: string[][] = informations[1] as string[][];
@@ -38,8 +38,8 @@ export function buyOutput(
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownCustomer = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()));
     const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
-    const succesfulAppearance: string[] = [];
-
+    let spoiledMaterials: IObjectInWarehouse[] = [];
+    let output = '';
     if (commandAndParameters.parameters != undefined) {
         const unknownFood = !foodListToLowerCase.includes(commandAndParameters.parameters[1]?.toLowerCase());
         if (unknownFood) {
@@ -71,8 +71,6 @@ export function buyOutput(
                     if (whatDoWeDoWithDishesFromAlergics === 'waste') {
                         removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                     }
-                    if (whatDoWeDoWithDishesFromAlergics === 'waste') {
-                    }
                     if (whatDoWeDoWithDishesFromAlergics === 'keep') {
                         keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
                         //Prepared to expand output with details about stored dishes
@@ -83,9 +81,12 @@ export function buyOutput(
                         //Prepared to expand output with details about stored dishes
                         // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                     }
-                    return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
+                    let output = '';
+                    spoiledMaterials = informations[6] as IObjectInWarehouse[];
+                    output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
                         specificDish?.name
                     } -> can't order, food cost ${orderCost}, alergic to: ${informationAboutAlergies[0].join(' ').toLowerCase()}`;
+                    return [output, undefined, spoiledMaterials];
                 } else if (specificCustomer.budget < orderCost) {
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
                 } else if (!isAlergic && specificCustomer.budget >= orderCost && informationAboutMissingMaterials.length == 0) {
@@ -107,7 +108,7 @@ export function buyOutput(
                     specificCustomer.budget -= orderCost;
                     restaurant.budget += orderCost - orderTax;
                     removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
-
+                    spoiledMaterials = informations[6] as IObjectInWarehouse[];
                     return [output, orderTax];
                 } else if (informationAboutMissingMaterials.length > 0) {
                     const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);

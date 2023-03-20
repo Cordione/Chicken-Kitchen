@@ -5,6 +5,7 @@ import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJson
 import { IObjectInWarehouse } from '../../Interface/IObjectInWarehouse';
 import { IOrder } from '../../Interface/IOrder';
 import { IRestaurant } from '../../Interface/IRestaurant';
+import { spoilFood } from '../utils/spoilFood';
 import { handleOrder } from '../utils/taxHandlerForOrders';
 
 export function orderOutput(
@@ -67,9 +68,11 @@ export function orderOutput(
             }
             output.push(`We ordered ${infromationsAboutOrders[i].quantity}x ${infromationsAboutOrders[i].name} and current restaurant budget is ${restaurant.budget}`);
         }
+        //Check if any food was spoiled
     }
+    const spoiledFood = spoilFood(baseIngredients, warehouse, informationsFromJSONFile);
     const taxMoney = infromationsAboutOrders.map(x => x.tax);
     const totalTaxMoney = taxMoney.reduce((a, b) => a + b, 0);
 
-    return [output.join(', '), totalTaxMoney];
+    return [output.join(', '), totalTaxMoney, spoiledFood];
 }

@@ -32,13 +32,13 @@ export function tableOutput(
     const unqiueCustomers = [...new Set(customers)];
     const foodList: string[] = filterOrders(commandAndParameters, food);
     const foodListToLowerCase = foodList.map(x => x.toLowerCase());
-    const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse);
+    const informations = informationsAboutOrders(commandAndParameters, customers, food, baseIngredients, warehouse, informationsFromJsonFile);
     const informationAboutOrdersAndItsPrice: ISpecificOrder[] = informations[0] as ISpecificOrder[];
     const informationAboutAlergies: string[][] = informations[1] as string[][];
     const informationAboutUnavailableFood: string[] = informations[2] as string[];
     const informationAboutMissingMaterials: IMaterials[] = informations[3] as IMaterials[];
     const informationAboutUsedMaterials: IMaterials[] = informations[4] as IMaterials[];
-
+    let spoiledMaterials: IObjectInWarehouse[] = [];
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()) && !foodListToLowerCase.includes(x.toLowerCase()));
     const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
@@ -102,6 +102,7 @@ export function tableOutput(
                     outputList.push('}');
                 }
             }
+            spoiledMaterials = informations[6] as IObjectInWarehouse[];
         } else if (informationAboutMissingMaterials.length > 0) {
             const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
             return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
@@ -166,6 +167,7 @@ export function tableOutput(
                     totalTaxOnOrders.push(orderTax);
                 }
                 totalTax = totalTaxOnOrders.reduce((a, b) => a + b, 0);
+                spoiledMaterials = informations[6] as IObjectInWarehouse[];
                 outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0)}, total tax: ${totalTax}\n`);
 
                 for (let index = 0; index < customers.length; index++) {
@@ -205,7 +207,7 @@ export function tableOutput(
                 }
             }
         }
-        return [outputList.join(''), totalTax];
+        return [outputList.join(''), totalTax, spoiledMaterials];
     } else if (unqiueCustomers.length != customers.length) {
         //each customer can appear only once @ table
         return `ERROR. One person can appear only once at the table.`;

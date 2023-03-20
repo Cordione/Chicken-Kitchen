@@ -224,7 +224,6 @@ describe('Command Tokenizer tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
-        console.log(warehouse);
 
         const result = tableOutput(
             { command: 'table', parameters: ['Alexandra Smith', 'Adam SMith', 'Princess Chicken', 'fries'] },
