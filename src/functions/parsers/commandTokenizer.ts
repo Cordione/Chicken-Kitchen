@@ -10,6 +10,11 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
     for (const singleLine of initialInputArray) {
         let element: ICommandAndParameters = { command: '', parameters: [] };
         const singleLineSplittedByComma = singleLine.split(', ').filter(x => x != '');
+        if (singleLineSplittedByComma.length === 1 && singleLineSplittedByComma[0].trim().toLowerCase() === 'Throw trash away'.trim().toLowerCase()) {
+            element.command = singleLineSplittedByComma[0].trim();
+            element.parameters = [];
+            arrayOfMatchingInterfaces.push(element);
+        }
         if (
             singleLineSplittedByComma[0].trim().toLowerCase() != 'Buy'.trim().toLowerCase() &&
             singleLineSplittedByComma[0].trim().toLowerCase() != 'Order'.trim().toLowerCase() &&

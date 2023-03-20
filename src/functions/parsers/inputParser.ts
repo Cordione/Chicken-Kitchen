@@ -8,6 +8,9 @@ export function inputParser(sourceString: string, baseIngredients: IBaseIngredie
     for (let index = 0; index < rawArray.length; index++) {
         const singleLine = rawArray[index].filter(x => x != '' && x != ' ');
         const formatedLine = singleLine.map(word => word.trim());
+        if (formatedLine[0].toLowerCase() === 'Throw trash away'.toLowerCase()) {
+            formatedArray.push({ command: formatedLine[0], parameters: [] });
+        }
         if (singleLine.length > 2 && singleLine[0].toLowerCase() == 'Buy'.toLowerCase()) {
             formatedArray.push({ command: formatedLine[0], parameters: [formatedLine[1], formatedLine[2]] });
         } else if (singleLine.length > 2 && singleLine[0].toLowerCase() == 'Order'.toLowerCase()) {
