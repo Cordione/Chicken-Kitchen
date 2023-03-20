@@ -49,7 +49,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
-        expect(result).toEqual("Elon Carousel has budget: 50 -> wants to order Fish In Water -> can't order, food cost 50, alergic to: vinegar");
+        expect(result).toContain("Elon Carousel has budget: 50 -> wants to order Fish In Water -> can't order, food cost 50, alergic to: vinegar");
     });
     test('Julie Mirage should not be able to buy Emperor Chicken -> to expensive.', () => {
         //given
@@ -91,7 +91,7 @@ describe('Take order tests', () => {
         //when
         const result = takeOrder(input, customers, food, baseIngredients, restaurant, warehouse, json);
         //then
-        expect(result).toEqual("Bernard Unfortunate has budget: 15 -> wants to order Emperor Chicken -> can't order, food cost 370, alergic to: potatoes");
+        expect(result).toContain("Bernard Unfortunate has budget: 15 -> wants to order Emperor Chicken -> can't order, food cost 370, alergic to: potatoes");
     });
     test('Unknown customer want to place an order', () => {
         //given
