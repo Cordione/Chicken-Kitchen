@@ -53,7 +53,8 @@ export function takeOrder(
             commandAndParameters.command.toLowerCase() != 'order'.toLowerCase() &&
             commandAndParameters.command.toLowerCase() != 'budget'.toLowerCase() &&
             commandAndParameters.command.toLowerCase() != 'table'.toLowerCase() &&
-            commandAndParameters.command.toLowerCase() != 'Audit'.toLowerCase()
+            commandAndParameters.command.toLowerCase() != 'Audit'.toLowerCase() &&
+            commandAndParameters.command.toLowerCase() != 'Throw trash away'.toLowerCase()
         ) {
             return `${commandAndParameters.command} command disabled.`;
         }
