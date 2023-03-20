@@ -1,3 +1,4 @@
+import { IFood } from '../../Interface/IFood';
 import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 import { IObjectInWarehouse } from '../../Interface/IObjectInWarehouse';
 import { IRestaurant } from '../../Interface/IRestaurant';
@@ -8,6 +9,7 @@ export function keepDishes(informationAboutOrdersAndItsPrice: ISpecificOrder[], 
     // const output: string[] = [];
 
     //Iterate throught specific orders
+    const keptDishes: IObjectInWarehouse[] = [];
 
     for (const element of informationAboutOrdersAndItsPrice) {
         const quarterPrice = Math.ceil(element.price / 4);
@@ -22,6 +24,7 @@ export function keepDishes(informationAboutOrdersAndItsPrice: ISpecificOrder[], 
                 if (specificDishInWarehouse == undefined) {
                     //IF warehouse will have less specific dish than maximum we put it inside
                     warehouse.push({ name: element.name, quantity: 1 });
+
                     // output.push(`There were no dishes in storage of that type, we added ${element.name}. Thou we had to spend extra money: ${quarterPrice} on keeping dish warm`);
                 } else {
                     const canWePutItIntoWarehouse = specificDishInWarehouse?.quantity < maxDishes;
@@ -32,9 +35,15 @@ export function keepDishes(informationAboutOrdersAndItsPrice: ISpecificOrder[], 
                         // );
                     }
                 }
+                const alreadyOnList = keptDishes.find(x => x.name.toLowerCase() === element.name.toLowerCase());
+                if (alreadyOnList) {
+                    alreadyOnList.quantity++;
+                } else {
+                    keptDishes.push({ name: element.name, quantity: 1 });
+                }
             }
         }
     }
 
-    // return output;
+    return keptDishes;
 }

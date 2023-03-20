@@ -15,6 +15,7 @@ import { informationsAboutOrders } from '../utils/informationsAboutOrders';
 import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
 import { keepDishes } from '../utils/keepDishes';
+import { updatedInfromationsAboutMaterials } from '../utils/updatedInformationsAboutMaterials';
 
 export function tableOutput(
     commandAndParameters: ICommandAndParameters,
@@ -42,7 +43,6 @@ export function tableOutput(
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()) && !foodListToLowerCase.includes(x.toLowerCase()));
     const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
-
     let totalTax;
     let anyoneIsAlergic: boolean = false;
     informationAboutAlergies.map(el => {
@@ -67,18 +67,20 @@ export function tableOutput(
             const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
             const customersNames = customers.map(x => x.customerName);
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
-            //Prepared to expand output with details about stored dishes
-            // let storedDishes: string[] = [];
-            removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+
+            let updatedInformationsAboutUsedMaterials: IMaterials[] = informationAboutUsedMaterials;
             if (whatDoWeDoWithDishesFromAlergics === 'waste') {
+                removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
             }
             if (whatDoWeDoWithDishesFromAlergics === 'keep') {
-                keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                updatedInformationsAboutUsedMaterials = []
                 //Prepared to expand output with details about stored dishes
                 // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
             }
             if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {
-                keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                const dish = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
+                updatedInformationsAboutUsedMaterials = updatedInfromationsAboutMaterials(informationAboutUsedMaterials, dish, food);
+                // updatedInformationsAboutUsedMaterials = updatedInfromationsAboutMaterials(informationAboutUsedMaterials, dish, food);
                 //Prepared to expand output with details about stored dishes
                 // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
             }
@@ -103,6 +105,7 @@ export function tableOutput(
                 }
             }
             spoiledMaterials = informations[6] as IObjectInWarehouse[];
+            return [outputList.join(''), totalTax, spoiledMaterials, updatedInformationsAboutUsedMaterials];
         } else if (informationAboutMissingMaterials.length > 0) {
             const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
             return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
@@ -154,6 +157,7 @@ export function tableOutput(
                         outputList.push('}');
                     }
                 }
+                return [outputList.join(''), totalTax, spoiledMaterials, informationAboutUsedMaterials];
             } else if (everyoneCanPayForTheirOrder) {
                 const customersNames = customers.map(x => x.customerName);
                 customers.forEach(el => el.sucessfulAppearances++);

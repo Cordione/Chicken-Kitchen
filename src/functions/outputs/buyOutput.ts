@@ -16,6 +16,7 @@ import { informationsAboutOrders } from '../utils/informationsAboutOrders';
 import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
 import { keepDishes } from '../utils/keepDishes';
+import { updatedInfromationsAboutMaterials } from '../utils/updatedInformationsAboutMaterials';
 
 export function buyOutput(
     commandAndParameters: ICommandAndParameters,
@@ -68,16 +69,18 @@ export function buyOutput(
                 const orderTax = Math.ceil(orderCost * transactionTax);
                 if (isAlergic) {
                     const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
+                    let updatedInformationsAboutUsedMaterials: IMaterials[] = informationAboutUsedMaterials;
                     if (whatDoWeDoWithDishesFromAlergics === 'waste') {
-                        removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                        updatedInformationsAboutUsedMaterials = [];
                     }
                     if (whatDoWeDoWithDishesFromAlergics === 'keep') {
-                        keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
+                        updatedInformationsAboutUsedMaterials = [];
                         //Prepared to expand output with details about stored dishes
                         // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                     }
                     if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {
-                        keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
+                        const dish = keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
+                        updatedInformationsAboutUsedMaterials = updatedInfromationsAboutMaterials(informationAboutUsedMaterials, dish, food);
                         //Prepared to expand output with details about stored dishes
                         // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                     }
@@ -86,7 +89,7 @@ export function buyOutput(
                     output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
                         specificDish?.name
                     } -> can't order, food cost ${orderCost}, alergic to: ${informationAboutAlergies[0].join(' ').toLowerCase()}`;
-                    return [output, undefined, spoiledMaterials];
+                    return [output, undefined, spoiledMaterials, updatedInformationsAboutUsedMaterials];
                 } else if (specificCustomer.budget < orderCost) {
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
                 } else if (!isAlergic && specificCustomer.budget >= orderCost && informationAboutMissingMaterials.length == 0) {
