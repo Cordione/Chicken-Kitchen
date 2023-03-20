@@ -1,3 +1,4 @@
 export interface IRestaurant {
-    budget: number
+    budget: number;
+    isPoisoned?: boolean;
 }
