@@ -69,12 +69,13 @@ export function tableOutput(
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
 
             let updatedInformationsAboutUsedMaterials: IMaterials[] = informationAboutUsedMaterials;
+            removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+
             if (whatDoWeDoWithDishesFromAlergics === 'waste') {
-                removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
             }
             if (whatDoWeDoWithDishesFromAlergics === 'keep') {
                 keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
-                updatedInformationsAboutUsedMaterials = []
+                updatedInformationsAboutUsedMaterials = [];
                 //Prepared to expand output with details about stored dishes
                 // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
             }

@@ -70,8 +70,8 @@ export function buyOutput(
                 if (isAlergic) {
                     const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
                     let updatedInformationsAboutUsedMaterials: IMaterials[] = informationAboutUsedMaterials;
+                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                     if (whatDoWeDoWithDishesFromAlergics === 'waste') {
-                        updatedInformationsAboutUsedMaterials = [];
                     }
                     if (whatDoWeDoWithDishesFromAlergics === 'keep') {
                         keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
