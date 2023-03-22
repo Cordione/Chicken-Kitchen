@@ -7,7 +7,6 @@ import { unifyTrash } from './unifyTrash';
 export function checkRestaurantState(restaurant: IRestaurant, food: IFood[], trash: IObjectInWarehouse[][], json: IInformationsFromJsonFile) {
     const trashListWithoutDuplicates = unifyTrash(trash);
     const howMuchSpaceItTakes: number[] = [];
-    // console.log(trashListWithoutDuplicates);
     //Check if wasted/spoiled element was dish/baseIngredient
     //If was dish read it's raw ingredient length, multiply it by quantity
     //If it was a base ingredient pass it's quantity.

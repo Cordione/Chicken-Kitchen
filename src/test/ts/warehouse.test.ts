@@ -28,7 +28,7 @@ describe('Warehouse testing', () => {
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
 
         //when
-        const result = orderOutput(input, baseIngredients,food, restaurant, warehouse, json);
+        const result = orderOutput(input, baseIngredients, food, restaurant, warehouse, json);
         //then
         expect(result).toContain('We ordered 10x tuna and current restaurant budget is 225');
         expect(warehouse[0]).toEqual({ name: 'tuna', quantity: 10 });
@@ -56,8 +56,8 @@ describe('Warehouse testing', () => {
             warehouse,
             json
         );
-        const tunacake = warehouse.find( x => x.name === "Tuna Cake")
-        const fries = warehouse.find( x => x.name === "Fries")
+        const tunacake = warehouse.find(x => x.name === 'Tuna Cake');
+        const fries = warehouse.find(x => x.name === 'Fries');
         expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
         expect(fries).toEqual({ name: 'Fries', quantity: 2 });
     });
@@ -77,8 +77,8 @@ describe('Warehouse testing', () => {
         buyOutput({ command: 'buy', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         buyOutput({ command: 'buy', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         buyOutput({ command: 'buy', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
-        const tunacake = warehouse.find( x => x.name === "Tuna Cake")
-        const fries = warehouse.find( x => x.name === "Fries")
+        const tunacake = warehouse.find(x => x.name === 'Tuna Cake');
+        const fries = warehouse.find(x => x.name === 'Fries');
         expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
         expect(fries).toEqual({ name: 'Fries', quantity: 0 });
     });
@@ -98,8 +98,9 @@ describe('Warehouse testing', () => {
         buyOutput({ command: 'buy', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         buyOutput({ command: 'buy', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         buyOutput({ command: 'buy', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
-        const tunacake = warehouse.find( x => x.name === "Tuna Cake")
-        const fries = warehouse.find( x => x.name === "Fries")
+        const tunacake = warehouse.find(x => x.name === 'Tuna Cake');
+        const fries = warehouse.find(x => x.name === 'Fries');
+
         expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
         expect(fries).toEqual(undefined);
     });
