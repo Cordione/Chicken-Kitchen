@@ -1,8 +1,9 @@
 import { IBaseIngredients } from '../../Interface/IBaseIngredients';
 import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 import { IObjectInWarehouse } from '../../Interface/IObjectInWarehouse';
+import { randomGenerator } from './randomGenerator';
 
-export function spoilFood(baseIngredients: IBaseIngredients[], warehouse: IObjectInWarehouse[], json: IInformationsFromJsonFile) {
+export function spoilFood(baseIngredients: IBaseIngredients[], warehouse: IObjectInWarehouse[], json: IInformationsFromJsonFile, random: (min: number, max: number) => number) {
     //Function is supposed to run throught all baseIngredients contained in warehouse
     //Times per ingredient equal to it's quantity
     //If any material will get spoiled, we're supposed to store information about it
@@ -17,7 +18,7 @@ export function spoilFood(baseIngredients: IBaseIngredients[], warehouse: IObjec
         const isBaseIngredient = baseIngredients.find(x => x.name.toLowerCase() === element.name.toLowerCase());
         if (isBaseIngredient) {
             for (let i = 0; i < element.quantity; i++) {
-                const rand = Math.random() * 100;
+                const rand = random(0, 100);
                 const isSpoiled = rand <= chanceToSpoil;
                 if (isSpoiled) {
                     const alreadyOnList = baseIngredientsInWarehouse.find(x => x.name.toLowerCase() === element.name.toLowerCase());
