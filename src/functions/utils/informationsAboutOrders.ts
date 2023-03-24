@@ -11,6 +11,7 @@ import { customersParser } from '../parsers/customersParser';
 import { foodParser } from '../parsers/foodParser';
 import { commandJSONFileOutput } from './commandJSONFileOutput';
 import { countRawMaterials } from './countExtraMaterials';
+import { randomGenerator } from './randomGenerator';
 import { spoilFood } from './spoilFood';
 
 export function informationsAboutOrders(
@@ -59,7 +60,7 @@ export function informationsAboutOrders(
                     } else {
                         const isPartialOrderBaseIngredient = baseIngredients.find(x => x.name.toLowerCase() === partialOrder?.name.toLowerCase());
                         if (isPartialOrderBaseIngredient) {
-                            const spoiledFood = spoilFood(baseIngredients, warehouse, json);
+                            const spoiledFood = spoilFood(baseIngredients, warehouse, json, randomGenerator);
                             //store information about spoiled food
                             for (let i = 0; i < spoiledFood.length; i++) {
                                 const alreadyOnList = allSpoiledFood.find(x => x.name.toLowerCase() === spoiledFood[i].name.toLowerCase());
@@ -172,8 +173,8 @@ export function informationsAboutOrders(
     }
     return [specificOrders, isAlergicTo, orderedUnavailableFood, missingIngredients, usedMaterialsWithQuantities, warehouse, allSpoiledFood];
 }
-const jsonSource = '../../json/allEnabled.json';
-const json = commandJSONFileOutput(jsonSource);
+// const jsonSource = '../../json/allEnabled.json';
+// const json = commandJSONFileOutput(jsonSource);
 // console.log(
 //     informationsAboutOrders(
 //         { command: 'a', parameters: ['Alexandra Smith', 'Adam Smith', 'emperor chicken', 'fries'] },

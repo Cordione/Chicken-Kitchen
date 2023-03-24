@@ -5,6 +5,7 @@ import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJson
 import { IObjectInWarehouse } from '../../Interface/IObjectInWarehouse';
 import { IOrder } from '../../Interface/IOrder';
 import { IRestaurant } from '../../Interface/IRestaurant';
+import { randomGenerator } from '../utils/randomGenerator';
 import { spoilFood } from '../utils/spoilFood';
 import { handleOrder } from '../utils/taxHandlerForOrders';
 
@@ -70,7 +71,7 @@ export function orderOutput(
         }
         //Check if any food was spoiled
     }
-    const spoiledFood = spoilFood(baseIngredients, warehouse, informationsFromJSONFile);
+    const spoiledFood = spoilFood(baseIngredients, warehouse, informationsFromJSONFile, randomGenerator);
     const taxMoney = infromationsAboutOrders.map(x => x.tax);
     const totalTaxMoney = taxMoney.reduce((a, b) => a + b, 0);
 
