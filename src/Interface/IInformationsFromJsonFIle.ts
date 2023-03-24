@@ -14,4 +14,5 @@ export interface IInformationsFromJsonFile {
     dishWithAllergies: string | number;
     spoilRate: number;
     wasteLimit: number;
+    maxTip: number;
 }
