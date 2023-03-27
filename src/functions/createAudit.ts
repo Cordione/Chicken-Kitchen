@@ -10,11 +10,13 @@ export function createAudit(
     whatWasWasted: IObjectInWarehouse[][],
     informationsFromJsonFile: IInformationsFromJsonFile,
     baseIngredients: IBaseIngredients[],
-    food: IFood[]
+    food: IFood[],
+    tips: number[]
 ) {
     const output: string[] = [];
     // console.log(`at`, auditArray)
     // console.log(`wasted`, whatWasWasted)
+    tips.splice(0, 0, 0);
     for (let index = 0; index < auditArray.length; index++) {
         const warehouseState = warehouseStates[index];
         const warehouseAsString: string[] = [];
@@ -60,6 +62,11 @@ export function createAudit(
         }
 
         if (index + 1 == auditArray.length) {
+            output.push(
+                `Restaurant Budget ${restaurantBugets[index]}: We had: ${restaurantBugets[0]} initial money, profit from orders after taxes: ${
+                    restaurantBugets[index] - restaurantBugets[0] - tips.flat().reduce((a, b) => a + b, 0)
+                }, recived in tips ${tips.flat().reduce((a, b) => a + b, 0)}`
+            );
             output.push(`Audit End`);
         }
     }
