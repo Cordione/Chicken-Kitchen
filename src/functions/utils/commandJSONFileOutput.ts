@@ -17,6 +17,7 @@ export function commandJSONFileOutput(jsonSource?: string) {
     src.dishWithAllergies = src['dishes with allergies'];
     src.spoilRate = src['spoil rate'];
     src.wasteLimit = src['waste limit'];
+    src.maxTip = src['max tip'];
     const commandOutput: IInformationsFromJsonFile = src;
     return commandOutput;
 }

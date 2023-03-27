@@ -13,5 +13,6 @@
     "max dish type": 3,
     "dishes with allergies": "waste",
     "spoil rate": 0.1,
-    "waste limit": 50
+    "waste limit": 50,
+    "max tip": 10
 }

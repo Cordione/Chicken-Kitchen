@@ -17,6 +17,8 @@ import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
 import { keepDishes } from '../utils/keepDishes';
 import { updatedInfromationsAboutMaterials } from '../utils/updatedInformationsAboutMaterials';
+import { buyEverythingIsOk } from './buy/buyEverythingIsOk';
+import { randomGenerator } from '../utils/randomGenerator';
 
 export function buyOutput(
     commandAndParameters: ICommandAndParameters,
@@ -76,14 +78,10 @@ export function buyOutput(
                     if (whatDoWeDoWithDishesFromAlergics === 'keep') {
                         keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
                         updatedInformationsAboutUsedMaterials = [];
-                        //Prepared to expand output with details about stored dishes
-                        // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                     }
                     if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {
                         const dish = keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
                         updatedInformationsAboutUsedMaterials = updatedInfromationsAboutMaterials(informationAboutUsedMaterials, dish, food);
-                        //Prepared to expand output with details about stored dishes
-                        // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                     }
                     let output = '';
                     spoiledMaterials = informations[6] as IObjectInWarehouse[];
@@ -94,26 +92,18 @@ export function buyOutput(
                 } else if (specificCustomer.budget < orderCost) {
                     return `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${specificDish?.name} -> can’t order, ${specificDish?.name} costs ${orderCost}`;
                 } else if (!isAlergic && specificCustomer.budget >= orderCost && informationAboutMissingMaterials.length == 0) {
-                    specificCustomer.sucessfulAppearances++;
-                    let output = ``;
-                    if (specificCustomer.sucessfulAppearances == 3) {
-                        output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
-                            specificDish?.name
-                        }, which cost: ${orderCost}: success -> Restaurant gets: ${
-                            orderCost - orderTax
-                        }, transactionTax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}`;
-                        specificCustomer.sucessfulAppearances = 0;
-                    } else {
-                        output = `${specificCustomer.customerName} has budget: ${specificCustomer.budget} -> wants to order ${
-                            specificDish?.name
-                        }, which cost: ${orderCost}: success -> Restaurant gets: ${orderCost - orderTax}, transactionTax: ${orderTax}`;
-                    }
-
-                    specificCustomer.budget -= orderCost;
-                    restaurant.budget += orderCost - orderTax;
-                    removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
-                    spoiledMaterials = informations[6] as IObjectInWarehouse[];
-                    return [output, orderTax];
+                    return buyEverythingIsOk(
+                        specificCustomer,
+                        specificDish,
+                        orderCost,
+                        orderTax,
+                        discountInMoney,
+                        restaurant,
+                        informationAboutUsedMaterials,
+                        warehouse,
+                        informationsFromJsonFile,
+                        randomGenerator
+                    );
                 } else if (informationAboutMissingMaterials.length > 0) {
                     const missingIngredientsNames = informationAboutMissingMaterials.map(x => x.name);
                     return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
