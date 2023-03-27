@@ -16,6 +16,9 @@ import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
 import { keepDishes } from '../utils/keepDishes';
 import { updatedInfromationsAboutMaterials } from '../utils/updatedInformationsAboutMaterials';
+import { tableEverything } from './table/tableEverything';
+import { tableEverythingIsOk } from './table/tableEverythingIsOk';
+import { randomGenerator } from '../utils/randomGenerator';
 
 export function tableOutput(
     commandAndParameters: ICommandAndParameters,
@@ -161,56 +164,83 @@ export function tableOutput(
                 }
                 return [outputList.join(''), totalTax, spoiledMaterials, informationAboutUsedMaterials];
             } else if (everyoneCanPayForTheirOrder) {
-                const customersNames = customers.map(x => x.customerName);
-                customers.forEach(el => el.sucessfulAppearances++);
-                const totalOrdersCost: number[] = [];
-                const totalTaxOnOrders: number[] = [];
-                removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
-                for (let index = 0; index < customers.length; index++) {
-                    const orderCost = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
-                    const orderTax = Math.ceil(orderCost * transactionTax);
-                    totalOrdersCost.push(orderCost);
-                    totalTaxOnOrders.push(orderTax);
-                }
-                totalTax = totalTaxOnOrders.reduce((a, b) => a + b, 0);
-                spoiledMaterials = informations[6] as IObjectInWarehouse[];
-                outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0)}, total tax: ${totalTax}\n`);
+                const otp = tableEverythingIsOk(
+                    customers,
+                    informationAboutUsedMaterials,
+                    warehouse,
+                    informationAboutOrdersAndItsPrice,
+                    restaurantMarkup,
+                    transactionTax,
+                    informationAboutMissingMaterials,
+                    foodList,
+                    informationsFromJsonFile,
+                    restaurant,
+                    randomGenerator
+                );
+                const outputLine1 = otp[0] as string[];
+                totalTax = otp[1] as number;
+                outputLine1.forEach(el => outputList.push(el));
+                return [outputLine1.join(''), otp[1], otp[2], otp[3], otp[4]]
+                // const customersNames = customers.map(x => x.customerName);
+                // customers.forEach(el => el.sucessfulAppearances++);
+                // const totalOrdersCost: number[] = [];
+                // const totalTaxOnOrders: number[] = [];
+                // removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
+                // for (let index = 0; index < customers.length; index++) {
+                //     const orderCost = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                //     const orderTax = Math.ceil(orderCost * transactionTax);
+                //     totalOrdersCost.push(orderCost);
+                //     totalTaxOnOrders.push(orderTax);
+                // }
+                // totalTax = totalTaxOnOrders.reduce((a, b) => a + b, 0);
+                // spoiledMaterials = informations[6] as IObjectInWarehouse[];
+                // outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0)}, total tax: ${totalTax}\n`);
+                // let otp =  tableEverything(
+                //     customers,
+                //     informationAboutMissingMaterials,
+                //     informationsFromJsonFile,
+                //     informationAboutOrdersAndItsPrice,
+                //     restaurantMarkup,
+                //     transactionTax,
+                //     foodList,
+                //     restaurant
+                // );
+                // otp.forEach(el => outputList.push(el))
+                // for (let index = 0; index < customers.length; index++) {
+                //     let discountToApply = 0;
 
-                for (let index = 0; index < customers.length; index++) {
-                    let discountToApply = 0;
+                //     if (customers[index].sucessfulAppearances == 3 && informationAboutMissingMaterials.length == 0) {
+                //         discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
+                //     }
+                //     const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
+                //     const orderPrice =
+                //         Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
+                //             ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
+                //             : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
 
-                    if (customers[index].sucessfulAppearances == 3 && informationAboutMissingMaterials.length == 0) {
-                        discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
-                    }
-                    const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
-                    const orderPrice =
-                        Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
-                            ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
-                            : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                //     // const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                //     const orderTax = Math.ceil(orderPrice * transactionTax);
+                //     const priceBeforeTaxes = orderPrice - orderTax;
 
-                    // const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
-                    const orderTax = Math.ceil(orderPrice * transactionTax);
-                    const priceBeforeTaxes = orderPrice - orderTax;
+                //     const currentCustomer = customers[index].customerName;
+                //     if (index == 0) {
+                //         outputList.push(`{\n`);
+                //     }
+                //     if (customers[index].sucessfulAppearances == 3) {
+                //         outputList.push(
+                //             `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}\n`
+                //         );
+                //         customers[index].sucessfulAppearances = 0;
+                //     } else {
+                //         outputList.push(`${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}\n`);
+                //     }
 
-                    const currentCustomer = customers[index].customerName;
-                    if (index == 0) {
-                        outputList.push(`{\n`);
-                    }
-                    if (customers[index].sucessfulAppearances == 3) {
-                        outputList.push(
-                            `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}\n`
-                        );
-                        customers[index].sucessfulAppearances = 0;
-                    } else {
-                        outputList.push(`${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}\n`);
-                    }
-
-                    customers[index].budget -= orderPrice;
-                    restaurant.budget += orderPrice - orderTax;
-                    if (index + 1 == customers.length) {
-                        outputList.push('}');
-                    }
-                }
+                //     customers[index].budget -= orderPrice;
+                //     restaurant.budget += orderPrice - orderTax;
+                //     if (index + 1 == customers.length) {
+                //         outputList.push('}');
+                //     }
+                // }
             }
         }
         return [outputList.join(''), totalTax, spoiledMaterials];
