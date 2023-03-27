@@ -14,5 +14,7 @@
     "dishes with allergies": "waste",
     "spoil rate": 0.1,
     "waste limit": 50,
-    "max tip": 10
+    "max tip": 10,
+    "order ingredient volatility": 10,
+    "order dish volatility": 25
 }

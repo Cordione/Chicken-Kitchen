@@ -15,4 +15,6 @@ export interface IInformationsFromJsonFile {
     spoilRate: number;
     wasteLimit: number;
     maxTip: number;
+    orderIngredientVolatility: number;
+    orderDishVolatility: number;
 }
