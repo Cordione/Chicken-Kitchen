@@ -10,7 +10,7 @@ describe('Audit Tests', () => {
         const finalOutput: string[] = [
             'Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
             'Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
-            'Alexandra Smith has budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
+            'Alexandra Smith has budget: 500 -> wants to order Emperor Chicken, which cost: 370: success',
         ];
         const warehouseStates: IObjectInWarehouse[][] = [
             [
@@ -86,14 +86,15 @@ describe('Audit Tests', () => {
                 { name: 'Chocolate', quantity: 4 },
             ],
         ];
-        const budget: number[] = [500, 500, 869.2, 869.2];
+        const budget: number[] = [500, 500, 870, 870];
         const jsonSource = '../../json/commands.json';
         const allFood = foodParser('./src/csv_files/food.csv');
         const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
         const json = commandJSONFileOutput(jsonSource);
-        const wasted: IObjectInWarehouse[][] = [[{name: 'none', quantity: 0}], [{name: 'none', quantity: 0}], [{name: 'none', quantity: 0}]];
+        const wasted: IObjectInWarehouse[][] = [[{ name: 'none', quantity: 0 }], [{ name: 'none', quantity: 0 }], [{ name: 'none', quantity: 0 }]];
+        const tips: number[] = [];
         //when
-        const result = createAudit(finalOutput, warehouseStates, budget, wasted, json, allIngredients, allFood);
+        const result = createAudit(finalOutput, warehouseStates, budget, wasted, json, allIngredients, allFood, tips);
         //then
         expect(result).toEqual([
             'Initial state:',
@@ -102,9 +103,10 @@ describe('Audit Tests', () => {
             'Command result: Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117',
             'Warehouse: Chicken,5,Tuna,5,Potatoes,5,Asparagus,5,Milk,5,Honey,5,Paprika,5,Garlic,5,Water,5,Lemon,5,Tomatoes,5,Pickles,5,Feta,5,Vinegar,5,Rice,5,Chocolate,5',
             'Restaurant Budget: 500',
-            'Command result: Alexandra Smith has budget: 500 -> wants to order Emperor Chicken, which cost: 369.20: success',
+            'Command result: Alexandra Smith has budget: 500 -> wants to order Emperor Chicken, which cost: 370: success',
             'Warehouse: Chicken,4,Tuna,4,Potatoes,4,Asparagus,2,Milk,2,Honey,2,Paprika,4,Garlic,4,Water,4,Lemon,5,Tomatoes,4,Pickles,4,Feta,4,Vinegar,5,Rice,5,Chocolate,4',
-            'Restaurant Budget: 869.2',
+            'Restaurant Budget: 870',
+            `Restaurant Budget 870: We had: 500 initial money, profit from orders after taxes: 370, recived in tips 0`,
             'Audit End',
         ]);
         console.log(result);
