@@ -15,9 +15,9 @@ export function orderOutput(
     food: IFood[],
     restaurant: IRestaurant,
     warehouse: IObjectInWarehouse[],
-    informationsFromJSONFile: IInformationsFromJsonFile
+    json: IInformationsFromJsonFile,
+    random: (min: number, max: number) => number
 ) {
-    const specificIngredient = commandAndParameters.parameters[0];
     const infromationsAboutOrders: IOrder[] = [];
     const output: string[] = [];
     let handledOrder;
@@ -39,7 +39,7 @@ export function orderOutput(
         }
         //add tax info to previous array
         for (let i = 0; i < infromationsAboutOrders.length; i++) {
-            handledOrder = handleOrder(infromationsAboutOrders[i].name, infromationsAboutOrders[i].quantity.toString(), baseIngredients, food, informationsFromJSONFile);
+            handledOrder = handleOrder(infromationsAboutOrders[i].name, infromationsAboutOrders[i].quantity.toString(), baseIngredients, food, json);
             infromationsAboutOrders[i].tax = handledOrder[0] as number;
             infromationsAboutOrders[i].totalCostWithTax = handledOrder[1] as number;
         }
@@ -51,16 +51,32 @@ export function orderOutput(
             if (singleIngredient == undefined && singleDish == undefined) {
                 return `We recived malformed input, there's no such ingredient/dish as: ${specificItem}`;
             }
-            if (singleIngredient == undefined && informationsFromJSONFile.order === 'ingredients') {
+            if (singleIngredient == undefined && json.order === 'ingredients') {
                 return `We recived malformed input, there's no such ingredient as: ${specificItem}`;
             }
-            if (singleDish == undefined && informationsFromJSONFile.order === 'dishes') {
+            if (singleDish == undefined && json.order === 'dishes') {
                 return `We recived malformed input, there's no such dish as: ${specificItem}`;
             }
         }
         //update restaurant budget & warehouse stockpile
+        const ingredientVolatility = json.orderIngredientVolatility != undefined ? parseFloat(`${json.orderIngredientVolatility}`) :10;
+        const dishVolatility = json.orderIngredientVolatility != undefined ? parseFloat(`${json.orderIngredientVolatility}`) : 25;
         for (let i = 0; i < infromationsAboutOrders.length; i++) {
-            restaurant.budget -= infromationsAboutOrders[i].totalCostWithTax;
+            let modifer = 1;
+
+            const isBaseIngredient = baseIngredients.find(x => x.name.toLowerCase() === infromationsAboutOrders[i].name.toLowerCase());
+            const isDish = food.find(x => x.name.toLowerCase() === infromationsAboutOrders[i].name.toLowerCase());
+            if (isBaseIngredient) {
+                const lowerScope = 100 - ingredientVolatility;
+                const upperScope = 100 + ingredientVolatility;
+                modifer = random(lowerScope, upperScope)/100;
+            }
+            if (isDish) {
+                const lowerScope = 100 - dishVolatility;
+                const upperScope = 100 + dishVolatility;
+                modifer = random(lowerScope, upperScope)/100;
+            }
+            restaurant.budget -= Math.ceil(infromationsAboutOrders[i].totalCostWithTax * modifer);
             const stockpile = warehouse.find(x => x.name.toLowerCase() === infromationsAboutOrders[i].name.toLowerCase());
             if (stockpile != undefined) {
                 stockpile.quantity = stockpile.quantity + infromationsAboutOrders[i].quantity;
@@ -71,7 +87,7 @@ export function orderOutput(
         }
         //Check if any food was spoiled
     }
-    const spoiledFood = spoilFood(baseIngredients, warehouse, informationsFromJSONFile, randomGenerator);
+    const spoiledFood = spoilFood(baseIngredients, warehouse, json, randomGenerator);
     const taxMoney = infromationsAboutOrders.map(x => x.tax);
     const totalTaxMoney = taxMoney.reduce((a, b) => a + b, 0);
 
