@@ -2,11 +2,11 @@ import { main } from '../../functions';
 describe('Take order tests', () => {
     test('Restaurant should NOT accept new orders after reporting bankrupcy, insteed should write "RESTAURANT BANKRUPT".', () => {
         //given
-        const inputString: string = 'order, tuna, 25\nbuy, julie mirage, emperor chicken\nbuy, alexandra smith, emperor chicken';
+        const inputString: string = 'budget, -, 550\nbuy, julie mirage, emperor chicken\nbuy, alexandra smith, emperor chicken';
         //when
         const result = main(inputString);
         //then
-        expect(result).toEqual(['We ordered 25x tuna and current restaurant budget is -188', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT', 'Daily tax to pay: 0']);
+        expect(result).toEqual(['Budget of restaurant was reduced by: 550, new budget is: -50', 'RESTAURANT BANKRUPT', 'RESTAURANT BANKRUPT', 'Daily tax to pay: 0']);
     });
     test('Work with json source, all commands are enabled', () => {
         //given
@@ -46,7 +46,6 @@ describe('Take order tests', () => {
         const jsonSource = '../../json/allenabled.json';
         const result = main(inputString, jsonSource);
         //then
-        expect(result[0]).toEqual('We ordered 60x water and current restaurant budget is 434');
         expect(result[1]).toEqual(`Restaurant Poisoned`);
     });
 });

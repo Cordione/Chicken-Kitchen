@@ -209,12 +209,12 @@ describe('Ordering tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const allIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
         const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
-
+        const rngProvider = jest.fn<number, number[]>().mockReturnValueOnce(90).mockReturnValueOnce(125);
         //when
-        const result = orderOutput(input, baseIngredients, food, restaurant, warehouse, json, jest.fn<number, number[]>().mockReturnValueOnce(90).mockReturnValueOnce(125));
+        const result = orderOutput(input, baseIngredients, food, restaurant, warehouse, json, rngProvider);
         //then
         //1 chicken: 20 + 2 taxes = 22, 22*0.9 = 19.8 , Math.ceil(19.8) = 20, 500-20 =480
         //1 princess chicken: 90 + 9 taxes = 99, 99*1.25 = 123,75 , Math.ceil(123,75) = 124, 480 - 124 = 356
-        expect(result).toContain("We ordered 1x chicken and current restaurant budget is 480, We ordered 1x princess chicken and current restaurant budget is 356");
+        expect(result).toContain('We ordered 1x chicken and current restaurant budget is 480, We ordered 1x princess chicken and current restaurant budget is 356');
     });
 });
