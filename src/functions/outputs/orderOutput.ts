@@ -59,8 +59,8 @@ export function orderOutput(
             }
         }
         //update restaurant budget & warehouse stockpile
-        const ingredientVolatility = json.orderIngredientVolatility != undefined ? parseFloat(`${json.orderIngredientVolatility}`) :10;
-        const dishVolatility = json.orderIngredientVolatility != undefined ? parseFloat(`${json.orderIngredientVolatility}`) : 25;
+        const ingredientVolatility = json.orderIngredientVolatility;
+        const dishVolatility = json.orderIngredientVolatility;
         for (let i = 0; i < infromationsAboutOrders.length; i++) {
             let modifer = 1;
 
@@ -69,12 +69,12 @@ export function orderOutput(
             if (isBaseIngredient) {
                 const lowerScope = 100 - ingredientVolatility;
                 const upperScope = 100 + ingredientVolatility;
-                modifer = random(lowerScope, upperScope)/100;
+                modifer = random(lowerScope, upperScope) / 100;
             }
             if (isDish) {
                 const lowerScope = 100 - dishVolatility;
                 const upperScope = 100 + dishVolatility;
-                modifer = random(lowerScope, upperScope)/100;
+                modifer = random(lowerScope, upperScope) / 100;
             }
             restaurant.budget -= Math.ceil(infromationsAboutOrders[i].totalCostWithTax * modifer);
             const stockpile = warehouse.find(x => x.name.toLowerCase() === infromationsAboutOrders[i].name.toLowerCase());

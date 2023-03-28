@@ -1,4 +1,3 @@
-import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 import { countTaxableProfit } from './countTaxableProfit';
 import { taxesToPay } from './taxesToPay';
 

@@ -8,7 +8,7 @@ export function spoilFood(baseIngredients: IBaseIngredients[], warehouse: IObjec
     //Times per ingredient equal to it's quantity
     //If any material will get spoiled, we're supposed to store information about it
     //We'll return this information outside
-    const chanceToSpoil: number = json.spoilRate != undefined ? parseFloat(`0${json.spoilRate}`) : 0.1;
+    const chanceToSpoil: number = json.spoilRate 
     const baseIngredientsInWarehouse: IObjectInWarehouse[] = [];
 
     if (chanceToSpoil === 0) {

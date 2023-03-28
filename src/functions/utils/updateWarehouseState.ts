@@ -11,12 +11,12 @@ export function updateWarehouseStateAndReturnWhatWasWasted(
 ) {
     let wasted: IObjectInWarehouse[] = [];
     let sum = 0;
-    const maxCapacity = informationsFromJSONFile.totalMaximum != undefined ? informationsFromJSONFile.totalMaximum : 500;
+    const maxCapacity = informationsFromJSONFile.totalMaximum;
     for (const element of innerWarehouseStockpile) {
         const isBaseIngredient = baseIngredients.find(x => x.name.toLowerCase() === element.name.toLowerCase());
         const isDish = food.find(x => x.name.toLowerCase() === element.name.toLowerCase());
-        const maxBaseIngredientsQuantity = informationsFromJSONFile.maxIngredientType != undefined ? informationsFromJSONFile.maxIngredientType : 10;
-        const maxBaseDishQuantity = informationsFromJSONFile.maxDishType != undefined ? informationsFromJSONFile.maxDishType : 3;
+        const maxBaseIngredientsQuantity = informationsFromJSONFile.maxIngredientType;
+        const maxBaseDishQuantity = informationsFromJSONFile.maxDishType;
         if (isBaseIngredient && element.quantity > maxBaseIngredientsQuantity) {
             wasted.push({ name: element.name, quantity: element.quantity - maxBaseIngredientsQuantity });
             element.quantity = maxBaseIngredientsQuantity;

@@ -44,7 +44,7 @@ export function tableEverythingIsOk(
     for (let index = 0; index < customers.length; index++) {
         let discountToApply = 0;
         const isTipping = randomGenerator(0, 100);
-        const maxTip = json.maxTip != undefined ? parseFloat(`0.${json.maxTip}`) : 0.1;
+        const maxTip = json.maxTip;
         const minTipRange = 0.01;
         let howBigWillBeTip = 0;
         let tip = 0;
@@ -86,7 +86,7 @@ export function tableEverythingIsOk(
         let output = `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrices[index] + tips[index]} -> success: `;
         if (tips[index] != 0) {
             output += `customer decided to tip: ${tips[index]}, Restaurant gets: ${pricesBeforeTaxes[index] + tips[index]}, transactionTax: ${orderTaxes[index]}.`;
-        } 
+        }
         if (customers[index].sucessfulAppearances != 3) {
             output += `Restaurant gets: ${pricesBeforeTaxes[index] + tips[index]}, transactionTax: ${orderTaxes[index]}.\n`;
         } else {

@@ -44,7 +44,7 @@ export function tableOutput(
     let spoiledMaterials: IObjectInWarehouse[] = [];
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownParameters = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()) && !foodListToLowerCase.includes(x.toLowerCase()));
-    const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
+    const transactionTax: number = informationsFromJsonFile.transactionTax;
     let totalTax;
     let anyoneIsAlergic: boolean = false;
     informationAboutAlergies.map(el => {
@@ -66,7 +66,7 @@ export function tableOutput(
     } else if (customers.length == unqiueCustomers.length && customers.length == foodList.length) {
         if (anyoneIsAlergic) {
             // one or more customers is allergic to ordered food
-            const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
+            const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies;
             const customersNames = customers.map(x => x.customerName);
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
 
@@ -123,7 +123,7 @@ export function tableOutput(
                 let discountToApply = 0;
 
                 if (customers[index].sucessfulAppearances == 2 && informationAboutMissingMaterials.length == 0) {
-                    discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
+                    discountToApply = informationsFromJsonFile.everyThirdDiscount;
                 }
                 const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
                 const orderPrice =
@@ -179,7 +179,7 @@ export function tableOutput(
                 const outputLine1 = otp[0] as string[];
                 totalTax = otp[1] as number;
                 outputLine1.forEach(el => outputList.push(el));
-                return [outputLine1.join(''), otp[1], otp[2], otp[3], otp[4]]
+                return [outputLine1.join(''), otp[1], otp[2], otp[3], otp[4]];
                 // const customersNames = customers.map(x => x.customerName);
                 // customers.forEach(el => el.sucessfulAppearances++);
                 // const totalOrdersCost: number[] = [];
