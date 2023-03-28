@@ -23,11 +23,11 @@ import { dailyTax } from './utils/dailyTax';
 // import * as commands from '../json/commands.json';
 
 export function main(initialString?: string, jsonSource?: string) {
-    let informationsFromJsonFile: IInformationsFromJsonFile = commandJSONFileOutput(jsonSource);
+    let json: IInformationsFromJsonFile = commandJSONFileOutput(jsonSource);
     const customers = customersParser('./src/csv_files/customersAlergies.csv');
     const food = foodParser('./src/csv_files/food.csv');
     const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv');
-    const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', baseIngredients, informationsFromJsonFile);
+    const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', baseIngredients, json);
     const finalOutput: string[] = [];
     const restaurant: IRestaurant = {
         budget: 500,
@@ -56,7 +56,7 @@ export function main(initialString?: string, jsonSource?: string) {
     //initial waste
     const warehouseState: IObjectInWarehouse[] = [];
 
-    const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
+    const wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, json);
     if (wastedMaterials.length > 0) {
         whatWasWasted.push(wastedMaterials);
         trash.push(wastedMaterials);
@@ -74,7 +74,7 @@ export function main(initialString?: string, jsonSource?: string) {
         for (let idx = 0; idx < warehouse.length; idx++) {
             warehouseState.push({ name: warehouse[idx].name, quantity: warehouse[idx].quantity });
         }
-        const result = takeOrder(input[index], customers, food, baseIngredients, restaurant, warehouse, informationsFromJsonFile);
+        const result = takeOrder(input[index], customers, food, baseIngredients, restaurant, warehouse, json);
         if (input[index].command.toLowerCase() != 'Audit'.toLowerCase() && input[index].command.toLowerCase() != 'throw trash away'.toLowerCase()) {
             if (result?.length == 5) {
                 finalOutput.push(result[0] as string);
@@ -100,7 +100,7 @@ export function main(initialString?: string, jsonSource?: string) {
             }
         }
         if (input[index].command.toLowerCase() == 'Order'.toLowerCase()) {
-            wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, informationsFromJsonFile);
+            wastedMaterials = updateWarehouseStateAndReturnWhatWasWasted(warehouse, baseIngredients, food, json);
         }
         if (wastedMaterials.length > 0) {
             whatWasWasted.push(wastedMaterials);
@@ -108,15 +108,15 @@ export function main(initialString?: string, jsonSource?: string) {
         } else {
             whatWasWasted.push([{ name: 'None', quantity: 0 }]);
         }
-        checkRestaurantState(restaurant, food, trash, informationsFromJsonFile);
+        checkRestaurantState(restaurant, food, trash, json);
         budget.push(restaurant.budget);
         command.push(`${input[index].command} ${input[index].parameters}`);
         warehouseStates.push(warehouseState);
 
         if (input[index].command.toLowerCase() == 'Audit'.toLowerCase() && input[index].parameters != undefined && input[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()) {
-            const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, informationsFromJsonFile);
+            const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, json.tipsTax, json.dailyTax);
             finalOutput.map(x => auditArray.push(x as string));
-            auditOutput = createAudit(auditArray, warehouseStates, budget, whatWasWasted, informationsFromJsonFile, baseIngredients, food, tips, dailyTaxAmount, tipsTaxToPay);
+            auditOutput = createAudit(auditArray, warehouseStates, budget, whatWasWasted, json, baseIngredients, food, tips, dailyTaxAmount, tipsTaxToPay);
         }
         if (input[index].command.toLowerCase() == 'Throw trash away'.toLowerCase()) {
             for (const element of trash) {
@@ -134,14 +134,14 @@ export function main(initialString?: string, jsonSource?: string) {
     }
 
     //count taxes
-    const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, informationsFromJsonFile);
+    const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, json.tipsTax, json.dailyTax);
     restaurant.budget - (dailyTaxAmount + tipsTaxToPay);
     budget.push(restaurant.budget - (dailyTaxAmount + tipsTaxToPay));
     finalOutput.push(`Daily tax to pay: ${dailyTaxAmount + tipsTaxToPay}`);
-    if (informationsFromJsonFile.audit == 'yes') {
+    if (json.audit == 'yes') {
         saveFile(auditOutput, './src/reports/Audit.txt');
     }
-    createReport(budget, finalOutput, whatWasWasted, informationsFromJsonFile, baseIngredients, food);
+    createReport(budget, finalOutput, whatWasWasted, json, baseIngredients, food);
     return finalOutput;
 }
 // console.log(main(`buy, bernard unfortunate, fries`));

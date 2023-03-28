@@ -10,7 +10,7 @@ describe('Daily tax tests', () => {
         const jsonSource = '../../json/all.json';
         const json = commandJSONFileOutput(jsonSource);
         //when
-        const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, json);
+        const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, json.tipsTax, json.dailyTax);
         //then
         // Paid already 100 tax, Recived 100 in tips which should be excluded
         // So we have 800 - 100 = 700, 700-100 = 600, 600-500 = 100, 100*0.2 = 20
