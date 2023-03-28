@@ -17,4 +17,5 @@ export interface IInformationsFromJsonFile {
     maxTip: number;
     orderIngredientVolatility: number;
     orderDishVolatility: number;
+    tipsTax: number;
 }

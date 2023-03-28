@@ -20,6 +20,7 @@ export function commandJSONFileOutput(jsonSource?: string) {
     src.maxTip = src['max tip'];
     src.orderIngredientVolatility = src['order ingredient volatility'];
     src.orderDishVolatility = src['order dish volatility']
+    src.tipsTax = src['tips tax']
     const commandOutput: IInformationsFromJsonFile = src;
     return commandOutput;
 }
