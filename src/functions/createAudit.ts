@@ -11,7 +11,8 @@ export function createAudit(
     informationsFromJsonFile: IInformationsFromJsonFile,
     baseIngredients: IBaseIngredients[],
     food: IFood[],
-    tips: number[]
+    tips: number[],
+    dailyTax: number[]
 ) {
     const output: string[] = [];
     // console.log(`at`, auditArray)
@@ -67,6 +68,8 @@ export function createAudit(
                     restaurantBugets[index] - restaurantBugets[0] - tips.flat().reduce((a, b) => a + b, 0)
                 }, recived in tips ${tips.flat().reduce((a, b) => a + b, 0)}`
             );
+            output.push(`Daily tax from orders to pay: ${dailyTax[0]}`);
+            output.push(`Daily tax from tips to pay: ${dailyTax[1]}`);
             output.push(`Audit End`);
         }
     }
