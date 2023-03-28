@@ -16,7 +16,6 @@ import { listOfCustomers } from '../utils/listOfCustomers';
 import { removeElementsFromWarehouse } from '../utils/removeElementsFromWarehouse';
 import { keepDishes } from '../utils/keepDishes';
 import { updatedInfromationsAboutMaterials } from '../utils/updatedInformationsAboutMaterials';
-import { tableEverything } from './table/tableEverything';
 import { tableEverythingIsOk } from './table/tableEverythingIsOk';
 import { randomGenerator } from '../utils/randomGenerator';
 

@@ -18,6 +18,8 @@ export function commandJSONFileOutput(jsonSource?: string) {
     src.spoilRate = src['spoil rate'];
     src.wasteLimit = src['waste limit'];
     src.maxTip = src['max tip'];
+    src.orderIngredientVolatility = src['order ingredient volatility'];
+    src.orderDishVolatility = src['order dish volatility']
     const commandOutput: IInformationsFromJsonFile = src;
     return commandOutput;
 }

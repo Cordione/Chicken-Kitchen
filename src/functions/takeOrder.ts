@@ -9,6 +9,8 @@ import { budgetOutput } from './outputs/bugetOutput';
 import { buyOutput } from './outputs/buyOutput';
 import { orderOutput } from './outputs/orderOutput';
 import { tableOutput } from './outputs/tableOutput';
+import { randomGenerator } from './utils/randomGenerator';
+import { getRandomInclusive } from './utils/getRandomInclusive';
 // import * as commands from '../json/commands.json';
 
 export function takeOrder(
@@ -32,7 +34,7 @@ export function takeOrder(
         } else if (commandAndParameters.command.toLowerCase() == 'order'.toLowerCase() && commandAndParameters.parameters != undefined) {
             //Find matching element price, store it, multiply it by amount of orders
             if (informationsFromJSONFile.order.toLowerCase() == 'ingredients' || informationsFromJSONFile.order.toLowerCase() == 'dishes' || informationsFromJSONFile.order.toLowerCase() == 'all') {
-                return orderOutput(commandAndParameters, baseIngredients, food, restaurant, warehouse, informationsFromJSONFile);
+                return orderOutput(commandAndParameters, baseIngredients, food, restaurant, warehouse, informationsFromJSONFile, getRandomInclusive);
             } else {
                 return `Order command disabled.`;
             }
