@@ -114,9 +114,9 @@ export function main(initialString?: string, jsonSource?: string) {
         warehouseStates.push(warehouseState);
 
         if (input[index].command.toLowerCase() == 'Audit'.toLowerCase() && input[index].parameters != undefined && input[index].parameters[0].toLowerCase() == 'Resources'.toLowerCase()) {
-            const dailyTaxes = dailyTax(taxPaid, tips, budget, informationsFromJsonFile);
+            const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, informationsFromJsonFile);
             finalOutput.map(x => auditArray.push(x as string));
-            auditOutput = createAudit(auditArray, warehouseStates, budget, whatWasWasted, informationsFromJsonFile, baseIngredients, food, tips, dailyTaxes);
+            auditOutput = createAudit(auditArray, warehouseStates, budget, whatWasWasted, informationsFromJsonFile, baseIngredients, food, tips, dailyTaxAmount, tipsTaxToPay);
         }
         if (input[index].command.toLowerCase() == 'Throw trash away'.toLowerCase()) {
             for (const element of trash) {
@@ -134,10 +134,10 @@ export function main(initialString?: string, jsonSource?: string) {
     }
 
     //count taxes
-    const dailyTaxWithTips = dailyTax(taxPaid, tips, budget, informationsFromJsonFile);
-    restaurant.budget - (dailyTaxWithTips[0] + dailyTaxWithTips[1]);
-    budget.push(restaurant.budget - (dailyTaxWithTips[0] + dailyTaxWithTips[1]));
-    finalOutput.push(`Daily tax to pay: ${dailyTaxWithTips[0] + dailyTaxWithTips[1]}`);
+    const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, informationsFromJsonFile);
+    restaurant.budget - (dailyTaxAmount + tipsTaxToPay);
+    budget.push(restaurant.budget - (dailyTaxAmount + tipsTaxToPay));
+    finalOutput.push(`Daily tax to pay: ${dailyTaxAmount + tipsTaxToPay}`);
     if (informationsFromJsonFile.audit == 'yes') {
         saveFile(auditOutput, './src/reports/Audit.txt');
     }
