@@ -14,10 +14,13 @@ export function keepDishes(informationAboutOrdersAndItsPrice: ISpecificOrder[], 
     for (const element of informationAboutOrdersAndItsPrice) {
         const quarterPrice = Math.ceil(element.price / 4);
         const specificDishInWarehouse = warehouse.find(x => x.name.toLowerCase() === element.name.toLowerCase());
-        const maxDishes = informationsFromJsonFile.maxDishType != undefined ? informationsFromJsonFile.maxDishType : 3;
+        const maxDishes = informationsFromJsonFile.maxDishType;
         const numericValue = typeof informationsFromJsonFile.dishWithAllergies === 'number' ? informationsFromJsonFile.dishWithAllergies : 0;
         //IF we can afford to place it in warehouse (buget is more then 25% dish cost)
+        console.log(numericValue);
+
         if (element.price > numericValue) {
+
             if (quarterPrice <= restaurant.budget) {
                 //Reduce restaurant buget by 25%
                 restaurant.budget -= quarterPrice;

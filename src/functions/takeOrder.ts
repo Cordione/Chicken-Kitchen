@@ -24,7 +24,7 @@ export function takeOrder(
 ) {
     if (restaurant.budget >= 0 && !restaurant.isPoisoned) {
         //Add variable to store information about total cost of order, set initial value to 0;
-        const restaurantMarkup: number = informationsFromJSONFile.profitMargin != undefined ? parseFloat(`1.${informationsFromJSONFile.profitMargin}`) : 1.3;
+        const restaurantMarkup: number = informationsFromJSONFile.profitMargin
         if (commandAndParameters.command.toLowerCase() == 'buy'.toLowerCase() && commandAndParameters.parameters != undefined) {
             if (informationsFromJSONFile.buy == 'yes') {
                 return buyOutput(commandAndParameters, customers, food, baseIngredients, restaurantMarkup, restaurant, warehouse, informationsFromJSONFile);

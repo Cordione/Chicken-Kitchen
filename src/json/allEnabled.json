@@ -16,5 +16,6 @@
     "waste limit": 50,
     "max tip": 10,
     "order ingredient volatility": 10,
-    "order dish volatility": 25
+    "order dish volatility": 25,
+    "tips tax": 5
 }

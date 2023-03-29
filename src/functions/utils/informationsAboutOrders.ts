@@ -31,7 +31,6 @@ export function informationsAboutOrders(
     const neededRawMaterialsWithQuantities: IMaterials[] = [];
     const usedMaterialsWithQuantities: IMaterials[] = [];
     const usedMaterialsNames: string[] = [];
-    const extraMaterials: IMaterials[] = [];
     const allSpoiledFood: IObjectInWarehouse[] = [];
 
     if (commandAndParameters.parameters != undefined) {

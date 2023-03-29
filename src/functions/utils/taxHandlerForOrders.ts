@@ -8,7 +8,7 @@ export function handleOrder(specificItem: string, amount: string, baseIngredient
     let totalCostBeforeTaxes = 0;
     const singleIngredient = baseIngredients.find(ingredient => ingredient.name.trim().toLowerCase() == specificItem.trim().toLowerCase());
     const singleDish = food.find(dish => dish.name.trim().toLowerCase() == specificItem.trim().toLowerCase());
-    const taxes: number = informationsFromJSONFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJSONFile.transactionTax}`) : 0.1;
+    const taxes: number = informationsFromJSONFile.transactionTax 
 
     if (singleIngredient == undefined && singleDish == undefined) {
         return `We recived malformed input, there's no such ingredient/dish as: ${specificItem}`;
