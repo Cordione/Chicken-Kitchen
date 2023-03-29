@@ -16,16 +16,16 @@ export function buyEverythingIsOk(
     informationAboutUsedMaterials: IMaterials[],
     warehouse: IObjectInWarehouse[],
     json: IInformationsFromJsonFile,
-    randomGenerator: (min: number, max: number) => number,
+    randomGenerator: (min: number, max: number) => number
 ) {
     specificCustomer.sucessfulAppearances++;
     const isTipping = randomGenerator(0, 100);
-    const maxTip = json.maxTip != undefined ? parseFloat(`0.${json.maxTip}`) : 0.1;
+    const maxTip = json.maxTip;
     const minTipRange = 0.01;
     let howBigWillBeTip = 0;
     let tip = 0;
     if (isTipping >= 50) {
-        howBigWillBeTip = randomGenerator(minTipRange, maxTip)
+        howBigWillBeTip = randomGenerator(minTipRange, maxTip);
         tip = Math.ceil(orderCost * howBigWillBeTip);
         if (specificCustomer.budget < orderCost + tip) {
             tip = Math.ceil(specificCustomer.budget - orderCost);

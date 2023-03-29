@@ -21,8 +21,8 @@ export function createReport(
     //Array to store all outputs before writing a file.
     const finalArray: string[] = [];
 
-    const maxBaseIngredientsQuantity = informationsFromJsonFile.maxIngredientType != undefined ? informationsFromJsonFile.maxIngredientType : 10;
-    const maxBaseDishQuantity = informationsFromJsonFile.maxDishType != undefined ? informationsFromJsonFile.maxDishType : 3;
+    const maxBaseIngredientsQuantity = informationsFromJsonFile.maxIngredientType;
+    const maxBaseDishQuantity = informationsFromJsonFile.maxDishType;
     // if (index == 0 && !isRestaurantBankrupt) {
     finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[0]}`);
     // }
@@ -43,7 +43,6 @@ export function createReport(
         if (restaurantBudgetIterations[index] >= 0) {
             isRestaurantBankrupt = false;
         }
-
 
         if (whatWasWastedAsString[0] != undefined && whatWasWastedAsString[0].toLowerCase() != 'None'.toLowerCase()) {
             for (const element of wasted) {

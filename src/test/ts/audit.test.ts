@@ -94,7 +94,7 @@ describe('Audit Tests', () => {
         const wasted: IObjectInWarehouse[][] = [[{ name: 'none', quantity: 0 }], [{ name: 'none', quantity: 0 }], [{ name: 'none', quantity: 0 }]];
         const tips: number[] = [];
         //when
-        const result = createAudit(finalOutput, warehouseStates, budget, wasted, json, allIngredients, allFood, tips);
+        const result = createAudit(finalOutput, warehouseStates, budget, wasted, json, allIngredients, allFood, tips, 0, 0);
         //then
         expect(result).toEqual([
             'Initial state:',
@@ -107,6 +107,8 @@ describe('Audit Tests', () => {
             'Warehouse: Chicken,4,Tuna,4,Potatoes,4,Asparagus,2,Milk,2,Honey,2,Paprika,4,Garlic,4,Water,4,Lemon,5,Tomatoes,4,Pickles,4,Feta,4,Vinegar,5,Rice,5,Chocolate,4',
             'Restaurant Budget: 870',
             `Restaurant Budget 870: We had: 500 initial money, profit from orders after taxes: 370, recived in tips 0`,
+            'Daily tax from orders to pay: 0',
+            'Daily tax from tips to pay: 0',
             'Audit End',
         ]);
         console.log(result);

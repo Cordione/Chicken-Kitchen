@@ -1,4 +1,5 @@
 import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
+import { setDefaultJsonStates } from './setDefaultJsonStates';
 export function commandJSONFileOutput(jsonSource?: string) {
     let src;
     if (jsonSource == undefined || jsonSource == '') {
@@ -20,8 +21,10 @@ export function commandJSONFileOutput(jsonSource?: string) {
     src.maxTip = src['max tip'];
     src.orderIngredientVolatility = src['order ingredient volatility'];
     src.orderDishVolatility = src['order dish volatility']
+    src.tipsTax = src['tips tax']
     const commandOutput: IInformationsFromJsonFile = src;
-    return commandOutput;
+    setDefaultJsonStates(commandOutput);
+    return commandOutput
 }
 // console.log(commandJSONFileOutput(`../../json/tax`));
-// console.log(commandJSONFileOutput())
+

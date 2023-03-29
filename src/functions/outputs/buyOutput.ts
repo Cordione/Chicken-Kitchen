@@ -40,7 +40,7 @@ export function buyOutput(
     const specificCustomer = customers[0];
     const customerNames = customers.map(x => x.customerName.toLowerCase());
     const unknownCustomer = commandAndParameters.parameters?.filter(x => !customerNames.includes(x.toLowerCase()));
-    const transactionTax: number = informationsFromJsonFile.transactionTax != undefined ? parseFloat(`0.${informationsFromJsonFile.transactionTax}`) : 0.2;
+    const transactionTax: number = informationsFromJsonFile.transactionTax;
     let spoiledMaterials: IObjectInWarehouse[] = [];
     let output = '';
     if (commandAndParameters.parameters != undefined) {
@@ -58,9 +58,8 @@ export function buyOutput(
             const specificDish = food.find(x => x.name.toLowerCase() === dish.toLowerCase());
             if (specificDish != undefined) {
                 let discountToApply = 0;
-
                 if (specificCustomer.sucessfulAppearances == 2 && !isAlergic && informationAboutMissingMaterials.length == 0) {
-                    discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
+                    discountToApply = informationsFromJsonFile.everyThirdDiscount;
                 }
                 const discountInMoney = Math.ceil(specificDish.price * restaurantMarkup * discountToApply);
 
@@ -70,13 +69,13 @@ export function buyOutput(
                         : Math.ceil(specificDish.price * restaurantMarkup);
                 const orderTax = Math.ceil(orderCost * transactionTax);
                 if (isAlergic) {
-                    const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies != undefined ? informationsFromJsonFile.dishWithAllergies : 'waste';
+                    const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies;
                     let updatedInformationsAboutUsedMaterials: IMaterials[] = informationAboutUsedMaterials;
                     removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
                     if (whatDoWeDoWithDishesFromAlergics === 'waste') {
                     }
                     if (whatDoWeDoWithDishesFromAlergics === 'keep') {
-                        keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
+                        const dish = keepDishes([specificDish], restaurant, warehouse, informationsFromJsonFile);
                         updatedInformationsAboutUsedMaterials = [];
                     }
                     if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {

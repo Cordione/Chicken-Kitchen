@@ -7,7 +7,6 @@ import { foodParser } from '../parsers/foodParser';
 export function countPriceOfOrder(food: IFood[], baseIngredients: IBaseIngredients[]) {
     food.map(element => {
         const requiredRawIngredientsNames: string[] = [];
-        const rawIngredientsWithQuantities: IMaterials[] = [];
         let orderCost: number = 0;
         const orderedFood = food.find(x => x.name.toLowerCase().includes(element.name.toLowerCase())) as IFood;
         const orderedFoodIngredients = orderedFood?.ingerdients.map(ingredient => ingredient);
