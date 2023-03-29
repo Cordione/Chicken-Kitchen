@@ -59,8 +59,6 @@ describe('Warehouse testing', () => {
         );
         const tunacake = warehouse.find(x => x.name === 'Tuna Cake');
         const fries = warehouse.find(x => x.name === 'Fries');
-        console.log(warehouse);
-
         expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
         expect(fries).toEqual({ name: 'Fries', quantity: 2 });
     });

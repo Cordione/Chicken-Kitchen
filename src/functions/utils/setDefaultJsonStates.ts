@@ -1,6 +1,6 @@
 import { IInformationsFromJsonFile } from '../../Interface/IInformationsFromJsonFIle';
 
-export function returnJsonStates(commandOutput: IInformationsFromJsonFile) {
+export function setDefaultJsonStates(commandOutput: IInformationsFromJsonFile) {
     commandOutput.audit = commandOutput.audit != undefined ? commandOutput.audit : 'no';
     commandOutput.buy = commandOutput.buy != undefined ? commandOutput.buy : 'no';
     commandOutput.table = commandOutput.table != undefined ? commandOutput.table : 'no';
