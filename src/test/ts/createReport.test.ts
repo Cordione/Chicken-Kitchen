@@ -14,8 +14,9 @@ describe('Create report tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const food = foodParser('./src/csv_files/food.csv');
         const baseIngredients = baseIngredientsParser('./src/csv_files/baseIngredients.csv')
+        const totalTrashTaxValue = 0
         //when
-        const report = createReport(restaurantBudgetIterations, orders, wasted, json, baseIngredients, food);
+        const report = createReport(restaurantBudgetIterations, orders, wasted, json, baseIngredients, food, totalTrashTaxValue);
         //then
         expect(report[0]).toEqual('Restaurant budget: 500');
         expect(report[1]).toEqual('Alexandra Smith have budget: 500 -> wants to order Princess Chicken, which cost: 117.00: success');
