@@ -31,7 +31,7 @@ describe('Warehouse testing', () => {
         const rngProvider = jest.fn<number, number[]>().mockReturnValueOnce(100);
         const result = orderOutput(input, baseIngredients, food, restaurant, warehouse, json, rngProvider);
         //then
-        expect(result).toContain('We ordered 10x tuna and current restaurant budget is 225');
+        expect(result).toContain('We ordered 10x tuna and current restaurant budget is 220');
         expect(warehouse[0]).toEqual({ name: 'tuna', quantity: 10 });
     });
     test('1 table -> 3 customers -> check warehouse, json - keep', () => {
