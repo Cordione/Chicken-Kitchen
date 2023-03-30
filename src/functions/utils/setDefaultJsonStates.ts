@@ -24,5 +24,5 @@ export function setDefaultJsonStates(commandOutput: IInformationsFromJsonFile) {
     commandOutput.orderIngredientVolatility = commandOutput.orderIngredientVolatility != undefined ? commandOutput.orderIngredientVolatility : 10;
     commandOutput.orderDishVolatility = commandOutput.orderDishVolatility != undefined ? commandOutput.orderDishVolatility : 25;
     commandOutput.tipsTax = commandOutput.tipsTax != undefined ? commandOutput.tipsTax : 5;
-    commandOutput.wasteTax = commandOutput.wasteTax != undefined ? commandOutput.wasteTax : 15;
+    commandOutput.wasteTax = commandOutput.wasteTax ?? 15;
 }

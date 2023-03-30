@@ -10,10 +10,9 @@ describe('Trash taxing tests', () => {
         const trash: IObjectInWarehouse[][] = [[{ name: `potatoes`, quantity: 505 }], [{ name: `potatoes`, quantity: 505 }]];
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const food = foodParser('./src/test/csv/baseIngredients.csv');
-        const jsonSource = '../../json/allEnabled.json';
-        const json = commandJSONFileOutput(jsonSource);
+
         //when
-        const result = totalMoneyThrownToTrash(trash, food, baseIngredients, json.wasteTax);
+        const result = totalMoneyThrownToTrash(trash, food, baseIngredients, 15);
         //then
         //  Tax is 3030 * 0.15 = 454.5
         //  Fine is applied 454/5 = 4 times.
@@ -26,10 +25,8 @@ describe('Trash taxing tests', () => {
         const trash: IObjectInWarehouse[][] = [[{ name: `water`, quantity: 4990 }]];
         const baseIngredients = baseIngredientsParser('./src/test/csv/baseIngredients.csv');
         const food = foodParser('./src/test/csv/baseIngredients.csv');
-        const jsonSource = '../../json/allEnabled.json';
-        const json = commandJSONFileOutput(jsonSource);
         //when
-        const result = totalMoneyThrownToTrash(trash, food, baseIngredients, json.wasteTax);
+        const result = totalMoneyThrownToTrash(trash, food, baseIngredients, 15);
         //then
         //  Tax is 4990 * 0.15 = 748.5
         //  Fine is applied 748/8 = 7 times.

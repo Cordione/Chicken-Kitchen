@@ -18,7 +18,7 @@ export function handleOrder(specificItem: string, amount: string, baseIngredient
         }
     } else if (singleDish != undefined) {
         if (informationsFromJSONFile.order === 'dishes' || informationsFromJSONFile.order === 'all') {
-            costBeforeTaxes = singleDish?.price;
+            costBeforeTaxes = singleDish.price;
         }
     }
 

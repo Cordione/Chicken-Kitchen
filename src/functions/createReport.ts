@@ -58,13 +58,12 @@ export function createReport(
             }
         }
         finalArray.push(outputArray[index]);
-
-        if (index == outputArray.length - 1 && !isRestaurantBankrupt && totalTrashTaxValue == 0) {
-            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
-        } else if(index == outputArray.length - 1 && !isRestaurantBankrupt && totalTrashTaxValue != 0){
-            finalArray.push(`We paid: ${totalTrashTaxValue} for exceeded waste.`);
-            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
-        }
+    }
+    if (!isRestaurantBankrupt && totalTrashTaxValue == 0) {
+        finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
+    } else if (!isRestaurantBankrupt && totalTrashTaxValue != 0) {
+        finalArray.push(`We paid: ${totalTrashTaxValue} for exceeded waste.`);
+        finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
     }
     //Save array as file
     const saved = saveFile(finalArray, './src/reports/Restaurant.txt');
