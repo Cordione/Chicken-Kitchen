@@ -20,11 +20,11 @@ export function commandJSONFileOutput(jsonSource?: string) {
     src.wasteLimit = src['waste limit'];
     src.maxTip = src['max tip'];
     src.orderIngredientVolatility = src['order ingredient volatility'];
-    src.orderDishVolatility = src['order dish volatility']
-    src.tipsTax = src['tips tax']
+    src.orderDishVolatility = src['order dish volatility'];
+    src.tipsTax = src['tips tax'];
+    src.wasteTax = src['waste tax'];
     const commandOutput: IInformationsFromJsonFile = src;
     setDefaultJsonStates(commandOutput);
-    return commandOutput
+    return commandOutput;
 }
 // console.log(commandJSONFileOutput(`../../json/tax`));
-

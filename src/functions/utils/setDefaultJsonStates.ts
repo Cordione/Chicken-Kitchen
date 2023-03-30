@@ -19,9 +19,10 @@ export function setDefaultJsonStates(commandOutput: IInformationsFromJsonFile) {
     commandOutput.dishWithAllergies = commandOutput.dishWithAllergies != undefined ? commandOutput.dishWithAllergies : 'waste';
     commandOutput.spoilRate = commandOutput.spoilRate != undefined ? parseFloat(`0${commandOutput.spoilRate}`) : 0.1;
     commandOutput.wasteLimit = commandOutput.wasteLimit != undefined ? commandOutput.wasteLimit : 50;
-    commandOutput.maxTip = commandOutput.maxTip != undefined ? commandOutput.maxTip : 0.1;
+    commandOutput.maxTip = commandOutput.maxTip != undefined ? parseFloat(`0.${commandOutput.maxTip}`) : 0.1;
 
     commandOutput.orderIngredientVolatility = commandOutput.orderIngredientVolatility != undefined ? commandOutput.orderIngredientVolatility : 10;
     commandOutput.orderDishVolatility = commandOutput.orderDishVolatility != undefined ? commandOutput.orderDishVolatility : 25;
     commandOutput.tipsTax = commandOutput.tipsTax != undefined ? commandOutput.tipsTax : 5;
+    commandOutput.wasteTax = commandOutput.wasteTax ?? 15;
 }

@@ -20,6 +20,7 @@ import { checkRestaurantState } from './utils/checkRestaurantState';
 import { unifyTrash } from './utils/unifyTrash';
 import { createWastePool } from './createWastePool';
 import { dailyTax } from './utils/dailyTax';
+import { totalMoneyThrownToTrash } from './utils/totalMoneyThrownToTrash';
 // import * as commands from '../json/commands.json';
 
 export function main(initialString?: string, jsonSource?: string) {
@@ -135,21 +136,23 @@ export function main(initialString?: string, jsonSource?: string) {
 
     //count taxes
     const { dailyTaxAmount, tipsTaxToPay } = dailyTax(taxPaid, tips, budget, json.tipsTax, json.dailyTax);
-    restaurant.budget - (dailyTaxAmount + tipsTaxToPay);
-    budget.push(restaurant.budget - (dailyTaxAmount + tipsTaxToPay));
+    const totalTrashTaxValue = totalMoneyThrownToTrash(trash, food, baseIngredients, json.wasteTax);
+    restaurant.budget -= dailyTaxAmount + tipsTaxToPay + totalTrashTaxValue;
+    budget.push(restaurant.budget);
+
     finalOutput.push(`Daily tax to pay: ${dailyTaxAmount + tipsTaxToPay}`);
     if (json.audit == 'yes') {
         saveFile(auditOutput, './src/reports/Audit.txt');
     }
-    createReport(budget, finalOutput, whatWasWasted, json, baseIngredients, food);
+    createReport(budget, finalOutput, whatWasWasted, json, baseIngredients, food, totalTrashTaxValue);
     return finalOutput;
 }
 // console.log(main(`buy, bernard unfortunate, fries`));
 // console.log(main(`table, adam smith, fries`));
 // console.log(main(`buy, adam smith, fries\nbuy, adam smith, fries\nbuy, adam smith, fries`));
-console.log(main(`table, adam smith, fries\ntable, adam smith, fries\n Audit, Resources \ntable, adam smith, fries`));
+// console.log(main(`table, adam smith, fries\ntable, adam smith, fries\n Audit, Resources \ntable, adam smith, fries`));
 // console.log(main(`order, tuna, 2, princess chicken, 5\norder, tuna, 5\norder, tuna, 5\norder, tuna, 5`));
-// console.log(main(`order, potatoes, 30\n order, water, 5`));
+console.log(main(`order, water, 5000\n Audit, Resources`));
 // console.log(main(`table, barbara smith, bernard unfortunate, adam smith, tuna cake, fries, fries\n Audit, Resources\nThrow trash away\nOrder, chicken, 1\nthrow trash away`));
 // console.log(main(`table, barbara smith, bernard unfortunate, adam smith, tuna cake, fries, fries\n throw trash away`, `../../json/number.json`));
 // console.log(main(`Buy, Alexandra Smith, emperor chicken\n order, tuna, 15, princess chicken, 2\n Audit, Resources`, `../../json/all.json`));
