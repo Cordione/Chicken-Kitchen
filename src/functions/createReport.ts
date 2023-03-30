@@ -10,7 +10,8 @@ export function createReport(
     whatWasWasted: IObjectInWarehouse[][],
     informationsFromJsonFile: IInformationsFromJsonFile,
     baseIngredients: IBaseIngredients[],
-    food: IFood[]
+    food: IFood[],
+    totalTrashTaxValue: number
 ) {
     //Function should take array of strings as parameter
     //First parameter should be array containing restaurant budget changes
@@ -58,7 +59,10 @@ export function createReport(
         }
         finalArray.push(outputArray[index]);
 
-        if (index == outputArray.length - 1 && !isRestaurantBankrupt) {
+        if (index == outputArray.length - 1 && !isRestaurantBankrupt && totalTrashTaxValue == 0) {
+            finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
+        } else if(index == outputArray.length - 1 && !isRestaurantBankrupt && totalTrashTaxValue != 0){
+            finalArray.push(`We paid: ${totalTrashTaxValue} for exceeded waste.`);
             finalArray.push(`Restaurant budget: ${restaurantBudgetIterations[restaurantBudgetIterations.length - 1]}`);
         }
     }
