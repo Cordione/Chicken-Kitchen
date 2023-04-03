@@ -13,11 +13,11 @@ describe('Command Tokenizer tests', () => {
         //when
         //then
         expect(commandAndParameters).toEqual([
-            { command: 'Buy', parameters: ['Julie Mirage', 'Princess Chicken'] },
-            { command: 'Buy', parameters: ['Elon Carousel', 'Tuna Cake'] },
-            { command: 'order', parameters: ['tuna', '5'] },
-            { command: 'budget', parameters: ['+', '10'] },
-            { command: 'Audit', parameters: ['Resources'] },
+            { command: 'Buy', flag: '', parameters: ['Julie Mirage', 'Princess Chicken'] },
+            { command: 'Buy', flag: '', parameters: ['Elon Carousel', 'Tuna Cake'] },
+            { command: 'order', flag: '', parameters: ['tuna', '5'] },
+            { command: 'budget', flag: '', parameters: ['+', '10'] },
+            { command: 'Audit', flag: '', parameters: ['Resources'] },
         ]);
     });
 
@@ -27,7 +27,7 @@ describe('Command Tokenizer tests', () => {
         const commandAndParameters: ICommandAndParameters[] = commandTokenizer(`table, Julie Mirage, Princess Chicken`, baseIngredients);
         //when
         //then
-        expect(commandAndParameters).toEqual([{ command: 'table', parameters: ['Julie Mirage', 'Princess Chicken'] }]);
+        expect(commandAndParameters).toEqual([{ command: 'table', flag: '', parameters: ['Julie Mirage', 'Princess Chicken'] }]);
     });
     test('Should properly handle output for table (2 persons/2 orders, affordable, w/o alergies)', () => {
         //given
@@ -35,6 +35,6 @@ describe('Command Tokenizer tests', () => {
         const commandAndParameters: ICommandAndParameters[] = commandTokenizer(`Table, Alexandra Smith, Adam Smith, Irish Fish, Fries`, baseIngredients);
         //when
         //then
-        expect(commandAndParameters).toEqual([{ command: 'Table', parameters: ['Alexandra Smith', 'Adam Smith', 'Irish Fish', 'Fries'] }]);
+        expect(commandAndParameters).toEqual([{ command: 'Table', flag: '', parameters: ['Alexandra Smith', 'Adam Smith', 'Irish Fish', 'Fries'] }]);
     });
 });

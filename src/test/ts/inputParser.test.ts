@@ -10,11 +10,11 @@ describe('Input tests', () => {
         const result = inputParser(filePath, baseIngredients);
         //then
         expect(result).toEqual([
-            { command: 'Buy', parameters: ['Julie Mirage', 'Princess Chicken'] },
-            { command: 'Buy', parameters: ['Elon Carousel', 'Tuna Cake'] },
-            { command: 'Sadkl', parameters: [] },
-            { command: 'Buy', parameters: ['Adam Smith', 'Fries'] },
-            { command: 'Audit', parameters: ['Resources'] },
+            { command: 'Buy', flag: '', parameters: ['Julie Mirage', 'Princess Chicken'] },
+            { command: 'Buy', flag: '', parameters: ['Elon Carousel', 'Tuna Cake'] },
+            { command: 'Sadkl', flag: '', parameters: [] },
+            { command: 'Buy', flag: '', parameters: ['Adam Smith', 'Fries'] },
+            { command: 'Audit', flag: '', parameters: ['Resources'] },
         ]);
     });
 });

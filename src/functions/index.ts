@@ -148,11 +148,11 @@ export function main(initialString?: string, jsonSource?: string) {
     return finalOutput;
 }
 // console.log(main(`buy, bernard unfortunate, fries`));
-// console.log(main(`table, adam smith, fries`));
+console.log(main(`table, Pooled, adam smith, fries`));
 // console.log(main(`buy, adam smith, fries\nbuy, adam smith, fries\nbuy, adam smith, fries`));
 // console.log(main(`table, adam smith, fries\ntable, adam smith, fries\n Audit, Resources \ntable, adam smith, fries`));
 // console.log(main(`order, tuna, 2, princess chicken, 5\norder, tuna, 5\norder, tuna, 5\norder, tuna, 5`));
-console.log(main(`order, water, 5000\n Audit, Resources`));
+// console.log(main(`order, water, 5000\n Audit, Resources`));
 // console.log(main(`table, barbara smith, bernard unfortunate, adam smith, tuna cake, fries, fries\n Audit, Resources\nThrow trash away\nOrder, chicken, 1\nthrow trash away`));
 // console.log(main(`table, barbara smith, bernard unfortunate, adam smith, tuna cake, fries, fries\n throw trash away`, `../../json/number.json`));
 // console.log(main(`Buy, Alexandra Smith, emperor chicken\n order, tuna, 15, princess chicken, 2\n Audit, Resources`, `../../json/all.json`));

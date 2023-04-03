@@ -20,7 +20,7 @@ describe('Command Tokenizer tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = tableOutput({ command: 'table', flag: "", parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Error no idea what is John Doe`);
     });
@@ -39,7 +39,7 @@ describe('Command Tokenizer tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Julie Mirage', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = tableOutput({ command: 'table', flag: "", parameters: ['Julie Mirage', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
 
         //then
         if (result != undefined) {
@@ -62,7 +62,7 @@ describe('Command Tokenizer tests', () => {
         const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         const result = tableOutput(
-            { command: 'table', parameters: ['Alexandra Smith', 'Bernard Unfortunate', 'Irish Fish', 'Fries'] },
+            { command: 'table', flag: "", parameters: ['Alexandra Smith', 'Bernard Unfortunate', 'Irish Fish', 'Fries'] },
             allCustomers,
             allFood,
             allIngredients,
@@ -92,7 +92,7 @@ describe('Command Tokenizer tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = tableOutput({ command: 'table', flag: "", parameters: ['Alexandra Smith', 'Adam Smith', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
 
         //then
         expect(result).toContain(`ERROR. Every person needs something to eat.`);
@@ -110,7 +110,7 @@ describe('Command Tokenizer tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Fries', 'Irish Fish'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = tableOutput({ command: 'table', flag: "", parameters: ['Alexandra Smith', 'Fries', 'Irish Fish'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
 
         //then
         expect(result).toContain(`ERROR. One person can have one type of food only.`);
@@ -129,7 +129,7 @@ describe('Command Tokenizer tests', () => {
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
         const result = tableOutput(
-            { command: 'table', parameters: ['Adam SMith', 'Adam SMith', 'Fries', 'Fries'] },
+            { command: 'table', flag: "", parameters: ['Adam SMith', 'Adam SMith', 'Fries', 'Fries'] },
             allCustomers,
             allFood,
             allIngredients,
@@ -156,7 +156,7 @@ describe('Command Tokenizer tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
-        const result = tableOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = tableOutput({ command: 'table', flag: "", parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Sorry we're out of supplies. Missing: Asparagus, Chicken, Honey, Milk`);
     });
@@ -175,7 +175,7 @@ describe('Command Tokenizer tests', () => {
         //when
 
         const result = tableOutput(
-            { command: 'table', parameters: ['Alexandra Smith', 'Adam SMith', 'Princess Chicken', 'fries'] },
+            { command: 'table', flag: "", parameters: ['Alexandra Smith', 'Adam SMith', 'Princess Chicken', 'fries'] },
             allCustomers,
             allFood,
             allIngredients,

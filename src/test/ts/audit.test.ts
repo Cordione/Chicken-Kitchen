@@ -111,6 +111,5 @@ describe('Audit Tests', () => {
             'Daily tax from tips to pay: 0',
             'Audit End',
         ]);
-        console.log(result);
     });
 });

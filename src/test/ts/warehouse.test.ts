@@ -14,6 +14,7 @@ describe('Warehouse testing', () => {
         //given
         const input: ICommandAndParameters = {
             command: 'order',
+            flag: '',
             parameters: ['tuna', '10'],
         };
         const restaurant: IRestaurant = {
@@ -48,7 +49,7 @@ describe('Warehouse testing', () => {
         const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
         tableOutput(
-            { command: 'table', parameters: ['barbara smith', 'bernard unfortunate', 'adam smith', 'tuna cake', 'fries', 'fries'] },
+            { command: 'table', flag: '', parameters: ['barbara smith', 'bernard unfortunate', 'adam smith', 'tuna cake', 'fries', 'fries'] },
             allCustomers,
             allFood,
             allIngredients,
@@ -75,9 +76,9 @@ describe('Warehouse testing', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
-        buyOutput({ command: 'buy', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
-        buyOutput({ command: 'buy', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
-        buyOutput({ command: 'buy', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', flag: '', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', flag: '', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', flag: '', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         const tunacake = warehouse.find(x => x.name === 'Tuna Cake');
         const fries = warehouse.find(x => x.name === 'Fries');
         expect(tunacake).toEqual({ name: 'Tuna Cake', quantity: 1 });
@@ -96,9 +97,9 @@ describe('Warehouse testing', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseSupplied.csv', allIngredients, json);
         //when
-        buyOutput({ command: 'buy', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
-        buyOutput({ command: 'buy', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
-        buyOutput({ command: 'buy', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', flag: '', parameters: ['barbara smith', 'tuna cake'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', flag: '', parameters: ['bernard unfortunate', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        buyOutput({ command: 'buy', flag: '', parameters: ['adam smith', 'fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         const tunacake = warehouse.find(x => x.name === 'Tuna Cake');
         const fries = warehouse.find(x => x.name === 'Fries');
 
