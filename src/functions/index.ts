@@ -149,6 +149,7 @@ export function main(initialString?: string, jsonSource?: string) {
 }
 // console.log(main(`buy, bernard unfortunate, fries`));
 console.log(main(`table, Pooled, adam smith, fries`));
+// console.log(main(`table, Pooled, Julie Mirage, Alexandra Smith, Adam Smith, Emperor Chicken, Emperor Chicken, Emperor Chicken\n Audit, Resources`));
 // console.log(main(`buy, adam smith, fries\nbuy, adam smith, fries\nbuy, adam smith, fries`));
 // console.log(main(`table, adam smith, fries\ntable, adam smith, fries\n Audit, Resources \ntable, adam smith, fries`));
 // console.log(main(`order, tuna, 2, princess chicken, 5\norder, tuna, 5\norder, tuna, 5\norder, tuna, 5`));

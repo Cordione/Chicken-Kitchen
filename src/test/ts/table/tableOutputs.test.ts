@@ -6,7 +6,7 @@ import { warehouseParser } from '../../../functions/parsers/warehouseParser';
 import { commandJSONFileOutput } from '../../../functions/utils/commandJSONFileOutput';
 import { IRestaurant } from '../../../Interface/IRestaurant';
 
-describe('Command Tokenizer tests', () => {
+describe('Table Output tests', () => {
     test(`Table, John Doe, Fries -> invalid, unknown customer`, () => {
         //given
         const allCustomers = customersParser('./src/csv_files/customersAlergies.csv');

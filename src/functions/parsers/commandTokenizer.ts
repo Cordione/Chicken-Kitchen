@@ -73,7 +73,7 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
                     element.flag = 'Pooled';
                 }
                 for (let index = 1; index < singleLineSplittedByComma.length; index++) {
-                    if (singleLineSplittedByComma[1].toLowerCase() === 'Pooled'.toLowerCase()) {
+                    if (singleLineSplittedByComma[index].toLowerCase() === 'Pooled'.toLowerCase()) {
                     } else {
                         element.parameters?.push(singleLineSplittedByComma[index]);
                     }

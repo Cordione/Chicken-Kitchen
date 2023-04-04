@@ -34,7 +34,7 @@ export function inputParser(sourceString: string, baseIngredients: IBaseIngredie
                 formatedLineWithoutFirstWord.push(formatedLine[1]);
             }
             for (let index = 1; index < formatedLine.length; index++) {
-                if (formatedLine[1].toLowerCase() === 'Pooled'.toLowerCase()) {
+                if (formatedLine[index].toLowerCase() === 'Pooled'.toLowerCase()) {
                 } else {
                     formatedLineWithoutFirstWord.push(formatedLine[index]);
                 }
