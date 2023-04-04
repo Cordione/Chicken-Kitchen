@@ -7,7 +7,7 @@ import { IMaterials } from '../../../Interface/IMaterials';
 import { IRestaurant } from '../../../Interface/IRestaurant';
 import { ISpecificOrder } from '../../../Interface/ISpecificOrder';
 
-describe('Command Tokenizer tests', () => {
+describe('Table, EverythingIsOkTests', () => {
     test('2 customers, one will tip, second will not', () => {
         //given
         const customers: ICustomerAlergies[] = [

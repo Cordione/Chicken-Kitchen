@@ -8,7 +8,7 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
     const initialInputArray: string[] = oneLongString.split('\n').filter(x => x != '');
     const arrayOfMatchingInterfaces: ICommandAndParameters[] = [];
     for (const singleLine of initialInputArray) {
-        let element: ICommandAndParameters = { command: '', parameters: [] };
+        let element: ICommandAndParameters = { command: '', flag: '', parameters: [] };
         const singleLineSplittedByComma = singleLine.split(', ').filter(x => x != '');
         if (singleLineSplittedByComma.length === 1 && singleLineSplittedByComma[0].trim().toLowerCase() === 'Throw trash away'.trim().toLowerCase()) {
             element.command = singleLineSplittedByComma[0].trim();
@@ -69,8 +69,14 @@ export function commandTokenizer(oneLongString: string, baseIngredients: IBaseIn
                 }
             }
             if (singleLineSplittedByComma[0].trim().toLowerCase() == 'Table'.toLowerCase()) {
+                if (singleLineSplittedByComma[1].toLowerCase() === 'Pooled'.toLowerCase()) {
+                    element.flag = 'Pooled';
+                }
                 for (let index = 1; index < singleLineSplittedByComma.length; index++) {
-                    element.parameters?.push(singleLineSplittedByComma[index]);
+                    if (singleLineSplittedByComma[index].toLowerCase() === 'Pooled'.toLowerCase()) {
+                    } else {
+                        element.parameters?.push(singleLineSplittedByComma[index]);
+                    }
                 }
             }
 

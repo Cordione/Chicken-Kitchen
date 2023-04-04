@@ -21,7 +21,7 @@ describe('Buy Output Tests', () => {
         const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients, json);
 
         //when
-        const result = buyOutput({ command: 'table', parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = buyOutput({ command: 'table', flag: "", parameters: ['John Doe', 'Fries'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Sorry we don't have information about your alergies John Doe,so we cannot fulfil your order`);
     });
@@ -40,7 +40,7 @@ describe('Buy Output Tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouse.csv', allIngredients, json);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['Adam Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = buyOutput({ command: 'table', flag: "", parameters: ['Adam Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toEqual(`Adam Smith has budget: 100 -> wants to order Princess Chicken -> can’t order, Princess Chicken costs 117`);
     });
@@ -58,7 +58,7 @@ describe('Buy Output Tests', () => {
         const json = commandJSONFileOutput(jsonSource);
         const warehouse = warehouseParser('./src/csv_files/warehouseEmpty.csv', allIngredients, json);
         //when
-        const result = buyOutput({ command: 'table', parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
+        const result = buyOutput({ command: 'table', flag: "", parameters: ['Alexandra Smith', 'Princess Chicken'] }, allCustomers, allFood, allIngredients, restaurantMarkup, restaurant, warehouse, json);
         //then
         expect(result).toContain(`Sorry we're out of supplies. Missing: Asparagus, Chicken, Honey, Milk`);
     });

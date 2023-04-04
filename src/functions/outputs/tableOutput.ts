@@ -18,6 +18,7 @@ import { keepDishes } from '../utils/keepDishes';
 import { updatedInfromationsAboutMaterials } from '../utils/updatedInformationsAboutMaterials';
 import { tableEverythingIsOk } from './table/tableEverythingIsOk';
 import { randomGenerator } from '../utils/randomGenerator';
+import { tableEverythingIsOkPooled } from './table/tableEverythingIsOkPooled';
 
 export function tableOutput(
     commandAndParameters: ICommandAndParameters,
@@ -47,6 +48,7 @@ export function tableOutput(
     const transactionTax: number = informationsFromJsonFile.transactionTax;
     let totalTax;
     let anyoneIsAlergic: boolean = false;
+
     informationAboutAlergies.map(el => {
         if (el.length > 0) {
             anyoneIsAlergic = true;
@@ -65,7 +67,6 @@ export function tableOutput(
         return `Error no idea what is ${unknownParameters.join(', ')}`;
     } else if (customers.length == unqiueCustomers.length && customers.length == foodList.length) {
         if (anyoneIsAlergic) {
-            // one or more customers is allergic to ordered food
             const whatDoWeDoWithDishesFromAlergics = informationsFromJsonFile.dishWithAllergies;
             const customersNames = customers.map(x => x.customerName);
             outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
@@ -78,15 +79,10 @@ export function tableOutput(
             if (whatDoWeDoWithDishesFromAlergics === 'keep') {
                 keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                 updatedInformationsAboutUsedMaterials = [];
-                //Prepared to expand output with details about stored dishes
-                // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
             }
             if (typeof whatDoWeDoWithDishesFromAlergics === 'number') {
                 const dish = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
                 updatedInformationsAboutUsedMaterials = updatedInfromationsAboutMaterials(informationAboutUsedMaterials, dish, food);
-                // updatedInformationsAboutUsedMaterials = updatedInfromationsAboutMaterials(informationAboutUsedMaterials, dish, food);
-                //Prepared to expand output with details about stored dishes
-                // storedDishes = keepDishes(informationAboutOrdersAndItsPrice, restaurant, warehouse, informationsFromJsonFile);
             }
             for (let index = 0; index < customers.length; index++) {
                 if (index == 0) {
@@ -100,10 +96,7 @@ export function tableOutput(
                 if (informationAboutAlergies[index].length == 0) {
                     outputList.push(`We're sorry ${customers[index].customerName}, we cannot provide you with table, becouse other guest is alergic to his order\n`);
                 }
-                //Prepared to expand output with details about stored dishes
-                // if (storedDishes[index] != '') {
-                //     outputList.push(`We stored ${}\n`);
-                // }
+
                 if (index + 1 == customers.length) {
                     outputList.push('}');
                 }
@@ -115,10 +108,9 @@ export function tableOutput(
             return `Sorry we're out of supplies. Missing: ${missingIngredientsNames.join(', ')}`;
         } else if (!anyoneIsAlergic && anyoneOrderedUnavailableFood) {
             return informationAboutUnavailableFood.find(x => x.length > 0);
-        } else if (!anyoneIsAlergic && !anyoneOrderedUnavailableFood) {
+        } else if (!anyoneIsAlergic && !anyoneOrderedUnavailableFood && commandAndParameters.flag.toLowerCase() != 'Pooled'.toLowerCase()) {
             const whoCouldntPay: ICustomerAlergies[] = [];
             let everyoneCanPayForTheirOrder: boolean = true;
-
             for (let index = 0; index < customers.length; index++) {
                 let discountToApply = 0;
 
@@ -130,7 +122,6 @@ export function tableOutput(
                     Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
                         ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
                         : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
-                // const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
                 if (customers[index].budget < orderPrice) {
                     everyoneCanPayForTheirOrder = false;
                     whoCouldntPay.push(customers[index]);
@@ -162,7 +153,7 @@ export function tableOutput(
                     }
                 }
                 return [outputList.join(''), totalTax, spoiledMaterials, informationAboutUsedMaterials];
-            } else if (everyoneCanPayForTheirOrder) {
+            } else if (everyoneCanPayForTheirOrder && commandAndParameters.flag.toLowerCase() != 'Pooled'.toLowerCase()) {
                 const otp = tableEverythingIsOk(
                     customers,
                     informationAboutUsedMaterials,
@@ -180,66 +171,59 @@ export function tableOutput(
                 totalTax = otp[1] as number;
                 outputLine1.forEach(el => outputList.push(el));
                 return [outputLine1.join(''), otp[1], otp[2], otp[3], otp[4]];
-                // const customersNames = customers.map(x => x.customerName);
-                // customers.forEach(el => el.sucessfulAppearances++);
-                // const totalOrdersCost: number[] = [];
-                // const totalTaxOnOrders: number[] = [];
-                // removeElementsFromWarehouse(informationAboutUsedMaterials, warehouse);
-                // for (let index = 0; index < customers.length; index++) {
-                //     const orderCost = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
-                //     const orderTax = Math.ceil(orderCost * transactionTax);
-                //     totalOrdersCost.push(orderCost);
-                //     totalTaxOnOrders.push(orderTax);
-                // }
-                // totalTax = totalTaxOnOrders.reduce((a, b) => a + b, 0);
-                // spoiledMaterials = informations[6] as IObjectInWarehouse[];
-                // outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> success, total cost: ${totalOrdersCost.reduce((a, b) => a + b, 0)}, total tax: ${totalTax}\n`);
-                // let otp =  tableEverything(
-                //     customers,
-                //     informationAboutMissingMaterials,
-                //     informationsFromJsonFile,
-                //     informationAboutOrdersAndItsPrice,
-                //     restaurantMarkup,
-                //     transactionTax,
-                //     foodList,
-                //     restaurant
-                // );
-                // otp.forEach(el => outputList.push(el))
-                // for (let index = 0; index < customers.length; index++) {
-                //     let discountToApply = 0;
+            }
+        } else if (!anyoneIsAlergic && !anyoneOrderedUnavailableFood && commandAndParameters.flag.toLowerCase() == 'Pooled'.toLowerCase()) {
+            //Set default boolean state as true
+            let tableCanPayForOrder: boolean = true;
+            const budgetsOfEachCustomers: number[] = [];
+            customers.forEach(el => budgetsOfEachCustomers.push(el.budget));
+            const sumOfCustomerBudgets = budgetsOfEachCustomers.reduce((a, b) => a + b, 0);
+            const costOfEachOrder: number[] = [];
 
-                //     if (customers[index].sucessfulAppearances == 3 && informationAboutMissingMaterials.length == 0) {
-                //         discountToApply = informationsFromJsonFile.everyThirdDiscount != undefined ? parseFloat(`0.${informationsFromJsonFile.everyThirdDiscount}`) : 0;
-                //     }
-                //     const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
-                //     const orderPrice =
-                //         Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
-                //             ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
-                //             : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+            for (let index = 0; index < customers.length; index++) {
+                let discountToApply = 0;
+                if (customers[index].sucessfulAppearances == 2 && informationAboutMissingMaterials.length == 0) {
+                    discountToApply = informationsFromJsonFile.everyThirdDiscount;
+                }
+                const discountInMoney = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup * discountToApply);
+                const orderPrice =
+                    Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney) <= customers[index].budget
+                        ? Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup - discountInMoney)
+                        : Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
+                costOfEachOrder.push(orderPrice);
+            }
+            let sumOfOrdersCost = costOfEachOrder.reduce((a, b) => a + b, 0);
 
-                //     // const orderPrice = Math.ceil(informationAboutOrdersAndItsPrice[index].price * restaurantMarkup);
-                //     const orderTax = Math.ceil(orderPrice * transactionTax);
-                //     const priceBeforeTaxes = orderPrice - orderTax;
+            if (sumOfCustomerBudgets < sumOfOrdersCost) {
+                //Check if all customers have needed budget, if no change state to false
+                tableCanPayForOrder = false;
+            }
 
-                //     const currentCustomer = customers[index].customerName;
-                //     if (index == 0) {
-                //         outputList.push(`{\n`);
-                //     }
-                //     if (customers[index].sucessfulAppearances == 3) {
-                //         outputList.push(
-                //             `${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}. Becouse of your third appearance you recived discount worth: ${discountInMoney}\n`
-                //         );
-                //         customers[index].sucessfulAppearances = 0;
-                //     } else {
-                //         outputList.push(`${currentCustomer}, ordered ${foodList[index]}, cost: ${orderPrice} -> success: Restaurant gets: ${priceBeforeTaxes}, tax: ${orderTax}\n`);
-                //     }
-
-                //     customers[index].budget -= orderPrice;
-                //     restaurant.budget += orderPrice - orderTax;
-                //     if (index + 1 == customers.length) {
-                //         outputList.push('}');
-                //     }
-                // }
+            if (tableCanPayForOrder) {
+                const otp = tableEverythingIsOkPooled(
+                    customers,
+                    informationAboutUsedMaterials,
+                    warehouse,
+                    informationAboutOrdersAndItsPrice,
+                    restaurantMarkup,
+                    transactionTax,
+                    informationAboutMissingMaterials,
+                    foodList,
+                    informationsFromJsonFile,
+                    restaurant,
+                    budgetsOfEachCustomers,
+                    randomGenerator
+                );
+                const outputLine1 = otp[0] as string[];
+                totalTax = otp[1] as number;
+                outputLine1.forEach(el => outputList.push(el));
+                return [outputLine1.join(''), otp[1], otp[2], otp[3], otp[4]];
+            } else {
+                const customersNames = customers.map(x => x.customerName);
+                outputList.push(`${customersNames.join(', ')}, ordered ${foodList.join(', ')} -> FAILURE\n`);
+                for (let index = 0; index < customerNames.length; index++) {
+                    outputList.push(`We're sorry ${customerNames[index]}, we cannot provide you with table because your budgets cannot cover all the costs.`);
+                }
             }
         }
         return [outputList.join(''), totalTax, spoiledMaterials];

@@ -11,6 +11,7 @@ describe('Ordering tests', () => {
     test('Order test, malformed input', () => {
         const input: ICommandAndParameters = {
             command: 'Buy',
+            flag: "",
             parameters: ['Julie Mirage', 'fish in water'],
         };
         const restaurant: IRestaurant = {
@@ -31,6 +32,7 @@ describe('Ordering tests', () => {
     test('Order test, 1 Dish - should fail', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['Fries', '1'],
         };
         const restaurant: IRestaurant = {
@@ -52,6 +54,7 @@ describe('Ordering tests', () => {
     test('Order test, 2 ingredients, 1 quantity - shouldnt work', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['chicken', '1', 'tuna'],
         };
         const restaurant: IRestaurant = {
@@ -72,6 +75,7 @@ describe('Ordering tests', () => {
     test('Order test, 2 ingredients, 2 quantities - should work', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['chicken', '1', 'princess chicken', '2'],
         };
         const restaurant: IRestaurant = {
@@ -92,6 +96,7 @@ describe('Ordering tests', () => {
     test('Order test, 1 ingredient - should work', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['chicken', '1'],
         };
         const restaurant: IRestaurant = {
@@ -113,6 +118,7 @@ describe('Ordering tests', () => {
     test('1 Dish with proper json', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['Fries', '1'],
         };
         const restaurant: IRestaurant = {
@@ -134,6 +140,7 @@ describe('Ordering tests', () => {
     test('1 Dish with proper json(all)', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['Fries', '1'],
         };
         const restaurant: IRestaurant = {
@@ -155,6 +162,7 @@ describe('Ordering tests', () => {
     test('1 ingredient with proper json(all)', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['chicken', '1'],
         };
         const restaurant: IRestaurant = {
@@ -176,6 +184,7 @@ describe('Ordering tests', () => {
     test('1 ingredient & 1 dish with wrong json(dish)', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['chicken', '1', 'princess Chicken', '1'],
         };
         const restaurant: IRestaurant = {
@@ -198,6 +207,7 @@ describe('Ordering tests', () => {
     test('1 ingredient, 1 dish with proper json, ingredient vol 0.9 dish vol 1.25', () => {
         const input: ICommandAndParameters = {
             command: 'Order',
+            flag: "",
             parameters: ['chicken', '1', 'princess chicken', '1'],
         };
         const restaurant: IRestaurant = {

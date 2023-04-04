@@ -34,6 +34,7 @@ describe('Take order tests', () => {
         //given
         const input: ICommandAndParameters = {
             command: 'Buy',
+            flag: "",
             parameters: ['Elon Carousel', 'Fish in Water'],
         };
         const restaurant: IRestaurant = {
@@ -55,6 +56,7 @@ describe('Take order tests', () => {
         //given
         const input: ICommandAndParameters = {
             command: 'Buy',
+            flag: "",
             parameters: ['Julie Mirage', 'emperor chicken'],
         };
         const restaurant: IRestaurant = {
@@ -76,6 +78,7 @@ describe('Take order tests', () => {
         //given
         const input: ICommandAndParameters = {
             command: 'Buy',
+            flag: "",
             parameters: ['Bernard Unfortunate', 'emperor chicken'],
         };
         const restaurant: IRestaurant = {
@@ -97,6 +100,7 @@ describe('Take order tests', () => {
         //given
         const input: ICommandAndParameters = {
             command: 'Buy',
+            flag: "",
             parameters: ['Jaques Chirac', 'Emperor Chicken'],
         };
         const restaurant: IRestaurant = {
@@ -119,6 +123,7 @@ describe('Take order tests', () => {
         //given
         const input: ICommandAndParameters = {
             command: 'Buy',
+            flag: "",
             parameters: ['Bernard Unfortunate', 'Pretzels'],
         };
         const restaurant: IRestaurant = {
